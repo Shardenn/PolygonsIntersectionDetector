@@ -50,22 +50,24 @@ void GLWidget::initializeGL()
     m_vertices.push_back(QVector3D(0.5,1,0));
     m_vertices.push_back(QVector3D(0.5,0.5,1));
 
-    // colors for each vertex
-    m_colors.push_back(QVector3D(1,0,0));
-    m_colors.push_back(QVector3D(1,0,0));
-    m_colors.push_back(QVector3D(1,0,0));
+    // texture coordinates
+    m_texture_coordinates.push_back(QVector2D(0,0));
+    m_texture_coordinates.push_back(QVector2D(0.5,1));
+    m_texture_coordinates.push_back(QVector2D(1,0));
 
-    m_colors.push_back(QVector3D(0,1,0));
-    m_colors.push_back(QVector3D(0,1,0));
-    m_colors.push_back(QVector3D(0,1,0));
+    m_texture_coordinates.push_back(QVector2D(0,0));
+    m_texture_coordinates.push_back(QVector2D(0.5,0.5));
+    m_texture_coordinates.push_back(QVector2D(0.5,1));
 
-    m_colors.push_back(QVector3D(0,0,1));
-    m_colors.push_back(QVector3D(0,0,1));
-    m_colors.push_back(QVector3D(0,0,1));
+    m_texture_coordinates.push_back(QVector2D(0,0));
+    m_texture_coordinates.push_back(QVector2D(1,0));
+    m_texture_coordinates.push_back(QVector2D(0.5,0.5));
 
-    m_colors.push_back(QVector3D(1,1,0));
-    m_colors.push_back(QVector3D(1,1,0));
-    m_colors.push_back(QVector3D(1,1,0));
+    m_texture_coordinates.push_back(QVector2D(1,0));
+    m_texture_coordinates.push_back(QVector2D(0.5,1));
+    m_texture_coordinates.push_back(QVector2D(0.5,0.5));
+
+    texture = bindTexture(QPixmap(path + "/Textures/QtCreator.png"));
 }
 
 void GLWidget::resizeGL(int w, int h)
@@ -92,18 +94,23 @@ void GLWidget::paintGL()
     vMatrix.lookAt(cameraPosition, QVector3D(0, 0, 0), cameraUpDirection);
 
     m_shader_program.bind();
+
     m_shader_program.setUniformValue("mvpMatrix", m_projectoin_matrix * vMatrix * mMatrix);
+    m_shader_program.setUniformValue("texture", 0);
+
+    glBindTexture(GL_TEXTURE_2D, texture);
 
     m_shader_program.setAttributeArray("vertex", m_vertices.constData());
     m_shader_program.enableAttributeArray("vertex");
 
-    m_shader_program.setAttributeArray("color", m_colors.constData());
-    m_shader_program.enableAttributeArray("color");
+    m_shader_program.setAttributeArray("textureCoordinate", m_texture_coordinates.constData());
+    m_shader_program.enableAttributeArray("textureCoordinate");
 
     glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
 
     m_shader_program.disableAttributeArray("vertex");
-    m_shader_program.disableAttributeArray("color");
+    m_shader_program.disableAttributeArray("textureCoordinates");
+
     m_shader_program.release();
 }
 

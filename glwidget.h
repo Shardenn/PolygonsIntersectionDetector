@@ -31,7 +31,9 @@ private:
     QGLShaderProgram m_shader_program;
 
     QVector<QVector3D> m_vertices;
-    QVector<QVector3D> m_colors;
+    QVector<QVector2D> m_texture_coordinates;
+
+    GLuint texture;
 
     // mouse input stuff
     float m_alpha;
