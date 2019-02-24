@@ -1,6 +1,7 @@
 #include "glwidget.h"
 #include <QDir>
 #include <QMouseEvent>
+#include <QTimer>
 
 GLWidget::GLWidget(QWidget *parent)
     : QGLWidget(QGLFormat(), parent)
@@ -8,6 +9,12 @@ GLWidget::GLWidget(QWidget *parent)
     m_alpha = 25;
     m_beta = -25;
     m_distance = 2.5;
+
+    m_light_angle = 0;
+
+    QTimer* timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(timeout()));
+    timer->start(20);
 }
 
 GLWidget::~GLWidget()
@@ -29,45 +36,73 @@ void GLWidget::initializeGL()
 
     auto path = QDir::currentPath() + "/../Object_intersections/";
 
-    m_shader_program.addShaderFromSourceFile(QGLShader::Vertex, path + "/Shaders/vertexShader.vsh");
-    m_shader_program.addShaderFromSourceFile(QGLShader::Fragment, path + "/Shaders/fragmentShader.fsh");
-    m_shader_program.link();
+    m_lighting_shader_program.addShaderFromSourceFile(QGLShader::Vertex, path + "/Shaders/lightingVertexShader.vsh");
+    m_lighting_shader_program.addShaderFromSourceFile(QGLShader::Fragment, path + "/Shaders/lightingFragmentShader.fsh");
+    m_lighting_shader_program.link();
 
     // vertices initiatlized with the piramyde
-    m_vertices.push_back(QVector3D(0,0,0));
-    m_vertices.push_back(QVector3D(0.5,1,0));
-    m_vertices.push_back(QVector3D(1,0,0));
+    // rear (from starting perspective)
+    m_pyramide_vertices.push_back(QVector3D(0,0,0));    // 0
+    m_pyramide_vertices.push_back(QVector3D(0.5,1,0));  // 1
+    m_pyramide_vertices.push_back(QVector3D(1,0,0));    // 2
+    // left (from starting perspective)
+    m_pyramide_vertices.push_back(QVector3D(0,0,0));    // 3
+    m_pyramide_vertices.push_back(QVector3D(0.5,0.5,1));// 4
+    m_pyramide_vertices.push_back(QVector3D(0.5,1,0));  // 5
+    // bottom (from starting perspective)
+    m_pyramide_vertices.push_back(QVector3D(0,0,0));    // 6
+    m_pyramide_vertices.push_back(QVector3D(1,0,0));    // 7
+    m_pyramide_vertices.push_back(QVector3D(0.5,0.5,1));// 8
+    // right (from starting perspective)
+    m_pyramide_vertices.push_back(QVector3D(1,0,0));    // 9
+    m_pyramide_vertices.push_back(QVector3D(0.5,1,0));  // 10
+    m_pyramide_vertices.push_back(QVector3D(0.5,0.5,1));// 11
 
-    m_vertices.push_back(QVector3D(0,0,0));
-    m_vertices.push_back(QVector3D(0.5,0.5,1));
-    m_vertices.push_back(QVector3D(0.5,1,0));
+    // pyramide normals
+    // for a triangle, its normal equals cross product of two its edges.
+    // Edge vector = point1 - point2
+    auto curr_normal = QVector3D::crossProduct((m_pyramide_vertices[1] - m_pyramide_vertices[0]),
+            (m_pyramide_vertices[1] - m_pyramide_vertices[0]));
+    m_pyramide_normals.push_back(curr_normal);
+    m_pyramide_normals.push_back(curr_normal);
+    m_pyramide_normals.push_back(curr_normal);
 
-    m_vertices.push_back(QVector3D(0,0,0));
-    m_vertices.push_back(QVector3D(1,0,0));
-    m_vertices.push_back(QVector3D(0.5,0.5,1));
+    curr_normal = QVector3D::crossProduct((m_pyramide_vertices[4] - m_pyramide_vertices[3]),
+            (m_pyramide_vertices[5] - m_pyramide_vertices[4]));
+    m_pyramide_normals.push_back(curr_normal);
+    m_pyramide_normals.push_back(curr_normal);
+    m_pyramide_normals.push_back(curr_normal);
 
-    m_vertices.push_back(QVector3D(1,0,0));
-    m_vertices.push_back(QVector3D(0.5,1,0));
-    m_vertices.push_back(QVector3D(0.5,0.5,1));
+    curr_normal = QVector3D::crossProduct((m_pyramide_vertices[7] - m_pyramide_vertices[6]),
+            (m_pyramide_vertices[8] - m_pyramide_vertices[7]));
+    m_pyramide_normals.push_back(curr_normal);
+    m_pyramide_normals.push_back(curr_normal);
+    m_pyramide_normals.push_back(curr_normal);
+
+    curr_normal = QVector3D::crossProduct((m_pyramide_vertices[10] - m_pyramide_vertices[9]),
+            (m_pyramide_vertices[11] - m_pyramide_vertices[10]));
+    m_pyramide_normals.push_back(curr_normal);
+    m_pyramide_normals.push_back(curr_normal);
+    m_pyramide_normals.push_back(curr_normal);
 
     // texture coordinates
-    m_texture_coordinates.push_back(QVector2D(0,0));
-    m_texture_coordinates.push_back(QVector2D(0.5,1));
-    m_texture_coordinates.push_back(QVector2D(1,0));
+    m_pyramide_texture_coordinates.push_back(QVector2D(0,0));
+    m_pyramide_texture_coordinates.push_back(QVector2D(1,0));
+    m_pyramide_texture_coordinates.push_back(QVector2D(1,1));
 
-    m_texture_coordinates.push_back(QVector2D(0,0));
-    m_texture_coordinates.push_back(QVector2D(0.5,0.5));
-    m_texture_coordinates.push_back(QVector2D(0.5,1));
+    m_pyramide_texture_coordinates.push_back(QVector2D(0,0));
+    m_pyramide_texture_coordinates.push_back(QVector2D(0.5,0.5));
+    m_pyramide_texture_coordinates.push_back(QVector2D(0.5,1));
 
-    m_texture_coordinates.push_back(QVector2D(0,0));
-    m_texture_coordinates.push_back(QVector2D(1,0));
-    m_texture_coordinates.push_back(QVector2D(0.5,0.5));
+    m_pyramide_texture_coordinates.push_back(QVector2D(0,0));
+    m_pyramide_texture_coordinates.push_back(QVector2D(1,0));
+    m_pyramide_texture_coordinates.push_back(QVector2D(0.5,0.5));
 
-    m_texture_coordinates.push_back(QVector2D(1,0));
-    m_texture_coordinates.push_back(QVector2D(0.5,1));
-    m_texture_coordinates.push_back(QVector2D(0.5,0.5));
+    m_pyramide_texture_coordinates.push_back(QVector2D(1,0));
+    m_pyramide_texture_coordinates.push_back(QVector2D(0.5,1));
+    m_pyramide_texture_coordinates.push_back(QVector2D(0.5,0.5));
 
-    texture = bindTexture(QPixmap(path + "/Textures/QtCreator.png"));
+    m_pyramide_texture = bindTexture(QPixmap(path + "/Textures/QtCreator.png"));
 }
 
 void GLWidget::resizeGL(int w, int h)
@@ -93,25 +128,55 @@ void GLWidget::paintGL()
     QVector3D cameraUpDirection = cameraTransformation * QVector3D(0, 1, 0);
     vMatrix.lookAt(cameraPosition, QVector3D(0, 0, 0), cameraUpDirection);
 
-    m_shader_program.bind();
+    mMatrix.setToIdentity();
 
-    m_shader_program.setUniformValue("mvpMatrix", m_projectoin_matrix * vMatrix * mMatrix);
-    m_shader_program.setUniformValue("texture", 0);
+    QMatrix4x4 mvMatrix;
+    mvMatrix = mMatrix * vMatrix;
 
-    glBindTexture(GL_TEXTURE_2D, texture);
+    QMatrix3x3 normalMatrix;
+    normalMatrix = mvMatrix.normalMatrix();
 
-    m_shader_program.setAttributeArray("vertex", m_vertices.constData());
-    m_shader_program.enableAttributeArray("vertex");
+    QMatrix4x4 lightTransformation;
+    lightTransformation.rotate(m_light_angle, 0, 1, 0);
 
-    m_shader_program.setAttributeArray("textureCoordinate", m_texture_coordinates.constData());
-    m_shader_program.enableAttributeArray("textureCoordinate");
+    QVector3D lightPosition = lightTransformation * QVector3D(0, 1, 1);
 
-    glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
+    m_lighting_shader_program.bind();
 
-    m_shader_program.disableAttributeArray("vertex");
-    m_shader_program.disableAttributeArray("textureCoordinates");
+    m_lighting_shader_program.setUniformValue("mvpMatrix", m_projectoin_matrix * mvMatrix);
+    m_lighting_shader_program.setUniformValue("mvMatrix", mvMatrix);
+    m_lighting_shader_program.setUniformValue("normalMatrix", normalMatrix);
+    m_lighting_shader_program.setUniformValue("lightPosition", vMatrix*lightPosition);
 
-    m_shader_program.release();
+    m_lighting_shader_program.setUniformValue("ambientColor", QColor(32, 32, 32));
+    m_lighting_shader_program.setUniformValue("diffuseColor", QColor(128, 128, 128));
+    m_lighting_shader_program.setUniformValue("specularColor", QColor(255, 255, 255));
+    m_lighting_shader_program.setUniformValue("ambientReflection", GLfloat(1.0));
+    m_lighting_shader_program.setUniformValue("diffuseReflection", GLfloat(1.0));
+    m_lighting_shader_program.setUniformValue("specularReflection", GLfloat(1.0));
+    m_lighting_shader_program.setUniformValue("shininess", GLfloat(100.0));
+    m_lighting_shader_program.setUniformValue("texture", 0);
+
+    glBindTexture(GL_TEXTURE_2D, m_pyramide_texture);
+
+    m_lighting_shader_program.setAttributeArray("vertex", m_pyramide_vertices.constData());
+    m_lighting_shader_program.enableAttributeArray("vertex");
+    m_lighting_shader_program.setAttributeArray("normal", m_pyramide_vertices.constData());
+    m_lighting_shader_program.enableAttributeArray("normal");
+    m_lighting_shader_program.setAttributeArray("textureCoordinate", m_pyramide_texture_coordinates.constData());
+    m_lighting_shader_program.enableAttributeArray("textureCoordinate");
+    glDrawArrays(GL_TRIANGLES, 0, m_pyramide_vertices.size());
+    m_lighting_shader_program.disableAttributeArray("vertex");
+    m_lighting_shader_program.disableAttributeArray("normal");
+    m_lighting_shader_program.disableAttributeArray("textureCoordinate");
+
+    m_lighting_shader_program.release();
+
+    mMatrix.setToIdentity();
+    mMatrix.translate(lightPosition);
+    mMatrix.rotate(m_light_angle, 0, 1, 0);
+    mMatrix.rotate(45, 1, 0, 0);
+    mMatrix.scale(0.1);
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *event)
@@ -159,4 +224,14 @@ void GLWidget::wheelEvent(QWheelEvent *event)
         updateGL();
     }
     event->accept();
+}
+
+void GLWidget::timeout()
+{
+    m_light_angle += 1;
+    while(m_light_angle >= 360)
+    {
+        m_light_angle -= 360;
+    }
+    updateGL();
 }

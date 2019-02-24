@@ -28,18 +28,28 @@ protected:
 
 private:
     QMatrix4x4 m_projectoin_matrix;
-    QGLShaderProgram m_shader_program;
+    QGLShaderProgram m_lighting_shader_program;
 
-    QVector<QVector3D> m_vertices;
-    QVector<QVector2D> m_texture_coordinates;
+    QVector<QVector3D> m_pyramide_vertices;
+    QVector<QVector3D> m_pyramide_normals;
+    QVector<QVector2D> m_pyramide_texture_coordinates;
 
-    GLuint texture;
+    GLuint m_pyramide_texture;
+
+    QGLShaderProgram m_colorint_shader_program;
+
+    QVector<QVector3D> m_spotlight_vertices;
+    QVector<QVector3D> m_spotlight_colors;
+    double m_light_angle;
 
     // mouse input stuff
     float m_alpha;
     float m_beta;
     float m_distance;
     QPoint m_last_mouse_position;
+
+private Q_SLOTS:
+    void timeout();
 };
 
 #endif // GLWIDGET_H
