@@ -3,6 +3,7 @@
 
 #include <QGLWidget>
 #include <QGLShaderProgram>
+#include <QGLBuffer>
 
 class GLWidget : public QGLWidget
 {
@@ -33,6 +34,8 @@ private:
     QVector<QVector3D> m_pyramide_vertices;
     QVector<QVector3D> m_pyramide_normals;
     QVector<QVector2D> m_pyramide_texture_coordinates;
+
+    QGLBuffer m_pyramide_buffer;
 
     GLuint m_pyramide_texture;
 

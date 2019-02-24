@@ -103,6 +103,21 @@ void GLWidget::initializeGL()
     m_pyramide_texture_coordinates.push_back(QVector2D(0.5,0.5));
 
     m_pyramide_texture = bindTexture(QPixmap(path + "/Textures/QtCreator.png"));
+
+    int num_pyramide_vertices = m_pyramide_vertices.size();
+
+    m_pyramide_buffer.create();
+    m_pyramide_buffer.bind();
+    m_pyramide_buffer.allocate(num_pyramide_vertices * (3 + 3 + 2) * sizeof(GLfloat));
+
+    int offset = 0;
+    m_pyramide_buffer.write(offset, m_pyramide_vertices.constData(), num_pyramide_vertices * 3 * sizeof(GLfloat));
+    offset += num_pyramide_vertices * 3 * sizeof(GLfloat);
+    m_pyramide_buffer.write(offset, m_pyramide_normals.constData(), num_pyramide_vertices * 3 * sizeof(GLfloat));
+    offset += num_pyramide_vertices * 3 * sizeof(GLfloat);
+    m_pyramide_buffer.write(offset, m_pyramide_texture_coordinates.constData(), num_pyramide_vertices * 2 * sizeof(GLfloat));
+
+    m_pyramide_buffer.release();
 }
 
 void GLWidget::resizeGL(int w, int h)
@@ -142,7 +157,6 @@ void GLWidget::paintGL()
     QVector3D lightPosition = lightTransformation * QVector3D(0, 1, 1);
 
     m_lighting_shader_program.bind();
-
     m_lighting_shader_program.setUniformValue("mvpMatrix", m_projectoin_matrix * mvMatrix);
     m_lighting_shader_program.setUniformValue("mvMatrix", mvMatrix);
     m_lighting_shader_program.setUniformValue("normalMatrix", normalMatrix);
@@ -159,17 +173,28 @@ void GLWidget::paintGL()
 
     glBindTexture(GL_TEXTURE_2D, m_pyramide_texture);
 
-    m_lighting_shader_program.setAttributeArray("vertex", m_pyramide_vertices.constData());
+    m_pyramide_buffer.bind();
+    int offset = 0;
+    int num_pyramide_vertices = m_pyramide_vertices.size();
+
+    m_lighting_shader_program.setAttributeBuffer("vertex", GL_FLOAT, offset, 3, 0);
     m_lighting_shader_program.enableAttributeArray("vertex");
-    m_lighting_shader_program.setAttributeArray("normal", m_pyramide_vertices.constData());
+    offset += num_pyramide_vertices * 3 * sizeof(GLfloat);
+
+    m_lighting_shader_program.setAttributeBuffer("normal", GL_FLOAT, offset, 3, 0);
     m_lighting_shader_program.enableAttributeArray("normal");
-    m_lighting_shader_program.setAttributeArray("textureCoordinate", m_pyramide_texture_coordinates.constData());
+    offset += num_pyramide_vertices * 3 * sizeof(GLfloat);
+
+    m_lighting_shader_program.setAttributeBuffer("textureCoordinate", GL_FLOAT, offset, 2, 0);
     m_lighting_shader_program.enableAttributeArray("textureCoordinate");
+    m_pyramide_buffer.release();
+
     glDrawArrays(GL_TRIANGLES, 0, m_pyramide_vertices.size());
+/*
     m_lighting_shader_program.disableAttributeArray("vertex");
     m_lighting_shader_program.disableAttributeArray("normal");
     m_lighting_shader_program.disableAttributeArray("textureCoordinate");
-
+*/
     m_lighting_shader_program.release();
 
     mMatrix.setToIdentity();
