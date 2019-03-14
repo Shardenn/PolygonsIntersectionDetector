@@ -27,11 +27,14 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         glwidget.cpp \
-    objloader.cpp
+    objloader.cpp \
+    model3d.cpp
 
 HEADERS += \
         glwidget.h \
-    objloader.h
+    objloader.h \
+    model3d.h \
+    vertexdata.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
