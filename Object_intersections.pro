@@ -26,10 +26,12 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        glwidget.cpp
+        glwidget.cpp \
+    objloader.cpp
 
 HEADERS += \
-        glwidget.h
+        glwidget.h \
+    objloader.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
