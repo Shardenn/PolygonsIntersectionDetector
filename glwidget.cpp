@@ -35,7 +35,8 @@ void GLWidget::initializeGL()
 
     qglClearColor(QColor(128, 128, 128));
 
-    auto path = QDir::currentPath() + "/../Object_intersections/";
+//    auto path = QDir::currentPath() + "/../Object_intersections/";
+    QString path = ":";
 
     m_lighting_shader_program.addShaderFromSourceFile(QGLShader::Vertex, path + "/Shaders/lightingVertexShader.vsh");
     m_lighting_shader_program.addShaderFromSourceFile(QGLShader::Fragment, path + "/Shaders/lightingFragmentShader.fsh");
@@ -103,7 +104,8 @@ void GLWidget::initializeGL()
     m_pyramide_texture_coordinates.push_back(QVector2D(0.5,1));
     m_pyramide_texture_coordinates.push_back(QVector2D(0.5,0.5));
 
-    m_pyramide_texture = bindTexture(QPixmap(path + "/Textures/QtCreator.png"));
+    m_pyramide_texture = bindTexture(QPixmap("../../PolygonsIntersectionDetector/Textures/QtCreator.png"));
+//    m_pyramide_texture = bindTexture(QPixmap(path + "/Textures/QtCreator.png"));
 
     int num_pyramide_vertices = m_pyramide_vertices.size();
 

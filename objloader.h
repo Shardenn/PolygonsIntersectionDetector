@@ -1,11 +1,13 @@
 #ifndef QOBJLOADER_H
 #define QOBJLOADER_H
 
-#include <GL/GL.h>
+#include <GL/gl.h>
 #include <QString>
+#include <QVector>
 #include <QVector3D>
 #include <QVector2D>
-
+#include "vertexdata.h"
+// TODO loadModel should return new object
 class QObjLoader
 {
 public:
@@ -20,7 +22,7 @@ private:
     QVector<QVector3D> m_normals;
     QVector<QVector2D> m_textureCoordinates;
 
-    QVector<GLuint> m_indeces;
+    QVector<GLuint> m_indices;
     QVector<QVertexData> m_vertices;
 };
 
