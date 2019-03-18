@@ -2,7 +2,7 @@
 #include <QDir>
 #include <QMouseEvent>
 #include <QTimer>
-#include <objloader.h>
+#include <objdataprocessor.h>
 
 GLWidget::GLWidget(QWidget *parent)
     : QGLWidget(QGLFormat(), parent)

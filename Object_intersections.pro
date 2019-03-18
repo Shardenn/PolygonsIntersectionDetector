@@ -30,14 +30,14 @@ include(GeomStack/GeomStackTests.pri)
 SOURCES += \
         main.cpp \
         glwidget.cpp \
-    objloader.cpp \
-    model3d.cpp
+    model3d.cpp \
+    objdataprocessor.cpp
 
 HEADERS += \
         glwidget.h \
-    objloader.h \
     model3d.h \
-    vertexdata.h
+    objdataprocessor.h \
+    model_data.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
