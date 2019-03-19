@@ -16,13 +16,13 @@ public:
      * \param filePath path to *.obj file
      * \return vector of data for each vertex from obj file
     */
-    static ModelData getModelData(const QString &filePath);
+    static MeshData getModelData(const QString &filePath);
     /*!
      * \brief When given model data, returns its triangulated copy.
      * \param originalData - original model data
      * \return triangulated data
      */
-    static ModelData triangulate(const ModelData &originalData);
+    static MeshData triangulate(const MeshData &originalData);
 private:
 
 };

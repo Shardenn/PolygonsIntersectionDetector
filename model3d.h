@@ -3,31 +3,31 @@
 
 #include <QOpenGLBuffer>
 #include <QMatrix4x4>
-#include "vertexdata.h"
+#include "model_data.h"
 
 class QOpenGLTexture;
 class QOpenGLFunctions;
 class QOpenGLShaderProgram;
 
-class QModel3D
+class Model3D
 {
 public:
-    QModel3D();
-    QModel3D(const QVector<QVertexData> &vertexData,
+    Model3D();
+    Model3D(const QVector<VertexData> &vertexData,
              const QVector<GLuint> &indeces,
              const QImage &texture);
 
-    ~QModel3D();
+    ~Model3D();
 
-    void init(const QVector<QVertexData> &vertexData,
+    void init(const QVector<VertexData> &vertexData,
          const QVector<GLuint> &indeces,
          const QImage &texture);
     void draw(QOpenGLShaderProgram *shaderProgram,
               QOpenGLFunctions *functions);
 private:
-    QOpenGLBuffer m_vertexBuffer;
-    QOpenGLBuffer m_indexBuffer;
-    QMatrix4x4 m_modelMatrix;
+    QOpenGLBuffer   m_vertexBuffer;
+    QOpenGLBuffer   m_indexBuffer;
+    QMatrix4x4      m_modelMatrix;
     QOpenGLTexture *m_texture;
 };
 

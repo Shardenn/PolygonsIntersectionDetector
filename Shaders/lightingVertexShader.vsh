@@ -1,26 +1,32 @@
+// VERTEX SHADER
+
 #version 330
 
-uniform mat4 mvpMatrix;
-uniform mat4 mvMatrix;
-uniform mat3 normalMatrix;
-uniform vec3 lightPosition;
+uniform mat4 u_projectionMatrix;
+uniform mat4 u_viewMatrix;
+uniform mat4 u_modelMatrix;
 
-in vec4 vertex;
+// uniform mat3 normalMatrix;
+// uniform vec3 lightPosition;
+
+in vec4 vertexPosition;
 in vec3 normal;
 in vec2 textureCoordinate;
 
-out vec3 varyingNormal;
-out vec3 varyingLightDirection;
-out vec3 varyingViewerDirection;
-out vec2 varyingTextureCoordinate;
+out vec4 v_position;
+out vec3 v_normal;
+out vec2 v_textureCoordinate;
+
+// out vec3 varyingLightDirection;
+// out vec3 varyingViewerDirection;
 
 void main(void)
 {
-	vec4 eyeVertex = mvMatrix * vertex;
-	eyeVertex /= eyeVertex.w;
-	varyingNormal = normalMatrix * normal;
-	varyingLightDirection = lightPosition - eyeVertex.xyz;
-	varyingViewerDirection = -eyeVertex.xyz;
-	varyingTextureCoordinate = textureCoordinate;
-    gl_Position = mvpMatrix * vertex;
+	mat4 mvMatrix = u_viewMatrix * u_modelMatrix;
+	
+	gl_Position = u_projectionMatrix * mvMatrix * vertexPosition;
+	
+	v_textureCoordinate = textureCoordinate;
+	v_normal = normalize(vec3(mvMatrix * vec4(vertexPosition, 0.0)));
+	v_position = mvMatrix * vertexPosition;
 }

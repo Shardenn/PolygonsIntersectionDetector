@@ -1,5 +1,5 @@
-#ifndef MODEL_DATA_H
-#define MODEL_DATA_H
+#ifndef MESH_DATA_H
+#define MESH_DATA_H
 
 #include <QVector3D>
 #include <QVector2D>
@@ -22,7 +22,7 @@ public:
     }
 };
 
-class ModelData
+class MeshData
 {
 public:
     /*!
@@ -36,13 +36,13 @@ public:
      */
     QVector<unsigned long> m_polygonVertIndexes;
 
-    ModelData()
+    MeshData()
     {
         m_vertexesData = QVector<VertexData>();
         m_polygonVertIndexes = QVector<unsigned long>();
     }
 
-    ModelData(QVector<VertexData> vData, QVector<unsigned long> indexes) :
+    MeshData(QVector<VertexData> vData, QVector<unsigned long> indexes) :
         m_vertexesData(vData),
         m_polygonVertIndexes(indexes)
     {}
@@ -53,6 +53,18 @@ public:
             m_polygonVertIndexes.append(m_polygonVertIndexes.size());
         }
         m_vertexesData.append(newVertex);
+    }
+
+    QVector<VertexData> getVertexesOfPolygonID(const unsigned long polygonID)
+    {
+        // size - 1 because we are 0-based. size - 2 because vertIndexes contains 1 more number in the end
+        if(polygonID > m_polygonVertIndexes.size() - 2) {
+            return QVector<VertexData>();
+        }
+        auto firstVertex = m_polygonVertIndexes[polygonID];
+        auto numVertexes = m_polygonVertIndexes[polygonID + 1] - firstVertex;
+
+        return m_vertexesData.mid(firstVertex, numVertexes);
     }
 };
 

@@ -2,8 +2,11 @@
 #define GLWIDGET_H
 
 #include <QGLWidget>
-#include <QGLShaderProgram>
-#include <QGLBuffer>
+#include <QOpenGLShaderProgram>
+#include <QOpenGLBuffer>
+#include <QOpenGLTexture>
+
+class Model3D;
 
 class GLWidget : public QGLWidget
 {
@@ -27,23 +30,12 @@ protected:
     void mouseMoveEvent(QMouseEvent*event) override;
     void wheelEvent(QWheelEvent*event) override;
 
+    void initShaders();
+    void initPyramid();
 private:
-    QMatrix4x4 m_projectoin_matrix;
-    QGLShaderProgram m_lighting_shader_program;
-
-    QVector<QVector3D> m_pyramide_vertices;
-    QVector<QVector3D> m_pyramide_normals;
-    QVector<QVector2D> m_pyramide_texture_coordinates;
-
-    QGLBuffer m_pyramide_buffer;
-
-    GLuint m_pyramide_texture;
-
-    QGLShaderProgram m_colorint_shader_program;
-
-    QVector<QVector3D> m_spotlight_vertices;
-    QVector<QVector3D> m_spotlight_colors;
-    double m_light_angle;
+    QMatrix4x4 m_projectoinMatrix;
+    QOpenGLShaderProgram m_shaderProgram;
+    QVector<Model3D*> m_objects;
 
     // mouse input stuff
     float m_alpha;

@@ -3,12 +3,12 @@
 #include <QTextStream>
 #include <QDebug>
 
-ModelData ObjDataProcessor::getModelData(const QString &filePath)
+MeshData ObjDataProcessor::getModelData(const QString &filePath)
 {
     QFile objFile(filePath);
     if(!objFile.exists()) {
         qDebug() << "File for loading obj not found";
-        return ModelData();
+        return MeshData();
     }
 
     objFile.open(QIODevice::ReadOnly);
@@ -21,7 +21,7 @@ ModelData ObjDataProcessor::getModelData(const QString &filePath)
     QVector<QVector2D> textureCoordinates;
 
     // data for the model contained in the file
-    ModelData modelData;
+    MeshData modelData;
 
     while(!objFileText.atEnd()) {
         QString str = objFileText.readLine();
@@ -66,7 +66,7 @@ ModelData ObjDataProcessor::getModelData(const QString &filePath)
     return modelData;
 }
 
-ModelData ObjDataProcessor::triangulate(const ModelData &originalData)
+MeshData ObjDataProcessor::triangulate(const MeshData &originalData)
 {
 
 }
