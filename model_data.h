@@ -34,15 +34,15 @@ public:
      * i-th position contains (m_polygonVertIndexes[i+1] - m_polygonVertIndexes[i])
      * vertexes data for i-th polygon
      */
-    QVector<unsigned long> m_polygonVertIndexes;
+    QVector<unsigned int> m_polygonVertIndexes;
 
     MeshData()
     {
         m_vertexesData = QVector<VertexData>();
-        m_polygonVertIndexes = QVector<unsigned long>();
+        m_polygonVertIndexes = QVector<unsigned int>();
     }
 
-    MeshData(QVector<VertexData> vData, QVector<unsigned long> indexes) :
+    MeshData(QVector<VertexData> vData, QVector<unsigned int> indexes) :
         m_vertexesData(vData),
         m_polygonVertIndexes(indexes)
     {}

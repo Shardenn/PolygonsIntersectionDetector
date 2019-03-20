@@ -1,5 +1,3 @@
-// FRAGMENT SHADER
-
 #version 330
 
 // uniform vec4 ambientColor;
@@ -16,29 +14,27 @@ uniform float u_lightPower;
 // in vec3 varyingLightDirection;
 // in vec3 varyingViewerDirection;
 
-out vec4 v_position;
-out vec2 v_texCoord;
-out vec3 v_normal;
+in vec4 v_position;
+in vec2 v_textureCoord;
+in vec3 v_normal;
 
 void main(void)
 {
 	vec4 resultColor = vec4(0.0, 0.0, 0.0, 0.0);
-	vec4 eyePosition = vec4(0.0, 0.0, 0.0, 0.0);
-	vec4 diffMatColor = texture2D(u_texture, v_texCoord);
+	vec4 eyePosition = vec4(0.0, 0.0, 0.0, 1.0);
+	vec4 diffMatColor = texture2D(u_texture, v_textureCoord);
 	vec3 eyeVect = normalize(v_position.xyz - eyePosition.xyz);
-	vec3 lightVect = normalize(reflect(lightVect, v_normal));
+	vec3 lightVect = normalize(v_position.xyz - u_lightPosition.xyz);
 	vec3 reflectLight = normalize(reflect(lightVect, v_normal));
 	float len = length(v_position.xyz - eyePosition.xyz);
 	float specularFactor = 60.0; 
 	float ambientFactor = 0.1;
 	
-	// finish the line
-	vec4 diffColor = diffMatColor * u_lightPower * max(0.0, dot(v_normal, -lightVect)) / (1.0 + 0.25 *
+	vec4 diffColor = diffMatColor * u_lightPower * max(0.0, dot(v_normal, -lightVect)) / (1.0 + 0.25 * pow(len, 2));
 	resultColor += diffColor;
 	vec4 ambientColor = ambientFactor * diffMatColor;
 	resultColor += ambientColor;
-	// finish the line
-	vec4 specularColor = vec4(1.0, 1.0, 1.0, 1.0) * u_lightPower * pow(max(0.0, dot(reflectLight, -eye
+	vec4 specularColor = vec4(1.0, 1.0, 1.0, 1.0) * u_lightPower * pow(max(0.0, dot(reflectLight, -eyeVect)), specularFactor) / (1.0 + 0.25 * pow(len, 2));
 	resultColor += specularColor;
 	
 	gl_FragColor = resultColor;

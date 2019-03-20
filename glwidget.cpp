@@ -4,11 +4,11 @@
 #include <QTimer>
 #include <objdataprocessor.h>
 #include <QOpenGLContext>
+#include <QOpenGLFunctions>
 #include "model3d.h"
-#include "objdataprocessor.h"
 
 GLWidget::GLWidget(QWidget *parent)
-    : QGLWidget(QGLFormat(), parent)
+    : QOpenGLWidget(parent)
 {
     m_alpha = 25;
     m_beta = -25;
@@ -33,13 +33,13 @@ QSize GLWidget::sizeHint() const
 
 void GLWidget::initializeGL()
 {
-    qglClearColor(QColor(128, 128, 128));
+    glClearColor(128, 128, 0, 1);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
     initShaders();
-    initPyramid();
+    initCube();
 }
 
 void GLWidget::resizeGL(int w, int h)
@@ -69,41 +69,62 @@ void GLWidget::paintGL()
     m_shaderProgram.setUniformValue("u_lightPower", 5.0f);
 
     for (auto object : m_objects) {
-        object->draw(&m_shaderProgram, context()->functions()))
+        object->draw(&m_shaderProgram, context()->currentContext()->functions());
     }
 }
 
 void GLWidget::initShaders()
 {
     if (!m_shaderProgram.addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                                 QDir::currentPath() + "../Object_intersections/Shaders/lightingVertexShader.vsh"))
+                                                 QDir::currentPath() + "/../Object_intersections/Shaders/lightingVertexShader.vsh"))
         close();
 
     if (!m_shaderProgram.addShaderFromSourceFile(QOpenGLShader::Fragment,
-                                                 QDir::currentPath() + "../Object_intersections/Shaders/lightingFragmentShader.fsh"))
+                                                 QDir::currentPath() + "/../Object_intersections/Shaders/lightingFragmentShader.fsh"))
         close();
 
     if (!m_shaderProgram.link())
         close();
 }
 
-void GLWidget::initPyramid()
+void GLWidget::initCube()
 {
-    auto something = ObjDataProcessor::getModelData(QDir::currentPath() + "../Object_intersections/Objects/foot.obj");
-    Model3D foot(something.m_vertexesData, something.m_polygonVertIndexes, QImage(""));
+    /*
+    auto cubeData = ObjDataProcessor::getModelData(QDir::currentPath() + "/../Object_intersections/Objects/cube.obj");
+    auto texture = QImage(QDir::currentPath() + "/../Object_intersections/Textures/QtCreator.png");
+    Model3D cube(cubeData.m_vertexesData, cubeData.m_polygonVertIndexes, texture);
+    */
 
+    /*
+    QVector<VertexData> vertexes;
+    vertexes.append(VertexData(QVector3D(-1, 1, 1), QVector2D(0.0, 1.0), QVector3D(1.0, 1.0, 1.0)));
+    vertexes.append(VertexData(QVector3D(-1, -1, 1), QVector2D(0.0, 0.0), QVector3D(1.0, 1.0, 1.0)));
+    vertexes.append(VertexData(QVector3D(1, -1, 1), QVector2D(1.0, 1.0), QVector3D(1.0, 1.0, 1.0)));
+    vertexes.append(VertexData(QVector3D(-1, -1, 1), QVector2D(1.0, 0.0), QVector3D(1.0, 1.0, 1.0)));
+
+    QVector<GLuint> indexes;
+
+    indexes.append(0);
+    indexes.append(1);
+    indexes.append(2);
+    indexes.append(1);
+    indexes.append(2);
+    indexes.append(3);
+
+    m_objects.append(new Model3D(vertexes, indexes, texture));
+    */
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
-    m_last_mouse_position = event->pos();
+    m_lastMousePosition = event->pos();
     event->accept();
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    int deltaX = event->x() - m_last_mouse_position.x();
-    int deltaY = event->y() - m_last_mouse_position.y();
+    int deltaX = event->x() - m_lastMousePosition.x();
+    int deltaY = event->y() - m_lastMousePosition.y();
 
     if(event->buttons() & Qt::LeftButton)
     {
@@ -119,9 +140,9 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
         while(m_beta > 90)
             m_beta = 90;
 
-        updateGL();
+        //paintGL();
     }
-    m_last_mouse_position = event->pos();
+    m_lastMousePosition = event->pos();
     event->accept();
 }
 
@@ -136,7 +157,7 @@ void GLWidget::wheelEvent(QWheelEvent *event)
         if(delta > 0)
             m_distance *= 0.9f;
 
-        updateGL();
+        //paintGL();
     }
     event->accept();
 }
@@ -149,5 +170,5 @@ void GLWidget::timeout()
     {
         m_light_angle -= 360;
     }*/
-    updateGL();
+    //paintGL();
 }

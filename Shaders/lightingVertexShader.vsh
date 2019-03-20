@@ -1,5 +1,3 @@
-// VERTEX SHADER
-
 #version 330
 
 uniform mat4 u_projectionMatrix;
@@ -24,9 +22,9 @@ void main(void)
 {
 	mat4 mvMatrix = u_viewMatrix * u_modelMatrix;
 	
-	gl_Position = u_projectionMatrix * mvMatrix * vertexPosition;
-	
 	v_textureCoordinate = textureCoordinate;
-	v_normal = normalize(vec3(mvMatrix * vec4(vertexPosition, 0.0)));
+	v_normal = normalize(vec3(mvMatrix * vertexPosition));
 	v_position = mvMatrix * vertexPosition;
+	
+	gl_Position = u_projectionMatrix * mvMatrix * vertexPosition;
 }

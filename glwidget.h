@@ -1,14 +1,15 @@
 #ifndef GLWIDGET_H
 #define GLWIDGET_H
 
-#include <QGLWidget>
+#include <QOpenGLWidget>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
 #include <QOpenGLTexture>
+#include <QOpenGLFunctions>
 
 class Model3D;
 
-class GLWidget : public QGLWidget
+class GLWidget : public QOpenGLWidget
 {
 
     Q_OBJECT
@@ -26,12 +27,12 @@ protected:
     void paintGL() override;
 
     // input handling on widget press
-    void mousePressEvent(QMouseEvent*event) override;
-    void mouseMoveEvent(QMouseEvent*event) override;
-    void wheelEvent(QWheelEvent*event) override;
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void wheelEvent(QWheelEvent* event) override;
 
     void initShaders();
-    void initPyramid();
+    void initCube();
 private:
     QMatrix4x4 m_projectoinMatrix;
     QOpenGLShaderProgram m_shaderProgram;
@@ -41,7 +42,7 @@ private:
     float m_alpha;
     float m_beta;
     float m_distance;
-    QPoint m_last_mouse_position;
+    QPoint m_lastMousePosition;
 
 private Q_SLOTS:
     void timeout();

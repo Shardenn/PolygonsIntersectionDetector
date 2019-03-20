@@ -50,11 +50,22 @@ MeshData ObjDataProcessor::getModelData(const QString &filePath)
             // 3 index - index of normals array
             modelData.m_polygonVertIndexes.append(modelData.m_polygonVertIndexes.size());
 
-            for(int i = 1; i < lineTokens.size(); i++) {
+            for(int i = 1; i < lineTokens.size() - 1; i++) {
                 QStringList vertexDataIndex = lineTokens[i].split("/");
-                VertexData newVertex(     verticesCoord[vertexDataIndex[0].toLong() - 1],
-                                     textureCoordinates[vertexDataIndex[1].toLong() - 1],
-                                                normals[vertexDataIndex[2].toLong() - 1]);
+
+                bool ok;
+                VertexData newVertex;
+                long index = vertexDataIndex[0].toLong(&ok);
+                if(ok)
+                    newVertex.m_position = verticesCoord[index - 1];
+
+                index = vertexDataIndex[1].toLong(&ok);
+                if(ok)
+                    newVertex.m_position = verticesCoord[index - 1];
+
+                index = vertexDataIndex[2].toLong(&ok);
+                if(ok)
+                    newVertex.m_position = verticesCoord[index - 1];
 
                 modelData.m_vertexesData.append(newVertex);
             }

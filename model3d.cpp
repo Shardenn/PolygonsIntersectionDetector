@@ -34,9 +34,10 @@ void Model3D::init(const QVector<VertexData> &vertexData, const QVector<GLuint> 
     if(m_indexBuffer.isCreated())
         m_indexBuffer.destroy();
 
-    if(m_texture != nullptr && m_texture->isCreated()) {
-        delete m_texture;
-        m_texture = nullptr;
+    if(m_texture != nullptr) {
+        if (m_texture->isCreated()) {
+            //m_texture->destroy();
+        }
     }
 
     m_vertexBuffer.create();
@@ -62,12 +63,14 @@ void Model3D::init(const QVector<VertexData> &vertexData, const QVector<GLuint> 
 
 void Model3D::draw(QOpenGLShaderProgram *shaderProgram, QOpenGLFunctions *functions)
 {
-    if (!m_vertexBuffer.isCreated() || !m_indexBuffer.isCreated()) {
-        return;
-    }
 
+//    if (!m_vertexBuffer.isCreated() || !m_indexBuffer.isCreated()) {
+  //      return;
+    //}
+/*
     m_texture->bind(0);
     shaderProgram->setUniformValue("u_texture", 0);
+    */
     shaderProgram->setUniformValue("modelMatrix", m_modelMatrix);
 
     m_vertexBuffer.bind();
@@ -96,5 +99,5 @@ void Model3D::draw(QOpenGLShaderProgram *shaderProgram, QOpenGLFunctions *functi
 
     m_vertexBuffer.release();
     m_indexBuffer.release();
-    m_texture->release();
+    //m_texture->release();
 }
