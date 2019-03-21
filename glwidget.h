@@ -9,7 +9,7 @@
 
 class Model3D;
 
-class GLWidget : public QOpenGLWidget
+class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
 
     Q_OBJECT

@@ -26,5 +26,7 @@ void main(void)
 	v_normal = normalize(vec3(mvMatrix * vertexPosition));
 	v_position = mvMatrix * vertexPosition;
 	
-	gl_Position = u_projectionMatrix * mvMatrix * vertexPosition;
+
+        gl_Position = vec4(0.0,0.0,0.0,1.0);
+        //gl_Position = u_projectionMatrix * mvMatrix * vertexPosition;
 }

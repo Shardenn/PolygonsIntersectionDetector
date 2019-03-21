@@ -22,6 +22,8 @@ public:
     void init(const QVector<VertexData> &vertexData,
          const QVector<GLuint> &indeces,
          const QImage &texture);
+
+
     void draw(QOpenGLShaderProgram *shaderProgram,
               QOpenGLFunctions *functions);
 private:
@@ -29,6 +31,7 @@ private:
     QOpenGLBuffer   m_indexBuffer;
     QMatrix4x4      m_modelMatrix;
     QOpenGLTexture *m_texture;
+    QOpenGLFunctions* f;
 };
 
 #endif // MODEL3D_H

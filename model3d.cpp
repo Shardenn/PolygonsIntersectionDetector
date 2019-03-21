@@ -2,6 +2,7 @@
 #include <QOpenGLTexture>
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
+#include <QDebug>
 
 Model3D::Model3D() :
     m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
@@ -11,9 +12,11 @@ Model3D::Model3D() :
 
 }
 
-Model3D::Model3D(const QVector<VertexData> &vertexData, const QVector<GLuint> &indeces, const QImage &texture)
+Model3D::Model3D(const QVector<VertexData> &vertexData, const QVector<GLuint> &indeces, const QImage &texture): Model3D()
 {
+    this->f = f;
     init(vertexData, indeces, texture);
+
 }
 
 Model3D::~Model3D()
@@ -40,6 +43,7 @@ void Model3D::init(const QVector<VertexData> &vertexData, const QVector<GLuint> 
         //}
     }
 
+
     m_vertexBuffer.create();
     m_vertexBuffer.bind();
     m_vertexBuffer.allocate(vertexData.constData(), vertexData.size() * sizeof (VertexData));
@@ -52,6 +56,7 @@ void Model3D::init(const QVector<VertexData> &vertexData, const QVector<GLuint> 
 
     m_texture = new QOpenGLTexture(texture.mirrored()); // TODO why it should be mirrored?
 
+
     // TODO what are the first two things?
     // set nearest filtering mode for texture minification
     m_texture->setMinificationFilter(QOpenGLTexture::Nearest);
@@ -61,12 +66,19 @@ void Model3D::init(const QVector<VertexData> &vertexData, const QVector<GLuint> 
     m_texture->setWrapMode(QOpenGLTexture::Repeat);
 }
 
-void Model3D::draw(QOpenGLShaderProgram *shaderProgram, QOpenGLFunctions *functions)
+void Model3D::draw(QOpenGLShaderProgram *shaderProgram, QOpenGLFunctions *f)
 {
+    qDebug() << "DRAW";
 
-    if (!m_vertexBuffer.isCreated() || !m_indexBuffer.isCreated()) {
+
+    if (!m_vertexBuffer.isCreated()) {
+        qDebug() << "FUCK";
+    }
+    if (!m_indexBuffer.isCreated()) {
         return;
     }
+
+
 
     m_texture->bind(0);
     shaderProgram->setUniformValue("u_texture", 0);
@@ -95,7 +107,7 @@ void Model3D::draw(QOpenGLShaderProgram *shaderProgram, QOpenGLFunctions *functi
 
     m_indexBuffer.bind();
 
-    functions->glDrawElements(GL_TRIANGLES, m_indexBuffer.size(), GL_UNSIGNED_INT, nullptr);
+    f->glDrawElements(GL_POINTS, 1, GL_UNSIGNED_INT, nullptr);
 
     m_vertexBuffer.release();
     m_indexBuffer.release();

@@ -7,12 +7,17 @@
 #include <QOpenGLFunctions>
 #include "model3d.h"
 
+#include <QDebug>
+
 GLWidget::GLWidget(QWidget *parent)
     : QOpenGLWidget(parent)
 {
     m_alpha = 25;
     m_beta = -25;
     m_distance = 2.5;
+
+
+
 
 //    m_light_angle = 0;
 
@@ -33,13 +38,17 @@ QSize GLWidget::sizeHint() const
 
 void GLWidget::initializeGL()
 {
-    glClearColor(128, 128, 0, 1);
+    initializeOpenGLFunctions();
+
+    qDebug() << "initializeGL";
+    glClearColor(0, 0, 0, 1);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
     initShaders();
     initCube();
+    qDebug() << "initializeGL Done";
 }
 
 void GLWidget::resizeGL(int w, int h)
@@ -57,9 +66,10 @@ void GLWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
     QMatrix4x4 vMatrix;
     vMatrix.setToIdentity();
-    vMatrix.translate(0.0,0.0,-5.0);
+    //vMatrix.translate(0.0,0.0,-5.0);
     //vMatrix.rotate(m_rotation);
 
     m_shaderProgram.bind();
@@ -69,22 +79,29 @@ void GLWidget::paintGL()
     m_shaderProgram.setUniformValue("u_lightPower", 5.0f);
 
     for (auto object : m_objects) {
-        object->draw(&m_shaderProgram, context()->currentContext()->functions());
+        object->draw(&m_shaderProgram, this->context()->functions());
     }
+
 }
 
 void GLWidget::initShaders()
 {
     if (!m_shaderProgram.addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                                 QDir::currentPath() + "/../PolygonsIntersectionDetector/Shaders/lightingVertexShader.vsh"))
+                                                 QDir::currentPath() + "/../PolygonsIntersectionDetector/Shaders/lightingVertexShader.vsh")) {
+        qDebug() << "FUCK";
         close();
+    }
 
     if (!m_shaderProgram.addShaderFromSourceFile(QOpenGLShader::Fragment,
-                                                 QDir::currentPath() + "/../PolygonsIntersectionDetector/Shaders/lightingFragmentShader.fsh"))
+                                                 QDir::currentPath() + "/../PolygonsIntersectionDetector/Shaders/lightingFragmentShader.fsh")) {
         close();
+        qDebug() << "FUCK1";
+    }
 
-    if (!m_shaderProgram.link())
+    if (!m_shaderProgram.link()) {
         close();
+        qDebug() << "FUCK2";
+    }
 }
 
 void GLWidget::initCube()
@@ -95,8 +112,9 @@ void GLWidget::initCube()
         qDebug() << "Texture was not opened in initCube()";
         return;
     }
-    Model3D cube(cubeData.m_vertexesData, cubeData.m_polygonVertIndexes, texture);
-    m_objects.append(&cube);
+
+    Model3D* cube = new Model3D (cubeData.m_vertexesData, cubeData.m_polygonVertIndexes, texture);
+    m_objects.append(cube);
 
     /*
     QVector<VertexData> vertexes;
