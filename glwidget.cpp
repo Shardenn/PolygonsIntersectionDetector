@@ -76,11 +76,11 @@ void GLWidget::paintGL()
 void GLWidget::initShaders()
 {
     if (!m_shaderProgram.addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                                 QDir::currentPath() + "/../Object_intersections/Shaders/lightingVertexShader.vsh"))
+                                                 QDir::currentPath() + "/../PolygonsIntersectionDetector/Shaders/lightingVertexShader.vsh"))
         close();
 
     if (!m_shaderProgram.addShaderFromSourceFile(QOpenGLShader::Fragment,
-                                                 QDir::currentPath() + "/../Object_intersections/Shaders/lightingFragmentShader.fsh"))
+                                                 QDir::currentPath() + "/../PolygonsIntersectionDetector/Shaders/lightingFragmentShader.fsh"))
         close();
 
     if (!m_shaderProgram.link())
@@ -89,11 +89,14 @@ void GLWidget::initShaders()
 
 void GLWidget::initCube()
 {
-    /*
-    auto cubeData = ObjDataProcessor::getModelData(QDir::currentPath() + "/../Object_intersections/Objects/cube.obj");
-    auto texture = QImage(QDir::currentPath() + "/../Object_intersections/Textures/QtCreator.png");
+    auto cubeData = ObjDataProcessor::getModelData(QDir::currentPath() + "/../PolygonsIntersectionDetector/Objects/cube.obj");
+    auto texture = QImage(QDir::currentPath() + "/../PolygonsIntersectionDetector/Textures/QtCreator.png");
+    if (texture.isNull()) {
+        qDebug() << "Texture was not opened in initCube()";
+        return;
+    }
     Model3D cube(cubeData.m_vertexesData, cubeData.m_polygonVertIndexes, texture);
-    */
+    m_objects.append(&cube);
 
     /*
     QVector<VertexData> vertexes;
@@ -110,9 +113,9 @@ void GLWidget::initCube()
     indexes.append(1);
     indexes.append(2);
     indexes.append(3);
-
-    m_objects.append(new Model3D(vertexes, indexes, texture));
     */
+    //m_objects.append(new Model3D(vertexes, indexes, texture));
+
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *event)

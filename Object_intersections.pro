@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui opengl testlib
-LIBS     += -lopengl32
+#LIBS     += -lopengl32 # do we need it for Windows?
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = Object_intersections
