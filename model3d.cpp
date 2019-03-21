@@ -30,7 +30,7 @@ Model3D::~Model3D()
         m_texture->destroy();
 }
 
-void Model3D::init(const QVector<VertexData> &vertexData, const QVector<GLuint> &indeces, const QImage &texture)
+void Model3D::init(const QVector<VertexData> &vertexData, const QVector<GLuint> &indexes, const QImage &texture)
 {
     if(m_vertexBuffer.isCreated())
         m_vertexBuffer.destroy();
@@ -38,9 +38,9 @@ void Model3D::init(const QVector<VertexData> &vertexData, const QVector<GLuint> 
         m_indexBuffer.destroy();
 
     if(m_texture != nullptr) {
-        //if (m_texture->isCreated()) {
-            //m_texture->destroy();
-        //}
+        if (m_texture->isCreated()) {
+            m_texture->destroy();
+        }
     }
 
 
@@ -51,7 +51,7 @@ void Model3D::init(const QVector<VertexData> &vertexData, const QVector<GLuint> 
 
     m_indexBuffer.create();
     m_indexBuffer.bind();
-    m_indexBuffer.allocate(indeces.constData(), indeces.size() * sizeof (GLuint));
+    m_indexBuffer.allocate(indexes.constData(), indexes.size() * sizeof (GLuint));
     m_indexBuffer.release();
 
     m_texture = new QOpenGLTexture(texture.mirrored()); // TODO why it should be mirrored?
@@ -105,9 +105,12 @@ void Model3D::draw(QOpenGLShaderProgram *shaderProgram, QOpenGLFunctions *f)
     shaderProgram->enableAttributeArray(normLoc);
     shaderProgram->setAttributeBuffer(normLoc, GL_FLOAT, offset, 3, sizeof(VertexData));
 
+    qDebug() << m_vertexBuffer.size();
+    qDebug() << m_indexBuffer.size();
+
     m_indexBuffer.bind();
 
-    f->glDrawElements(GL_POINTS, 1, GL_UNSIGNED_INT, nullptr);
+    f->glDrawElements(GL_TRIANGLES, m_indexBuffer.size()-1, GL_UNSIGNED_INT, nullptr);
 
     m_vertexBuffer.release();
     m_indexBuffer.release();

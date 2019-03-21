@@ -61,11 +61,11 @@ MeshData ObjDataProcessor::getModelData(const QString &filePath)
 
                 index = vertexDataIndex[1].toLong(&ok);
                 if(ok)
-                    newVertex.m_position = verticesCoord[index - 1];
+                    newVertex.m_textureCoordinate = textureCoordinates[index - 1];
 
                 index = vertexDataIndex[2].toLong(&ok);
                 if(ok)
-                    newVertex.m_position = verticesCoord[index - 1];
+                    newVertex.m_normal = normals[index - 1];
 
                 modelData.m_vertexesData.append(newVertex);
             }

@@ -41,7 +41,7 @@ void GLWidget::initializeGL()
     initializeOpenGLFunctions();
 
     qDebug() << "initializeGL";
-    glClearColor(0, 0, 0, 1);
+    glClearColor(128, 0, 0, 1);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -79,7 +79,7 @@ void GLWidget::paintGL()
     m_shaderProgram.setUniformValue("u_lightPower", 5.0f);
 
     for (auto object : m_objects) {
-        object->draw(&m_shaderProgram, this->context()->functions());
+        object->draw(&m_shaderProgram, context()->functions());
     }
 
 }
