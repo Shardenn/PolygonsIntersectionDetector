@@ -26,8 +26,11 @@ Model3D::~Model3D()
     if(m_indexBuffer.isCreated())
         m_indexBuffer.destroy();
 
-    if(m_texture != nullptr && m_texture->isCreated())
+    if(m_texture != nullptr && m_texture->isCreated()) {
+        // model3D does not have vaild OGL context.
+        // how to destroy a texture?
         m_texture->destroy();
+    }
 }
 
 void Model3D::init(const QVector<VertexData> &vertexData, const QVector<GLuint> &indexes, const QImage &texture)

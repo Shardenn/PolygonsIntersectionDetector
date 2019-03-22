@@ -10,8 +10,7 @@
 #include <QDebug>
 
 GLWidget::GLWidget(QWidget *parent)
-    : QOpenGLWidget(parent),
-      m_indexBuffer(QOpenGLBuffer::IndexBuffer)
+    : QOpenGLWidget(parent)
 {
     m_alpha = 25;
     m_beta = -25;
@@ -29,8 +28,6 @@ GLWidget::GLWidget(QWidget *parent)
 
 GLWidget::~GLWidget()
 {
-    m_vertexBuffer.destroy();
-    m_indexBuffer.destroy();
     for (auto object : m_objects) {
         delete object;
     }
@@ -44,9 +41,6 @@ QSize GLWidget::sizeHint() const
 void GLWidget::initializeGL()
 {
     initializeOpenGLFunctions();
-
-    m_vertexBuffer.create();
-    m_indexBuffer.create();
 
     qDebug() << "initializeGL";
     glClearColor(0, 0.3, 0, 1);
