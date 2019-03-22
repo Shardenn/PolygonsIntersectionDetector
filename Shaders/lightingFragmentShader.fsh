@@ -37,5 +37,6 @@ void main(void)
 //	vec4 specularColor = vec4(1.0, 1.0, 1.0, 1.0) * u_lightPower * pow(max(0.0, dot(reflectLight, -eyeVect)), specularFactor) / (1.0 + 0.25 * pow(len, 2));
 //	resultColor += specularColor;
 	
-        gl_FragColor = resultColor;
+        //gl_FragColor = resultColor;
+    gl_FragColor = texture2D(u_texture, v_textureCoord);
 }

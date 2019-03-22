@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Textures/QtCreator.png</file>
+    </qresource>
+</RCC>

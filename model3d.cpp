@@ -68,22 +68,21 @@ void Model3D::init(const QVector<VertexData> &vertexData, const QVector<GLuint> 
 
 void Model3D::draw(QOpenGLShaderProgram *shaderProgram, QOpenGLFunctions *f)
 {
-    qDebug() << "DRAW";
-
+    qDebug() << "Drawing..";
 
     if (!m_vertexBuffer.isCreated()) {
-        qDebug() << "FUCK";
-    }
-    if (!m_indexBuffer.isCreated()) {
+        qDebug() << "Vertex buffer is not created";
         return;
     }
-
-
+    if (!m_indexBuffer.isCreated()) {
+        qDebug() << "Index buffer is not created";
+        return;
+    }
 
     m_texture->bind(0);
     shaderProgram->setUniformValue("u_texture", 0);
 
-    shaderProgram->setUniformValue("modelMatrix", m_modelMatrix);
+    shaderProgram->setUniformValue("u_modelMatrix", m_modelMatrix);
 
     m_vertexBuffer.bind();
 
@@ -104,9 +103,6 @@ void Model3D::draw(QOpenGLShaderProgram *shaderProgram, QOpenGLFunctions *f)
     int normLoc = shaderProgram->attributeLocation("normal");
     shaderProgram->enableAttributeArray(normLoc);
     shaderProgram->setAttributeBuffer(normLoc, GL_FLOAT, offset, 3, sizeof(VertexData));
-
-    qDebug() << m_vertexBuffer.size();
-    qDebug() << m_indexBuffer.size();
 
     m_indexBuffer.bind();
 
