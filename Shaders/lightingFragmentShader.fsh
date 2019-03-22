@@ -20,7 +20,7 @@ in vec3 v_normal;
 
 void main(void)
 {
-        vec4 resultColor = vec4(1.0, 1.0, 1.0, 0.0);
+        vec4 resultColor = vec4(1.0, 1.0, 1.0, 1.0);
 //	vec4 eyePosition = vec4(0.0, 0.0, 0.0, 1.0);
 //	vec4 diffMatColor = texture2D(u_texture, v_textureCoord);
 //	vec3 eyeVect = normalize(v_position.xyz - eyePosition.xyz);
@@ -37,8 +37,5 @@ void main(void)
 //	vec4 specularColor = vec4(1.0, 1.0, 1.0, 1.0) * u_lightPower * pow(max(0.0, dot(reflectLight, -eyeVect)), specularFactor) / (1.0 + 0.25 * pow(len, 2));
 //	resultColor += specularColor;
 	
-
-
-	gl_FragColor = resultColor;
-	
+        gl_FragColor = resultColor;
 }

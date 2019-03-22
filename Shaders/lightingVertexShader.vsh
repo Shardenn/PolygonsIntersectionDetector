@@ -20,13 +20,12 @@ out vec2 v_textureCoord;
 
 void main(void)
 {
-	mat4 mvMatrix = u_viewMatrix * u_modelMatrix;
-	
-	v_textureCoord = textureCoordinate;
-	v_normal = normalize(vec3(mvMatrix * vertexPosition));
-	v_position = mvMatrix * vertexPosition;
-	
+    mat4 mvMatrix = u_viewMatrix * u_modelMatrix;
 
-        gl_Position = vec4(0.0,0.0,0.0,1.0);
-        //gl_Position = u_projectionMatrix * mvMatrix * vertexPosition;
+    v_textureCoord = textureCoordinate;
+    v_normal = normalize(vec3(mvMatrix * vertexPosition));
+    v_position = mvMatrix * vertexPosition;
+
+    gl_Position = vec4(vertexPosition);
+    //gl_Position = u_projectionMatrix * mvMatrix * vertexPosition;
 }

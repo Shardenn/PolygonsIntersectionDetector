@@ -38,6 +38,10 @@ private:
     QOpenGLShaderProgram m_shaderProgram;
     QVector<Model3D*> m_objects;
 
+    QOpenGLBuffer m_vertexBuffer;
+    QOpenGLBuffer m_indexBuffer;
+    QOpenGLTexture * m_texture;
+
     // mouse input stuff
     float m_alpha;
     float m_beta;
