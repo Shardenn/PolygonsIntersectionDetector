@@ -6,8 +6,9 @@
 #include <QOpenGLBuffer>
 #include <QOpenGLTexture>
 #include <QOpenGLFunctions>
+#include "model3d.h"
 
-class Model3D;
+class Model3D::GLModel3D;
 
 class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -36,7 +37,7 @@ protected:
 private:
     QMatrix4x4 m_projectoinMatrix;
     QOpenGLShaderProgram m_shaderProgram;
-    QVector<Model3D*> m_objects;
+    QVector<Model3D::GLModel3D*> m_objects;
 
     // mouse input stuff
     float m_alpha;

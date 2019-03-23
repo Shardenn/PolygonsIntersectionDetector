@@ -1,10 +1,10 @@
-#include "model3d.h"
+#include "Model3D.h"
 #include <QOpenGLTexture>
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
 #include <QDebug>
 
-Model3D::Model3D() :
+Model3D::GLModel3D::GLModel3D() :
     m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
     m_indexBuffer(QOpenGLBuffer::IndexBuffer),
     m_texture(nullptr)
@@ -12,14 +12,12 @@ Model3D::Model3D() :
 
 }
 
-Model3D::Model3D(const QVector<VertexData> &vertexData, const QVector<GLuint> &indeces, const QImage &texture): Model3D()
+Model3D::GLModel3D::GLModel3D(const QVector<VertexData> &vertexData, const QVector<GLuint> &indeces, const QImage &texture): GLModel3D()
 {
-    this->f = f;
-    init(vertexData, indeces, texture);
-
+    reinit(vertexData, indeces, texture);
 }
 
-Model3D::~Model3D()
+Model3D::GLModel3D::~GLModel3D()
 {
     if(m_vertexBuffer.isCreated())
         m_vertexBuffer.destroy();
@@ -27,13 +25,15 @@ Model3D::~Model3D()
         m_indexBuffer.destroy();
 
     if(m_texture != nullptr && m_texture->isCreated()) {
-        // model3D does not have vaild OGL context.
+        // GLModel3D does not have vaild OGL context.
         // how to destroy a texture?
         m_texture->destroy();
+        //const GLuint textureID = m_texture->textureId();
+        //f->glDeleteTextures(1, &textureID);
     }
 }
 
-void Model3D::init(const QVector<VertexData> &vertexData, const QVector<GLuint> &indexes, const QImage &texture)
+void Model3D::GLModel3D::reinit(const QVector<VertexData> &vertexData, const QVector<GLuint> &indexes, const QImage &texture)
 {
     if(m_vertexBuffer.isCreated())
         m_vertexBuffer.destroy();
@@ -45,7 +45,6 @@ void Model3D::init(const QVector<VertexData> &vertexData, const QVector<GLuint> 
             m_texture->destroy();
         }
     }
-
 
     m_vertexBuffer.create();
     m_vertexBuffer.bind();
@@ -59,7 +58,6 @@ void Model3D::init(const QVector<VertexData> &vertexData, const QVector<GLuint> 
 
     m_texture = new QOpenGLTexture(texture.mirrored()); // TODO why it should be mirrored?
 
-
     // TODO what are the first two things?
     // set nearest filtering mode for texture minification
     m_texture->setMinificationFilter(QOpenGLTexture::Nearest);
@@ -69,7 +67,7 @@ void Model3D::init(const QVector<VertexData> &vertexData, const QVector<GLuint> 
     m_texture->setWrapMode(QOpenGLTexture::Repeat);
 }
 
-void Model3D::draw(QOpenGLShaderProgram *shaderProgram, QOpenGLFunctions *f)
+void Model3D::GLModel3D::draw(QOpenGLShaderProgram *shaderProgram, QOpenGLFunctions *f)
 {
     qDebug() << "Drawing..";
 
@@ -83,8 +81,8 @@ void Model3D::draw(QOpenGLShaderProgram *shaderProgram, QOpenGLFunctions *f)
     }
 
     m_texture->bind(0);
-    shaderProgram->setUniformValue("u_texture", 0);
 
+    shaderProgram->setUniformValue("u_texture", 0);
     shaderProgram->setUniformValue("u_modelMatrix", m_modelMatrix);
 
     m_vertexBuffer.bind();

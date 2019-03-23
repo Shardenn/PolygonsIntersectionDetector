@@ -37,7 +37,7 @@ HEADERS += \
         glwidget.h \
     model3d.h \
     objdataprocessor.h \
-    model_data.h
+    modeldata.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

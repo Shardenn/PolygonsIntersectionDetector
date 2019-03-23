@@ -4,7 +4,7 @@ uniform mat4 u_projectionMatrix;
 uniform mat4 u_viewMatrix;
 uniform mat4 u_modelMatrix;
 
-uniform mat4 u_mvpMatrix;
+//uniform mat4 u_mvpMatrix;
 // uniform mat3 normalMatrix;
 // uniform vec3 lightPosition;
 
@@ -27,6 +27,6 @@ void main(void)
     v_normal = normalize(vec3(mvMatrix * vertexPosition));
     v_position = mvMatrix * vertexPosition;
 
-    gl_Position = u_mvpMatrix * vertexPosition;
+    gl_Position = u_projectionMatrix * mvMatrix * vertexPosition;
     //gl_Position = u_projectionMatrix * mvMatrix * vertexPosition;
 }

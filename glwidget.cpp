@@ -16,9 +16,6 @@ GLWidget::GLWidget(QWidget *parent)
     m_beta = -25;
     m_distance = 2.5;
 
-
-
-
 //    m_light_angle = 0;
 
     QTimer* timer = new QTimer(this);
@@ -68,16 +65,9 @@ void GLWidget::paintGL()
 
     QMatrix4x4 vMatrix;
     vMatrix.setToIdentity();
-    //vMatrix.translate(0.0,0.0,-5.0);
-    //vMatrix.rotate(m_rotation);
-
-    QMatrix4x4 mvMatrix;
-    mvMatrix.setToIdentity();
-    mvMatrix.translate(0.0, 0.0, -5.0);
-    mvMatrix.rotate(30, QVector3D(0.0, 1.0, 1.0));
+    vMatrix.translate(0.0,0.0,-5.0); // move camera a bit further from origin
 
     m_shaderProgram.bind();
-    m_shaderProgram.setUniformValue("u_mvpMatrix", m_projectoinMatrix * mvMatrix);
 
     m_shaderProgram.setUniformValue("u_projectionMatrix", m_projectoinMatrix);
     m_shaderProgram.setUniformValue("u_viewMatrix", vMatrix);
@@ -158,7 +148,8 @@ void GLWidget::initCube()
         indexesData.append(i + 3);
     }
 
-    Model3D *cube = new Model3D(vertexData, indexesData, QImage(":/Textures/QtCreator.png"));
+    using namespace Model3D;
+    GLModel3D *cube = new GLModel3D(vertexData, indexesData, QImage(":/Textures/QtCreator.png"));
     m_objects.append(cube);
 
 }
