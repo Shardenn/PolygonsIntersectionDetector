@@ -24,7 +24,7 @@ void main(void)
     mat4 mvMatrix = u_viewMatrix * u_modelMatrix;
 
     v_textureCoord = textureCoordinate;
-    v_normal = normalize(vec3(mvMatrix * vertexPosition));
+    v_normal = normalize(vec3(mvMatrix * vec4(normal, 0.0)));
     v_position = mvMatrix * vertexPosition;
 
     gl_Position = u_projectionMatrix * mvMatrix * vertexPosition;

@@ -8,8 +8,6 @@
 #include <QOpenGLFunctions>
 #include "model3d.h"
 
-class Model3D::GLModel3D;
-
 class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
 
@@ -43,7 +41,8 @@ private:
     float m_alpha;
     float m_beta;
     float m_distance;
-    QPoint m_lastMousePosition;
+    QVector2D m_lastMousePosition;
+    QQuaternion m_rotation;
 
 private Q_SLOTS:
     void timeout();

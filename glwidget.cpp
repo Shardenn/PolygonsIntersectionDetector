@@ -5,7 +5,6 @@
 #include <objdataprocessor.h>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
-#include "model3d.h"
 
 #include <QDebug>
 
@@ -40,10 +39,10 @@ void GLWidget::initializeGL()
     initializeOpenGLFunctions();
 
     qDebug() << "initializeGL";
-    glClearColor(0, 0.3, 0, 1);
+    glClearColor(0.0f, 0.3f, 0.0f, 1.0f);
 
     glEnable(GL_DEPTH_TEST);
-    //glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
 
     initShaders();
     initCube();
@@ -66,6 +65,7 @@ void GLWidget::paintGL()
     QMatrix4x4 vMatrix;
     vMatrix.setToIdentity();
     vMatrix.translate(0.0,0.0,-5.0); // move camera a bit further from origin
+    vMatrix.rotate(m_rotation);
 
     m_shaderProgram.bind();
 
@@ -148,40 +148,41 @@ void GLWidget::initCube()
         indexesData.append(i + 3);
     }
 
-    using namespace Model3D;
-    GLModel3D *cube = new GLModel3D(vertexData, indexesData, QImage(":/Textures/QtCreator.png"));
-    m_objects.append(cube);
+    using namespace Model3D; 
+    auto cube1 = new GLModel3D(vertexData, indexesData,
+                               QImage(":/Textures/QtCreator.png"));
 
+    cube1->translate(QVector3D(2.0f, 0.0f, 0.0f));
+
+    m_objects.append(cube1);
+    m_objects.append(new GLModel3D(vertexData, indexesData,
+                                   QImage(":/Textures/QtCreator.png")));
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
-    m_lastMousePosition = event->pos();
+    if (event->buttons() == Qt::LeftButton) {
+        m_lastMousePosition = QVector2D(event->localPos());
+    }
     event->accept();
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    int deltaX = event->x() - m_lastMousePosition.x();
-    int deltaY = event->y() - m_lastMousePosition.y();
+    if (event->buttons() != Qt::LeftButton)
+        return;
 
-    if(event->buttons() & Qt::LeftButton)
-    {
-        m_alpha -= deltaX;
-        while(m_alpha < 0)
-            m_alpha += 360;
-        while(m_alpha >= 360)
-            m_alpha -= 360;
+    QVector2D diff = QVector2D(event->localPos()) - m_lastMousePosition;
+    m_lastMousePosition = QVector2D(event->localPos());
 
-        m_beta -= deltaY;
-        while(m_beta < -90)
-            m_beta = -90;
-        while(m_beta > 90)
-            m_beta = 90;
+    float angle = diff.length() / 2.0f;
 
-        //paintGL();
-    }
-    m_lastMousePosition = event->pos();
+    QVector3D axis(diff.y(), diff.x(), 0.0);
+
+    m_rotation = QQuaternion::fromAxisAndAngle(axis, angle) * m_rotation;
+
+    update();
+
     event->accept();
 }
 

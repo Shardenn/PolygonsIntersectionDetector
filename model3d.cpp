@@ -12,7 +12,10 @@ Model3D::GLModel3D::GLModel3D() :
 
 }
 
-Model3D::GLModel3D::GLModel3D(const QVector<VertexData> &vertexData, const QVector<GLuint> &indeces, const QImage &texture): GLModel3D()
+Model3D::GLModel3D::GLModel3D(const QVector<VertexData> &vertexData,
+                              const QVector<GLuint> &indeces,
+                              const QImage &texture):
+    GLModel3D()
 {
     reinit(vertexData, indeces, texture);
 }
@@ -33,7 +36,9 @@ Model3D::GLModel3D::~GLModel3D()
     }
 }
 
-void Model3D::GLModel3D::reinit(const QVector<VertexData> &vertexData, const QVector<GLuint> &indexes, const QImage &texture)
+void Model3D::GLModel3D::reinit(const QVector<VertexData> &vertexData,
+                                const QVector<GLuint> &indexes,
+                                const QImage &texture)
 {
     if(m_vertexBuffer.isCreated())
         m_vertexBuffer.destroy();
@@ -48,12 +53,14 @@ void Model3D::GLModel3D::reinit(const QVector<VertexData> &vertexData, const QVe
 
     m_vertexBuffer.create();
     m_vertexBuffer.bind();
-    m_vertexBuffer.allocate(vertexData.constData(), vertexData.size() * sizeof (VertexData));
+    m_vertexBuffer.allocate(vertexData.constData(),
+                            vertexData.size() * sizeof (VertexData));
     m_vertexBuffer.release();
 
     m_indexBuffer.create();
     m_indexBuffer.bind();
-    m_indexBuffer.allocate(indexes.constData(), indexes.size() * sizeof (GLuint));
+    m_indexBuffer.allocate(indexes.constData(),
+                           indexes.size() * sizeof (GLuint));
     m_indexBuffer.release();
 
     m_texture = new QOpenGLTexture(texture.mirrored()); // TODO why it should be mirrored?
@@ -67,10 +74,9 @@ void Model3D::GLModel3D::reinit(const QVector<VertexData> &vertexData, const QVe
     m_texture->setWrapMode(QOpenGLTexture::Repeat);
 }
 
-void Model3D::GLModel3D::draw(QOpenGLShaderProgram *shaderProgram, QOpenGLFunctions *f)
+void Model3D::GLModel3D::draw(QOpenGLShaderProgram *shaderProgram,
+                              QOpenGLFunctions *f)
 {
-    qDebug() << "Drawing..";
-
     if (!m_vertexBuffer.isCreated()) {
         qDebug() << "Vertex buffer is not created";
         return;
@@ -112,4 +118,9 @@ void Model3D::GLModel3D::draw(QOpenGLShaderProgram *shaderProgram, QOpenGLFuncti
     m_vertexBuffer.release();
     m_indexBuffer.release();
     m_texture->release();
+}
+
+void Model3D::GLModel3D::translate(const QVector3D &translation)
+{
+    m_modelMatrix.translate(translation);
 }

@@ -28,6 +28,8 @@ public:
 
     void draw(QOpenGLShaderProgram *shaderProgram,
               QOpenGLFunctions *functions);
+
+    void translate(const QVector3D &translation);
 private:
     QOpenGLBuffer   m_vertexBuffer;
     QOpenGLBuffer   m_indexBuffer;
