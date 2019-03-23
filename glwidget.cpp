@@ -38,7 +38,6 @@ void GLWidget::initializeGL()
 {
     initializeOpenGLFunctions();
 
-    qDebug() << "initializeGL";
     glClearColor(0.0f, 0.3f, 0.0f, 1.0f);
 
     glEnable(GL_DEPTH_TEST);
@@ -46,7 +45,11 @@ void GLWidget::initializeGL()
 
     initShaders();
     initCube();
-    qDebug() << "initializeGL Done";
+
+    if (glGetError() != 0) {
+        qDebug() << "InitializeGL got an error";
+        Q_ASSERT(glGetError() == 0);
+    }
 }
 
 void GLWidget::resizeGL(int w, int h)
@@ -93,6 +96,7 @@ void GLWidget::initShaders()
 
     if (!m_shaderProgram.link()) {
         qDebug() << "The shader program was not linked in InitShaders()";
+        Q_ASSERT(m_shaderProgram.link());
     }
 
     if(!m_shaderProgram.bind()) {
