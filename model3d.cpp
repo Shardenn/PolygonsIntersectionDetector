@@ -1,10 +1,14 @@
-#include "Model3D.h"
+#include "model3d.h"
 #include <QOpenGLTexture>
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
 #include <QDebug>
 
-Model3D::GLModel3D::GLModel3D() :
+// do I need a separate scope so files, that includes this one,
+// do not see "using namespace"?
+using namespace Model3D;
+
+GLModel3D::GLModel3D() :
     m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
     m_indexBuffer(QOpenGLBuffer::IndexBuffer),
     m_texture(nullptr)
@@ -12,7 +16,7 @@ Model3D::GLModel3D::GLModel3D() :
 
 }
 
-Model3D::GLModel3D::GLModel3D(const QVector<VertexData> &vertexData,
+GLModel3D::GLModel3D(const QVector<VertexData> &vertexData,
                               const QVector<GLuint> &indeces,
                               const QImage &texture):
     GLModel3D()
@@ -20,7 +24,7 @@ Model3D::GLModel3D::GLModel3D(const QVector<VertexData> &vertexData,
     reinit(vertexData, indeces, texture);
 }
 
-Model3D::GLModel3D::~GLModel3D()
+GLModel3D::~GLModel3D()
 {
     if(m_vertexBuffer.isCreated())
         m_vertexBuffer.destroy();
@@ -36,7 +40,7 @@ Model3D::GLModel3D::~GLModel3D()
     }
 }
 
-void Model3D::GLModel3D::reinit(const QVector<VertexData> &vertexData,
+void GLModel3D::reinit(const QVector<VertexData> &vertexData,
                                 const QVector<GLuint> &indexes,
                                 const QImage &texture)
 {
@@ -74,7 +78,7 @@ void Model3D::GLModel3D::reinit(const QVector<VertexData> &vertexData,
     m_texture->setWrapMode(QOpenGLTexture::Repeat);
 }
 
-void Model3D::GLModel3D::draw(QOpenGLShaderProgram *shaderProgram,
+void GLModel3D::draw(QOpenGLShaderProgram *shaderProgram,
                               QOpenGLFunctions *f)
 {
     if (!m_vertexBuffer.isCreated()) {
@@ -120,7 +124,7 @@ void Model3D::GLModel3D::draw(QOpenGLShaderProgram *shaderProgram,
     m_texture->release();
 }
 
-void Model3D::GLModel3D::translate(const QVector3D &translation)
+void GLModel3D::translate(const QVector3D &translation)
 {
     m_modelMatrix.translate(translation);
 }
