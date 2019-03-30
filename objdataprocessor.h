@@ -4,7 +4,9 @@
 #include <GL/gl.h>
 #include <QString>
 #include <QVector>
-#include "modeldata.h"
+#include "model3d.h"
+
+using namespace Model3D;
 
 // TODO loadModel should return new object
 class ObjDataProcessor

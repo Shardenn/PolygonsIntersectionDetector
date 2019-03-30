@@ -106,6 +106,8 @@ void GLWidget::initShaders()
 
 void GLWidget::initCube()
 {
+    using namespace Model3D;
+
     QVector<VertexData> vertexData;
 
     float cubeLength = 1.0;
@@ -141,25 +143,39 @@ void GLWidget::initCube()
     vertexData.append(VertexData(QVector3D(l, -l, l),    QVector2D(1.0, 1.0),   QVector3D(0.0, -1.0, 0.0)));
     vertexData.append(VertexData(QVector3D(l, -l, -l),   QVector2D(1.0, 0.0),   QVector3D(0.0, -1.0, 0.0)));
 
-    QVector<GLuint> indexesData;
+    QVector<GLuint> indicesData;
 
     for (unsigned int i = 0; i < 24; i += 4) {
-        indexesData.append(i + 0);
-        indexesData.append(i + 1);
-        indexesData.append(i + 2);
-        indexesData.append(i + 2);
-        indexesData.append(i + 1);
-        indexesData.append(i + 3);
+        indicesData.append(i + 0);
+        indicesData.append(i + 1);
+        indicesData.append(i + 2);
+        indicesData.append(i + 2);
+        indicesData.append(i + 1);
+        indicesData.append(i + 3);
     }
 
-    using namespace Model3D; 
-    auto cube1 = new GLModel3D(vertexData, indexesData,
-                               QImage(":/Textures/QtCreator.png"));
+    QVector<QVector3D> verts;
+    QVector<QVector3D> normals;
+    QVector<QVector2D> texts;
+    for(auto vertex : vertexData) {
+        verts.append(vertex.m_position);
+        normals.append(vertex.m_normal);
+        texts.append(vertex.m_textureCoordinate);
+    }
 
+    MeshData mesh(verts, texts, normals, indicesData);
+
+    auto cube1 = new GLModel3D(vertexData, indicesData,
+                               QImage(":/Textures/QtCreator.png"));
     cube1->translate(QVector3D(2.0f, 0.0f, 0.0f));
 
+    auto cube2 = new GLModel3D(mesh, QImage(":/Textures/QtCreator.png"));
+    cube2->translate(QVector3D(-2.0f, 0.0f, 0.0f));
+
+
     m_objects.append(cube1);
-    m_objects.append(new GLModel3D(vertexData, indexesData,
+    m_objects.append(cube2);
+    m_objects.append(new GLModel3D(vertexData, indicesData,
                                    QImage(":/Textures/QtCreator.png")));
 }
 

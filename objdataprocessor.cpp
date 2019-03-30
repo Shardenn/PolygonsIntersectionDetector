@@ -5,6 +5,8 @@
 
 MeshData ObjDataProcessor::getModelData(const QString &filePath)
 {
+    using namespace Model3D;
+
     QFile objFile(filePath);
     if(!objFile.exists()) {
         qDebug() << "File for loading obj not found";
@@ -48,7 +50,7 @@ MeshData ObjDataProcessor::getModelData(const QString &filePath)
             // 1 index - index of vertices array
             // 2 index - index of texture coordinates array
             // 3 index - index of normals array
-            modelData.m_polygonVertIndexes.append(modelData.m_polygonVertIndexes.size());
+            modelData.m_polygonVertIndices.append(modelData.m_polygonVertIndices.size());
 
             for(int i = 1; i < lineTokens.size() - 1; i++) {
                 QStringList vertexDataIndex = lineTokens[i].split("/");
@@ -67,7 +69,7 @@ MeshData ObjDataProcessor::getModelData(const QString &filePath)
                 if(ok)
                     newVertex.m_normal = normals[index - 1];
 
-                modelData.m_vertexesData.append(newVertex);
+                //modelData.m_posit.append(newVertex);
             }
         }
     }

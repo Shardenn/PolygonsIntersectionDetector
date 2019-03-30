@@ -20,6 +20,13 @@ Model3D::GLModel3D::GLModel3D(const QVector<VertexData> &vertexData,
     reinit(vertexData, indeces, texture);
 }
 
+Model3D::GLModel3D::GLModel3D(const MeshData& mesh,
+                              const QImage& texture) :
+    GLModel3D()
+{
+    reinit(mesh, texture);
+}
+
 Model3D::GLModel3D::~GLModel3D()
 {
     if(m_vertexBuffer.isCreated())
@@ -37,7 +44,7 @@ Model3D::GLModel3D::~GLModel3D()
 }
 
 void Model3D::GLModel3D::reinit(const QVector<VertexData> &vertexData,
-                                const QVector<GLuint> &indexes,
+                                const QVector<GLuint> &indices,
                                 const QImage &texture)
 {
     if(m_vertexBuffer.isCreated())
@@ -51,6 +58,8 @@ void Model3D::GLModel3D::reinit(const QVector<VertexData> &vertexData,
         }
     }
 
+    // it is harder to operate with GL when the data is separated.
+    // Seems like using tied vertex/textures/normals is a good decision
     m_vertexBuffer.create();
     m_vertexBuffer.bind();
     m_vertexBuffer.allocate(vertexData.constData(),
@@ -59,8 +68,8 @@ void Model3D::GLModel3D::reinit(const QVector<VertexData> &vertexData,
 
     m_indexBuffer.create();
     m_indexBuffer.bind();
-    m_indexBuffer.allocate(indexes.constData(),
-                           indexes.size() * sizeof (GLuint));
+    m_indexBuffer.allocate(indices.constData(),
+                           indices.size() * sizeof (GLuint));
     m_indexBuffer.release();
 
     m_texture = new QOpenGLTexture(texture.mirrored()); // TODO why it should be mirrored?
@@ -72,6 +81,46 @@ void Model3D::GLModel3D::reinit(const QVector<VertexData> &vertexData,
     m_texture->setMagnificationFilter(QOpenGLTexture::Linear);
     // (1.1, 1.2) is the same tex coord as (0.1, 0.2)
     m_texture->setWrapMode(QOpenGLTexture::Repeat);
+}
+
+void Model3D::GLModel3D::reinit(const MeshData& mesh,
+                                const QImage& texture)
+{
+    // we will create VertexData vector to call another
+    // overload of reinit function
+
+    // get how much elements in QVector<VertexData> do we need
+    auto elementsCount = qMax(mesh.m_positions.size(),
+                            qMax(mesh.m_textureCoords.size(), mesh.m_normals.size()));
+    QVector<VertexData> vertexData(elementsCount);
+
+    // reset the iterator and assign an element to
+    // our vertexData
+    auto it = vertexData.begin();
+    for(auto position : mesh.m_positions) {
+        it->m_position = position;
+        it++;
+    }
+    it = vertexData.begin();
+    for(auto texture : mesh.m_textureCoords) {
+        it->m_textureCoordinate = texture;
+        it++;
+    }
+    it = vertexData.begin();
+    for(auto normal : mesh.m_normals) {
+        it->m_normal = normal;
+        it++;
+    }
+/*  TODO does meshData stores indices this way? What way?
+    QVector<GLuint> indices;
+    auto indicesCount = mesh.m_polygonVertIndices.last();
+    for(unsigned int i = 0; i < indicesCount; i++) {
+        indices.append(i);
+    }
+
+    reinit(vertexData, indices, texture);
+*/
+    reinit(vertexData, mesh.m_polygonVertIndices, texture);
 }
 
 void Model3D::GLModel3D::draw(QOpenGLShaderProgram *shaderProgram,
