@@ -1,5 +1,5 @@
-#ifndef OBJDATAPROCESSOR_H
-#define OBJDATAPROCESSOR_H
+#ifndef OBJDLOADER_H
+#define OBJDLOADER_H
 
 #include <GL/gl.h>
 #include <QString>
@@ -8,8 +8,7 @@
 
 using namespace Model3D;
 
-// TODO loadModel should return new object
-class ObjDataProcessor
+class ObjLoadaer
 {
 public:
     /*!
@@ -18,7 +17,7 @@ public:
      * \param filePath path to *.obj file
      * \return vector of data for each vertex from obj file
     */
-    static MeshData getModelData(const QString &filePath);
+    static MeshData load(const QString &filePath);
     /*!
      * \brief When given model data, returns its triangulated copy.
      * \param originalData - original model data
