@@ -5,7 +5,6 @@
 #-------------------------------------------------
 
 QT       += core gui opengl testlib
-#LIBS     += -lopengl32 # do we need it for Windows?
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = Object_intersections
@@ -26,16 +25,17 @@ CONFIG += c++14
 
 #include(GeomStack/GeomStack.pri)
 #include(GeomStack/GeomStackTests.pri)
-include(OBJLoader/OBJLoader.pri)
+include(Object3D/Object3D.pri)
+include(Object3D/Object3DTests.pri)
 
 SOURCES += \
         main.cpp \
-    model3d.cpp \
+    #model3d.cpp \
     glwidget.cpp \
 
 HEADERS += \
         glwidget.h \
-    model3d.h \
+    #model3d.h \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

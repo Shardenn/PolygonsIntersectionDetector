@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>Objects/cube.obj</file>
         <file>Objects/foot.obj</file>
+        <file>Objects/test_trivial.obj</file>
     </qresource>
 </RCC>

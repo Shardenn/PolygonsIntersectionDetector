@@ -49,15 +49,28 @@ public:
      * \brief Vector of normals for each vertex
      */
     QVector<QVector3D> m_normals;
-
-
     /*!
-     * \brief stores starting indices for each polygon
-     * e.g. for polygon i we need to get vertices num
-     * m_polygonVertices[i+1] starting from vertex
-     * m_polygonVertices[i] from m_positions vector.
+     * \brief stores starting vertices\normals position
+     * indices for each polygon
+     * e.g. to get i'th polygon vertices\normals:
+     * the polygon has exactly m_polygonVertices[i+1]
+     * vertices\normals;
+     * the first vertex\normal from m_positions
+     * (or m_normals)
+     * vector, that belongs to the polygon, is
+     * m_polygonVertices[i]
      */
     QVector<indexNumber_t> m_polygonVertices;
+    /*!
+     * \brief stores starting texture coordinates
+     * indices for each polygon
+     * e.g. to get i'th polygon texture coordinates:
+     * the polygon has exactly m_polygonTextures[i+1]
+     * texture coordinates;
+     * the first texture coordinate from m_textureCoords
+     * vector, that belongs to the polygon, is
+     * m_polygonTextures[i]
+     */
     QVector<indexNumber_t> m_polygonTextures;
     MeshData() {}
 
@@ -92,7 +105,22 @@ public:
         getPolygonVerticesInterval(polygonID, m_polygonVertices, firstVertex, numVertices);
         return m_normals.mid(firstVertex, numVertices);
     }
+/*
+    const inline bool operator==(const MeshData& other)
+    {
+        // doing a trivial member-by-memeber comparison here
+        return this->m_positions == other.m_positions &&
+                this->m_normals == other.m_normals &&
+                this->m_textureCoords == other.m_textureCoords &&
+                this->m_polygonTextures == other.m_polygonTextures &&
+                this->m_polygonVertices == other.m_polygonVertices;
+    }
 
+    const inline bool operator!=(const MeshData& other)
+    {
+        return !(*this == other);
+    }
+*/
 private:
     /*!
      * \brief getPolygonVerticesInterval
@@ -117,6 +145,15 @@ private:
         numVertices = intervalSource[polygonID + 1] - firstVertexNumber;
     }
 };
+
+inline bool operator==(const MeshData& a, const MeshData& b)
+{
+    return a.m_positions        == b.m_positions &&
+            a.m_normals         == b.m_normals &&
+            a.m_textureCoords   == b.m_textureCoords &&
+            a.m_polygonTextures == b.m_polygonTextures &&
+            a.m_polygonVertices == b.m_polygonVertices;
+}
 
 class GLModel3D
 {

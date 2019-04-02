@@ -1,12 +1,14 @@
 #include "glwidget.h"
 #include <QApplication>
 
-//#include "GeomStack/geomstacktests.h"
+#include <Object3D/object3dtests.h>
 
 void runTests()
 {
     //GeomStack::GeomStackTests gsTests;
     //QTest::qExec(&gsTests);
+    OBJLoader::Object3DTests objTests;
+    QTest::qExec(&objTests);
 }
 
 int main(int argc, char *argv[])

@@ -50,7 +50,6 @@ MeshData OBJLoader::OBJLoader::load(const QString &filePath)
             // 2 index - index of texture coordinates array
             // 3 index - index of normals array
             modelData.m_polygonVertices.append(modelData.m_positions.size());
-            modelData.m_polygonTextures.append(modelData.m_textureCoords.size());
 
             auto newPolygon = getPolygonInformation(lineTokens);
 
@@ -58,13 +57,14 @@ MeshData OBJLoader::OBJLoader::load(const QString &filePath)
                 // each "vertex" contains info about
                 // vertex that belongs to the polygon
                 if (vertex[0] > 0)
-                    modelData.m_positions.append(coords[vertex[0]-1]);
+                    modelData.m_positions.append(coords[vertex[0] - 1]);
 
-                if (vertex[1] > 0)
-                    modelData.m_textureCoords.append(texturesCoords[vertex[1]-1]);
-
+                if (vertex[1] > 0) {
+                    modelData.m_textureCoords.append(texturesCoords[vertex[1] - 1]);
+                    modelData.m_polygonTextures.append(modelData.m_textureCoords.size());
+                }
                 if (vertex[2] > 0)
-                    modelData.m_normals.append(normals[vertex[2]-1]);
+                    modelData.m_normals.append(normals[vertex[2] - 1]);
             }
 
         }
@@ -73,7 +73,8 @@ MeshData OBJLoader::OBJLoader::load(const QString &filePath)
     objFile.close();
 
     modelData.m_polygonVertices.append(modelData.m_positions.size());
-    modelData.m_polygonTextures.append(modelData.m_textureCoords.size());
+    if (modelData.m_polygonTextures.size() > 0)
+        modelData.m_polygonTextures.append(modelData.m_textureCoords.size());
 
     return modelData;
 }
