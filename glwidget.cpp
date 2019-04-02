@@ -2,7 +2,7 @@
 #include <QDir>
 #include <QMouseEvent>
 #include <QTimer>
-#include <objloader.h>
+#include <OBJLoader/objloader.h>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
 
@@ -164,7 +164,7 @@ void GLWidget::initCube()
     }
 
     MeshData m;
-    m = ObjLoader::load(":/Objects/cube.obj");
+    m = OBJLoader::OBJLoader::load(":/Objects/cube.obj");
 
     MeshData mesh(verts, texts, normals, indicesData);
 

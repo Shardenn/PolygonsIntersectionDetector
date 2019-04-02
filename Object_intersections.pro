@@ -24,19 +24,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++14
 
-include(GeomStack/GeomStack.pri)
-include(GeomStack/GeomStackTests.pri)
+#include(GeomStack/GeomStack.pri)
+#include(GeomStack/GeomStackTests.pri)
+include(OBJLoader/OBJLoader.pri)
 
 SOURCES += \
         main.cpp \
     model3d.cpp \
     glwidget.cpp \
-    objloader.cpp
 
 HEADERS += \
         glwidget.h \
     model3d.h \
-    objloader.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -47,3 +46,5 @@ RESOURCES += \
     textures.qrc \
     shaders.qrc \
     objects.qrc
+
+DISTFILES +=

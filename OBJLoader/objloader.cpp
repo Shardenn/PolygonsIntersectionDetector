@@ -3,7 +3,7 @@
 #include <QTextStream>
 #include <QDebug>
 
-MeshData ObjLoader::load(const QString &filePath)
+MeshData OBJLoader::OBJLoader::load(const QString &filePath)
 {
     using namespace Model3D;
 
@@ -78,13 +78,13 @@ MeshData ObjLoader::load(const QString &filePath)
     return modelData;
 }
 
-MeshData ObjLoader::triangulate(const MeshData &originalData)
+MeshData OBJLoader::OBJLoader::triangulate(const MeshData &originalData)
 {
 
 }
 
 // TODO process the errors like convertion errors
-QVector<QVector3D> ObjLoader::getPolygonInformation(QStringList &polygonInfoLine)
+QVector<QVector3D> OBJLoader::OBJLoader::getPolygonInformation(QStringList &polygonInfoLine)
 {
     QVector<QVector3D> polygonInformaion;
     // polygonInfoLine[0] == "f"

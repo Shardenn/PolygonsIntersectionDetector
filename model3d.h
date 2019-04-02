@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef MODEL3D_H
 #define MODEL3D_H
 
@@ -47,11 +49,14 @@ public:
      * \brief Vector of normals for each vertex
      */
     QVector<QVector3D> m_normals;
-/*
-    QVector<indexNumber_t> m_positionIndices;
-    QVector<indexNumber_t> m_textureIndices;
-    QVector<indexNumber_t> m_normalIndices;
-*/
+
+
+    /*!
+     * \brief stores starting indices for each polygon
+     * e.g. for polygon i we need to get vertices num
+     * m_polygonVertices[i+1] starting from vertex
+     * m_polygonVertices[i] from m_positions vector.
+     */
     QVector<indexNumber_t> m_polygonVertices;
     QVector<indexNumber_t> m_polygonTextures;
     MeshData() {}
@@ -70,21 +75,21 @@ public:
     QVector<QVector3D> getPolygonVertices(const indexNumber_t polygonID)
     {
         indexNumber_t firstVertex, numVertices;
-        getPolygonVerticesInterval(polygonID, firstVertex, numVertices);
+        getPolygonVerticesInterval(polygonID, m_polygonVertices, firstVertex, numVertices);
         return m_positions.mid(firstVertex, numVertices);
     }
 
     QVector<QVector2D> getPolygonTextureCoords(const indexNumber_t polygonID)
     {
         indexNumber_t firstVertex, numVertices;
-        getPolygonVerticesInterval(polygonID, firstVertex, numVertices);
+        getPolygonVerticesInterval(polygonID, m_polygonTextures, firstVertex, numVertices);
         return m_textureCoords.mid(firstVertex, numVertices);
     }
 
     QVector<QVector3D> getPolygonNormals(const indexNumber_t polygonID)
     {
         indexNumber_t firstVertex, numVertices;
-        getPolygonVerticesInterval(polygonID, firstVertex, numVertices);
+        getPolygonVerticesInterval(polygonID, m_polygonVertices, firstVertex, numVertices);
         return m_normals.mid(firstVertex, numVertices);
     }
 
@@ -101,14 +106,15 @@ private:
      * false otherwise on in case of an error
      */
     void getPolygonVerticesInterval(const indexNumber_t polygonID,
+                                    QVector<indexNumber_t>& intervalSource,
                                     indexNumber_t& firstVertexNumber,
                                     indexNumber_t& numVertices)
     {
         // "-1" because vertIndices contains 1 more number in the end
-        Q_ASSERT(polygonID > m_polygonVertices.size() - 1);
+        Q_ASSERT(polygonID > intervalSource.size() - 1);
 
-        firstVertexNumber = m_polygonVertices[polygonID];
-        numVertices = m_polygonVertices[polygonID + 1] - firstVertexNumber;
+        firstVertexNumber = intervalSource[polygonID];
+        numVertices = intervalSource[polygonID + 1] - firstVertexNumber;
     }
 };
 

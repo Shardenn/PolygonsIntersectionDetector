@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef OBJDLOADER_H
 #define OBJDLOADER_H
 
@@ -8,7 +10,9 @@
 
 using namespace Model3D;
 
-class ObjLoader
+namespace OBJLoader {
+
+class OBJLoader
 {
 public:
     /*!
@@ -32,4 +36,5 @@ private:
     static QVector<QVector3D> getPolygonInformation(QStringList& polygonInfoLine);
 };
 
+}
 #endif // QOBJLOADER_H
