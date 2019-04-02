@@ -47,13 +47,13 @@ public:
      * \brief Vector of normals for each vertex
      */
     QVector<QVector3D> m_normals;
-    /*!
-     * \brief Vector of polygon vertices indexes.
-     * i-th position contains (m_polygonVertIndexes[i+1] - m_polygonVertIndexes[i])
-     * vertices data for i-th polygon
-     */
-    QVector<indexNumber_t> m_polygonVertIndices;
-
+/*
+    QVector<indexNumber_t> m_positionIndices;
+    QVector<indexNumber_t> m_textureIndices;
+    QVector<indexNumber_t> m_normalIndices;
+*/
+    QVector<indexNumber_t> m_polygonVertices;
+    QVector<indexNumber_t> m_polygonTextures;
     MeshData() {}
 
     MeshData(QVector<QVector3D>& vertices,
@@ -63,7 +63,7 @@ public:
         m_positions(vertices),
         m_textureCoords(textureCoords),
         m_normals(normals),
-        m_polygonVertIndices(indices)
+        m_polygonVertices(indices)
     {}
 
     // duplicate. Can we get rig of them?
@@ -105,10 +105,10 @@ private:
                                     indexNumber_t& numVertices)
     {
         // "-1" because vertIndices contains 1 more number in the end
-        Q_ASSERT(polygonID > m_polygonVertIndices.size() - 1);
+        Q_ASSERT(polygonID > m_polygonVertices.size() - 1);
 
-        firstVertexNumber = m_polygonVertIndices[polygonID];
-        numVertices = m_polygonVertIndices[polygonID + 1] - firstVertexNumber;
+        firstVertexNumber = m_polygonVertices[polygonID];
+        numVertices = m_polygonVertices[polygonID + 1] - firstVertexNumber;
     }
 };
 

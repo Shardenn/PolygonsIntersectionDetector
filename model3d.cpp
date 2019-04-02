@@ -120,7 +120,7 @@ void Model3D::GLModel3D::reinit(const MeshData& mesh,
 
     reinit(vertexData, indices, texture);
 */
-    reinit(vertexData, mesh.m_polygonVertIndices, texture);
+    reinit(vertexData, mesh.m_polygonVertices, texture);
 }
 
 void Model3D::GLModel3D::draw(QOpenGLShaderProgram *shaderProgram,

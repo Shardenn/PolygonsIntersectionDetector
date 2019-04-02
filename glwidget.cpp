@@ -163,6 +163,9 @@ void GLWidget::initCube()
         texts.append(vertex.m_textureCoordinate);
     }
 
+    MeshData m;
+    m = ObjLoader::load(":/Objects/cube.obj");
+
     MeshData mesh(verts, texts, normals, indicesData);
 
     auto cube1 = new GLModel3D(vertexData, indicesData,

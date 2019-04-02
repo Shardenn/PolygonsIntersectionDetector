@@ -29,6 +29,7 @@ private:
                      QVector<unsigned int> textures,
                      QVector<unsigned int> normals);
 
+    static QVector<QVector3D> getPolygonInformation(QStringList& polygonInfoLine);
 };
 
 #endif // QOBJLOADER_H

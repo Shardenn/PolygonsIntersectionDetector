@@ -17,10 +17,9 @@ MeshData ObjLoader::load(const QString &filePath)
 
     QTextStream objFileText(&objFile);
 
-    // temp containers for setting data according to "faces" data
-    QVector<QVector3D> verticesCoord;
-    QVector<QVector3D> normals;
-    QVector<QVector2D> textureCoordinates;
+    // temporary arrays for vertices and normals
+    QVector<QVector3D> coords, normals;
+    QVector<QVector2D> texturesCoords;
 
     // data for the model contained in the file
     MeshData modelData;
@@ -31,50 +30,50 @@ MeshData ObjLoader::load(const QString &filePath)
 
         if(lineTokens[0] == "#") {
             qDebug() << "Comment in obj file: " << str;
-        } else if(lineTokens[0] == "mtllib") {
+        } else if (lineTokens[0] == "mtllib") {
             // process the provided material
             qDebug() << "Obj file has the material assigned:" << str;
         } else if (lineTokens[0] == "v") {
-            verticesCoord.append(QVector3D(lineTokens[1].toFloat(),
+            coords.append(QVector3D(lineTokens[1].toFloat(),
                                         lineTokens[2].toFloat(),
                                         lineTokens[3].toFloat()));
-        } else if(lineTokens[0] == "vt") {
-            textureCoordinates.append(QVector2D(lineTokens[1].toFloat(),
+        } else if (lineTokens[0] == "vt") {
+            texturesCoords.append(QVector2D(lineTokens[1].toFloat(),
                                                   lineTokens[2].toFloat()));
-        } else if(lineTokens[0] == "vn") {
+        } else if (lineTokens[0] == "vn") {
             normals.append(QVector3D(lineTokens[1].toFloat(),
                                        lineTokens[2].toFloat(),
                                        lineTokens[3].toFloat()));
-        } else if(lineTokens[0] == "f") {
+        } else if (lineTokens[0] == "f") {
             // in obj file, indeces are going from 1, they are not 0-based
             // 1 index - index of vertices array
             // 2 index - index of texture coordinates array
             // 3 index - index of normals array
-            modelData.m_polygonVertIndices.append(modelData.m_polygonVertIndices.size());
+            modelData.m_polygonVertices.append(modelData.m_positions.size());
+            modelData.m_polygonTextures.append(modelData.m_textureCoords.size());
 
-            for(int i = 1; i < lineTokens.size() - 1; i++) {
-                QStringList vertexDataIndex = lineTokens[i].split("/");
+            auto newPolygon = getPolygonInformation(lineTokens);
 
-                bool ok;
-                VertexData newVertex;
-                long index = vertexDataIndex[0].toLong(&ok);
-                if(ok)
-                    newVertex.m_position = verticesCoord[index - 1];
+            for (auto vertex : newPolygon) {
+                // each "vertex" contains info about
+                // vertex that belongs to the polygon
+                if (vertex[0] > 0)
+                    modelData.m_positions.append(coords[vertex[0]-1]);
 
-                index = vertexDataIndex[1].toLong(&ok);
-                if(ok)
-                    newVertex.m_textureCoordinate = textureCoordinates[index - 1];
+                if (vertex[1] > 0)
+                    modelData.m_textureCoords.append(texturesCoords[vertex[1]-1]);
 
-                index = vertexDataIndex[2].toLong(&ok);
-                if(ok)
-                    newVertex.m_normal = normals[index - 1];
-
-                //modelData.m_posit.append(newVertex);
+                if (vertex[2] > 0)
+                    modelData.m_normals.append(normals[vertex[2]-1]);
             }
+
         }
     }
 
     objFile.close();
+
+    modelData.m_polygonVertices.append(modelData.m_positions.size());
+    modelData.m_polygonTextures.append(modelData.m_textureCoords.size());
 
     return modelData;
 }
@@ -82,4 +81,33 @@ MeshData ObjLoader::load(const QString &filePath)
 MeshData ObjLoader::triangulate(const MeshData &originalData)
 {
 
+}
+
+// TODO process the errors like convertion errors
+QVector<QVector3D> ObjLoader::getPolygonInformation(QStringList &polygonInfoLine)
+{
+    QVector<QVector3D> polygonInformaion;
+    // polygonInfoLine[0] == "f"
+    for(int i = 1; i < polygonInfoLine.size(); i++) {
+        QVector3D vertexIndicesInfo(0, 0, 0);
+        auto vertexInfo = polygonInfoLine[i].split("/");
+        // vertexInfo[i] contains info about 1 vertex
+        // for example, 1/2/3, where 1 is position index,
+        // 2 is texture coord index, 3 is normal index
+        bool convertionSuccess = true;
+        unsigned int positionInd = vertexInfo[0].toUInt(&convertionSuccess);
+        if (convertionSuccess) {
+            vertexIndicesInfo[0] = positionInd;
+        }
+        unsigned int textureInd = vertexInfo[1].toUInt(&convertionSuccess);
+        if (convertionSuccess) {
+            vertexIndicesInfo[1] = textureInd;
+        }
+        unsigned int normalInd = vertexInfo[2].toUInt(&convertionSuccess);
+        if (convertionSuccess) {
+            vertexIndicesInfo[2] = normalInd;
+        }
+        polygonInformaion.append(vertexIndicesInfo);
+    }
+    return polygonInformaion;
 }
