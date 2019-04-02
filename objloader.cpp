@@ -1,9 +1,9 @@
-#include "objdataprocessor.h"
+#include "objloader.h"
 #include <QFile>
 #include <QTextStream>
 #include <QDebug>
 
-MeshData ObjDataProcessor::getModelData(const QString &filePath)
+MeshData ObjLoader::load(const QString &filePath)
 {
     using namespace Model3D;
 
@@ -79,7 +79,7 @@ MeshData ObjDataProcessor::getModelData(const QString &filePath)
     return modelData;
 }
 
-MeshData ObjDataProcessor::triangulate(const MeshData &originalData)
+MeshData ObjLoader::triangulate(const MeshData &originalData)
 {
 
 }

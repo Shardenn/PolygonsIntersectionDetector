@@ -8,7 +8,7 @@
 
 using namespace Model3D;
 
-class ObjLoadaer
+class ObjLoader
 {
 public:
     /*!
@@ -25,6 +25,9 @@ public:
      */
     static MeshData triangulate(const MeshData &originalData);
 private:
+    bool getFaceData(QVector<unsigned int> vertices,
+                     QVector<unsigned int> textures,
+                     QVector<unsigned int> normals);
 
 };
 

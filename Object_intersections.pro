@@ -30,8 +30,8 @@ include(GeomStack/GeomStackTests.pri)
 SOURCES += \
         main.cpp \
     model3d.cpp \
-    objdataprocessor.cpp \
-    glwidget.cpp
+    glwidget.cpp \
+    objloader.cpp
 
 HEADERS += \
         glwidget.h \
@@ -45,4 +45,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     textures.qrc \
-    shaders.qrc
+    shaders.qrc \
+    objects.qrc

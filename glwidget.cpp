@@ -2,7 +2,7 @@
 #include <QDir>
 #include <QMouseEvent>
 #include <QTimer>
-#include <objdataprocessor.h>
+#include <objloader.h>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
 
