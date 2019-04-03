@@ -3,6 +3,8 @@
 #include <QTextStream>
 #include <QDebug>
 
+using namespace Model3D;
+
 MeshData OBJLoader::OBJLoader::load(const QString &filePath)
 {
     using namespace Model3D;
@@ -91,22 +93,23 @@ QVector<QVector3D> OBJLoader::OBJLoader::getPolygonInformation(QStringList &poly
     QVector<QVector3D> polygonInformaion;
     // polygonInfoLine[0] == "f"
     for(int i = 1; i < polygonInfoLine.size(); i++) {
-        QVector3D vertexIndicesInfo(0, 0, 0);
+        QVector3D vertexIndicesInfo;
         auto vertexInfo = polygonInfoLine[i].split("/");
         // vertexInfo[i] contains info about 1 vertex
         // for example, 1/2/3, where 1 is position index,
         // 2 is texture coord index, 3 is normal index
-        bool convertionSuccess = true;
-        unsigned int positionInd = vertexInfo[0].toUInt(&convertionSuccess);
-        if (convertionSuccess) {
+        Q_ASSERT(vertexInfo.size() == 3);
+        bool isConvertionSuccess = true;
+        unsigned int positionInd = vertexInfo[0].toUInt(&isConvertionSuccess);
+        if (isConvertionSuccess) {
             vertexIndicesInfo[0] = positionInd;
         }
-        unsigned int textureInd = vertexInfo[1].toUInt(&convertionSuccess);
-        if (convertionSuccess) {
+        unsigned int textureInd = vertexInfo[1].toUInt(&isConvertionSuccess);
+        if (isConvertionSuccess) {
             vertexIndicesInfo[1] = textureInd;
         }
-        unsigned int normalInd = vertexInfo[2].toUInt(&convertionSuccess);
-        if (convertionSuccess) {
+        unsigned int normalInd = vertexInfo[2].toUInt(&isConvertionSuccess);
+        if (isConvertionSuccess) {
             vertexIndicesInfo[2] = normalInd;
         }
         polygonInformaion.append(vertexIndicesInfo);

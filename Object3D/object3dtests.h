@@ -18,6 +18,7 @@ private slots:
     //void objLoaderWithTextures();
 
     void objLoaderEmptyFile();
+    void objLoaderTest01();
     // TODO
     // no error checking in objLoader now.
     // Add error checks, this test crashes

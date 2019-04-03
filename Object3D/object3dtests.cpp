@@ -78,6 +78,18 @@ void OBJLoader::Object3DTests::objLoaderEmptyFile()
 
     QCOMPARE(expectedMesh, loadedMesh);
 }
+
+void OBJLoader::Object3DTests::objLoaderTest01()
+{
+    auto loadedMesh = OBJLoader::load("v 1 2 3");
+    QCOMPARE(loadedMesh.isNull());
+    auto loadedMesh = OBJLoader::load("v 1 2 3\n f 1 1 1");
+    QCOMPARE(loadedMesh.isNull());
+    auto loadedMesh = OBJLoader::load("v 1 2 3\n f -1 1 1");
+    QCOMPARE(loadedMesh.isNull());
+    auto loadedMesh = OBJLoader::load("v 1 2 3\n f 1 1 1 \n g groupName\n f 1 1 1");
+    QCOMPARE(loadedMesh.isNull());
+}
 /*
 void OBJLoader::Object3DTests::objLoaderIncorrectFile()
 {

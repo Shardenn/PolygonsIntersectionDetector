@@ -8,9 +8,10 @@
 #include <QVector>
 #include "model3d.h"
 
-using namespace Model3D;
 
 namespace OBJLoader {
+
+using namespace Model3D;
 
 class OBJLoader
 {
