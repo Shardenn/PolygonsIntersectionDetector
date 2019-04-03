@@ -1,4 +1,4 @@
-#include "Model3D.h"
+#include <Object3D/model3d.h>
 #include <QOpenGLTexture>
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>

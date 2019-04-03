@@ -5,8 +5,6 @@
 
 void runTests()
 {
-    //GeomStack::GeomStackTests gsTests;
-    //QTest::qExec(&gsTests);
     OBJLoader::Object3DTests objTests;
     QTest::qExec(&objTests);
 }

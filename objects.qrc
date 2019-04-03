@@ -2,6 +2,10 @@
     <qresource prefix="/">
         <file>Objects/cube.obj</file>
         <file>Objects/foot.obj</file>
-        <file>Objects/test_trivial.obj</file>
+        <file>Objects/UnitTests/test_empty.obj</file>
+        <file>Objects/UnitTests/test_shuffled.obj</file>
+        <file>Objects/UnitTests/test_trivial.obj</file>
+        <file>Objects/UnitTests/test_usual.obj</file>
+        <file>Objects/UnitTests/test_incorrect_file.obj</file>
     </qresource>
 </RCC>

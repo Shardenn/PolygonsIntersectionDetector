@@ -11,6 +11,17 @@ class Object3DTests : public QObject
 
 private slots:
     void objLoaderTrivial();
+    void objLoaderUsual();
+    void objLoaderShuffledVertices();
+
+    // TODO
+    //void objLoaderWithTextures();
+
+    void objLoaderEmptyFile();
+    // TODO
+    // no error checking in objLoader now.
+    // Add error checks, this test crashes
+    //void objLoaderIncorrectFile();
 };
 
 }

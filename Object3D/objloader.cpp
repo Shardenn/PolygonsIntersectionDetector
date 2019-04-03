@@ -72,7 +72,8 @@ MeshData OBJLoader::OBJLoader::load(const QString &filePath)
 
     objFile.close();
 
-    modelData.m_polygonVertices.append(modelData.m_positions.size());
+    if (modelData.m_polygonVertices.size() > 0)
+        modelData.m_polygonVertices.append(modelData.m_positions.size());
     if (modelData.m_polygonTextures.size() > 0)
         modelData.m_polygonTextures.append(modelData.m_textureCoords.size());
 
