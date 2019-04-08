@@ -166,7 +166,12 @@ void GLWidget::initCube()
     MeshData m;
     m = OBJLoader::OBJLoader::load(":/Objects/cube.obj");
 
-    MeshData mesh(verts, texts, normals, indicesData);
+    QVector<int> inds;
+    for (auto i : indicesData) {
+        inds.append(i);
+    }
+
+    MeshData mesh(verts, texts, normals, inds);
 
     auto cube1 = new GLModel3D(vertexData, indicesData,
                                QImage(":/Textures/QtCreator.png"));
@@ -174,7 +179,6 @@ void GLWidget::initCube()
 
     auto cube2 = new GLModel3D(mesh, QImage(":/Textures/QtCreator.png"));
     cube2->translate(QVector3D(-2.0f, 0.0f, 0.0f));
-
 
     m_objects.append(cube1);
     m_objects.append(cube2);

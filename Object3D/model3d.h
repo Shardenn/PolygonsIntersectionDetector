@@ -14,6 +14,7 @@ class QOpenGLShaderProgram;
 
 namespace  Model3D {
 
+// TODO delete vertexData
 class VertexData
 {
 public:
@@ -36,19 +37,21 @@ public:
 class MeshData
 {
 public:
-    using indexNumber_t = unsigned int;
     /*!
      * \brief Vector of vertices positions
      */
-    QVector<QVector3D> m_positions;
+    QVector<QVector3D> positions;
+
+    QVector<QVector3D> positionsTriangulated;
+
     /*!
      * \brief Vector of vertex data of the model stored flat
      */
-    QVector<QVector2D> m_textureCoords;
+    QVector<QVector2D> textureCoords;
     /*!
      * \brief Vector of normals for each vertex
      */
-    QVector<QVector3D> m_normals;
+    QVector<QVector3D> normals;
     /*!
      * \brief stores starting vertices\normals position
      * indices for each polygon
@@ -60,7 +63,9 @@ public:
      * vector, that belongs to the polygon, is
      * m_polygonVertices[i]
      */
-    QVector<indexNumber_t> m_polygonVertices;
+    QVector<int> polygonVertices;
+
+    QVector<int> polygonVerticesTriangulated;
     /*!
      * \brief stores starting texture coordinates
      * indices for each polygon
@@ -71,56 +76,36 @@ public:
      * vector, that belongs to the polygon, is
      * m_polygonTextures[i]
      */
-    QVector<indexNumber_t> m_polygonTextures;
-    MeshData() {}
+    QVector<int> polygonTextures;
+    MeshData();
 
     MeshData(QVector<QVector3D>& vertices,
              QVector<QVector2D>& textureCoords,
              QVector<QVector3D>& normals,
-             QVector<indexNumber_t>& indices) :
-        m_positions(vertices),
-        m_textureCoords(textureCoords),
-        m_normals(normals),
-        m_polygonVertices(indices)
-    {}
+             QVector<int>& indices);
 
     // duplicate. Can we get rig of them?
-    QVector<QVector3D> getPolygonVertices(const indexNumber_t polygonID)
-    {
-        indexNumber_t firstVertex, numVertices;
-        getPolygonVerticesInterval(polygonID, m_polygonVertices, firstVertex, numVertices);
-        return m_positions.mid(firstVertex, numVertices);
-    }
+    QVector<QVector3D> getPolygonVertices(const int polygonID);
 
-    QVector<QVector2D> getPolygonTextureCoords(const indexNumber_t polygonID)
-    {
-        indexNumber_t firstVertex, numVertices;
-        getPolygonVerticesInterval(polygonID, m_polygonTextures, firstVertex, numVertices);
-        return m_textureCoords.mid(firstVertex, numVertices);
-    }
+    QVector<QVector2D> getPolygonTextureCoords(const int polygonID);
 
-    QVector<QVector3D> getPolygonNormals(const indexNumber_t polygonID)
-    {
-        indexNumber_t firstVertex, numVertices;
-        getPolygonVerticesInterval(polygonID, m_polygonVertices, firstVertex, numVertices);
-        return m_normals.mid(firstVertex, numVertices);
-    }
-/*
-    const inline bool operator==(const MeshData& other)
+    QVector<QVector3D> getPolygonNormals(const int polygonID);
+
+    inline bool operator==(const MeshData& other) const
     {
         // doing a trivial member-by-memeber comparison here
-        return this->m_positions == other.m_positions &&
-                this->m_normals == other.m_normals &&
-                this->m_textureCoords == other.m_textureCoords &&
-                this->m_polygonTextures == other.m_polygonTextures &&
-                this->m_polygonVertices == other.m_polygonVertices;
+        return this->positions == other.positions &&
+                this->normals == other.normals &&
+                this->textureCoords == other.textureCoords &&
+                this->polygonTextures == other.polygonTextures &&
+                this->polygonVertices == other.polygonVertices;
     }
 
-    const inline bool operator!=(const MeshData& other)
+    inline bool operator!=(const MeshData& other) const
     {
         return !(*this == other);
     }
-*/
+
 private:
     /*!
      * \brief getPolygonVerticesInterval
@@ -133,27 +118,11 @@ private:
      * \return true if the ID is valid
      * false otherwise on in case of an error
      */
-    void getPolygonVerticesInterval(const indexNumber_t polygonID,
-                                    QVector<indexNumber_t>& intervalSource,
-                                    indexNumber_t& firstVertexNumber,
-                                    indexNumber_t& numVertices)
-    {
-        // "-1" because vertIndices contains 1 more number in the end
-        Q_ASSERT(polygonID > intervalSource.size() - 1);
-
-        firstVertexNumber = intervalSource[polygonID];
-        numVertices = intervalSource[polygonID + 1] - firstVertexNumber;
-    }
+    void getPolygonVerticesInterval(const int polygonID,
+                                    QVector<int>& intervalSource,
+                                    int& firstVertexNumber,
+                                    int& numVertices);
 };
-
-inline bool operator==(const MeshData& a, const MeshData& b)
-{
-    return a.m_positions        == b.m_positions &&
-            a.m_normals         == b.m_normals &&
-            a.m_textureCoords   == b.m_textureCoords &&
-            a.m_polygonTextures == b.m_polygonTextures &&
-            a.m_polygonVertices == b.m_polygonVertices;
-}
 
 class GLModel3D
 {

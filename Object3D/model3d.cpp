@@ -4,6 +4,52 @@
 #include <QOpenGLShaderProgram>
 #include <QDebug>
 
+Model3D::MeshData::MeshData()
+{}
+
+Model3D::MeshData::MeshData(QVector<QVector3D>& vertices,
+         QVector<QVector2D>& textureCoords,
+         QVector<QVector3D>& normals,
+         QVector<int>& indices) :
+    positions(vertices),
+    textureCoords(textureCoords),
+    normals(normals),
+    polygonVertices(indices)
+{}
+
+QVector<QVector3D> Model3D::MeshData::getPolygonVertices(const int polygonID)
+{
+    int firstVertex, numVertices;
+    getPolygonVerticesInterval(polygonID, polygonVertices, firstVertex, numVertices);
+    return positions.mid(firstVertex, numVertices);
+}
+
+QVector<QVector2D> Model3D::MeshData::getPolygonTextureCoords(const int polygonID)
+{
+    int firstVertex, numVertices;
+    getPolygonVerticesInterval(polygonID, polygonTextures, firstVertex, numVertices);
+    return textureCoords.mid(firstVertex, numVertices);
+}
+
+QVector<QVector3D> Model3D::MeshData::getPolygonNormals(const int polygonID)
+{
+    int firstVertex, numVertices;
+    getPolygonVerticesInterval(polygonID, polygonVertices, firstVertex, numVertices);
+    return normals.mid(firstVertex, numVertices);
+}
+
+void Model3D::MeshData::getPolygonVerticesInterval(const int polygonID,
+                                QVector<int>& intervalSource,
+                                int& firstVertexNumber,
+                                int& numVertices)
+{
+    // "-1" because vertIndices contains 1 more number in the end
+    Q_ASSERT(polygonID > intervalSource.size() - 1);
+
+    firstVertexNumber = intervalSource[polygonID];
+    numVertices = intervalSource[polygonID + 1] - firstVertexNumber;
+}
+
 Model3D::GLModel3D::GLModel3D() :
     m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
     m_indexBuffer(QOpenGLBuffer::IndexBuffer),
@@ -90,24 +136,24 @@ void Model3D::GLModel3D::reinit(const MeshData& mesh,
     // overload of reinit function
 
     // get how much elements in QVector<VertexData> do we need
-    auto elementsCount = qMax(mesh.m_positions.size(),
-                            qMax(mesh.m_textureCoords.size(), mesh.m_normals.size()));
+    auto elementsCount = qMax(mesh.positions.size(),
+                            qMax(mesh.textureCoords.size(), mesh.normals.size()));
     QVector<VertexData> vertexData(elementsCount);
 
     // reset the iterator and assign an element to
     // our vertexData
     auto it = vertexData.begin();
-    for(auto position : mesh.m_positions) {
+    for(auto position : mesh.positions) {
         it->m_position = position;
         it++;
     }
     it = vertexData.begin();
-    for(auto texture : mesh.m_textureCoords) {
+    for(auto texture : mesh.textureCoords) {
         it->m_textureCoordinate = texture;
         it++;
     }
     it = vertexData.begin();
-    for(auto normal : mesh.m_normals) {
+    for(auto normal : mesh.normals) {
         it->m_normal = normal;
         it++;
     }
@@ -120,7 +166,11 @@ void Model3D::GLModel3D::reinit(const MeshData& mesh,
 
     reinit(vertexData, indices, texture);
 */
-    reinit(vertexData, mesh.m_polygonVertices, texture);
+    QVector<GLuint> verts;
+    for (auto vert : mesh.polygonVertices) {
+        verts.append(vert);
+    }
+    reinit(vertexData, verts, texture);
 }
 
 void Model3D::GLModel3D::draw(QOpenGLShaderProgram *shaderProgram,
