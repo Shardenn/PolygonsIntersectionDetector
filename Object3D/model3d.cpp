@@ -139,23 +139,26 @@ void Model3D::GLModel3D::reinit(const MeshData& mesh,
 
     int offset = 0;
     QVector<QVector3D> allPositions = mesh.getCronologicalVerticesCoords();
-    m_vertexBuffer.write(offset, allPositions.constData(), allPositions.size() * sizeof(QVector3D));
+    m_vertexBuffer.write(offset, allPositions.constData(),
+                                 allPositions.size() * sizeof(QVector3D));
 
     offset += allPositions.size() * sizeof(QVector3D);
     QVector<QVector2D> allTextures = mesh.getCronologicalTexturesCoords();
-    m_vertexBuffer.write(offset, allTextures.constData(), allTextures.size() * sizeof(QVector2D));
+    m_vertexBuffer.write(offset, allTextures.constData(),
+                                 allTextures.size() * sizeof(QVector2D));
 
     offset += allTextures.size()  * sizeof(QVector2D);
     QVector<QVector3D> allNormals = mesh.getCronologicalNormalsCoords();
-    m_vertexBuffer.write(offset, allNormals.constData(), allNormals.size() * sizeof(QVector3D));
+    m_vertexBuffer.write(offset, allNormals.constData(),
+                                 allNormals.size() * sizeof(QVector3D));
 
     m_vertexBuffer.release();
-
 
     QVector<int> indices(mesh.verticesIndices.size());
     for (int i = 0; i < mesh.verticesIndices.size(); i++) {
         indices[i] = i;
     }
+
     m_indexBuffer.create();
     m_indexBuffer.bind();
     m_indexBuffer.allocate(indices.constData(),
@@ -197,26 +200,27 @@ void Model3D::GLModel3D::draw(QOpenGLShaderProgram *shaderProgram,
 
     int vertLoc = shaderProgram->attributeLocation("vertexPosition");
     shaderProgram->enableAttributeArray(vertLoc);
-    shaderProgram->setAttributeBuffer(vertLoc, GL_FLOAT, offset, 3, 0);
+    shaderProgram->setAttributeBuffer(vertLoc, GL_FLOAT, offset, 3);
 
     offset += m_meshData.verticesIndices.size() * sizeof(QVector3D);
 
     int texLoc = shaderProgram->attributeLocation("textureCoordinate");
     shaderProgram->enableAttributeArray(texLoc);
-    shaderProgram->setAttributeBuffer(texLoc, GL_FLOAT, offset, 2, 0);
+    shaderProgram->setAttributeBuffer(texLoc, GL_FLOAT, offset, 2);
 
     offset += m_meshData.texturesIndices.size() * sizeof(QVector2D);
 
     int normLoc = shaderProgram->attributeLocation("normal");
     shaderProgram->enableAttributeArray(normLoc);
-    shaderProgram->setAttributeBuffer(normLoc, GL_FLOAT, offset, 3, 0);
+    shaderProgram->setAttributeBuffer(normLoc, GL_FLOAT, offset, 3);
 
     m_indexBuffer.bind();
 
     functions->glDrawElements(GL_TRIANGLES, m_indexBuffer.size()-1, GL_UNSIGNED_INT, nullptr);
 
-    m_vertexBuffer.release();
     m_indexBuffer.release();
+    m_vertexBuffer.release();
+
     m_texture->release();
 }
 

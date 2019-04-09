@@ -38,12 +38,14 @@ MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream)
         } else if (lineTokens[0] == "mtllib") {
             // process the provided material
             qDebug() << "Obj file has the material assigned:" << str;
+        } else if (lineTokens[0] == "g") {
+            qDebug() << "Obj file has group in line " + str;
         } else if (lineTokens[0] == "v") {
             QVector<float> parsedCoords = parseLine(str);
 
             if (parsedCoords.size() != 3) {
-                qDebug() << "Line " + str + " has either more or less than 3 arguments for texture";
-                continue;
+                qDebug() << "Line " + str + " has either more or less than 3 arguments for vertex";
+                break;
             }
 
             QVector3D newCoord(parsedCoords[0], parsedCoords[1], parsedCoords[2]);
@@ -53,7 +55,7 @@ MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream)
 
             if (parsedCoords.size() != 2) {
                 qDebug() << "Line " + str + " has either more or less than 2 arguments for texture";
-                continue;
+                break;
             }
 
             QVector2D newTexture(parsedCoords[0], parsedCoords[1]);
@@ -62,8 +64,8 @@ MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream)
             QVector<float> parsedCoords = parseLine(str);
 
             if (parsedCoords.size() != 3) {
-                qDebug() << "Line " + str + " has either more or less than 3 arguments for texture";
-                continue;
+                qDebug() << "Line " + str + " has either more or less than 3 arguments for normal";
+                break;
             }
 
             QVector3D newNormal(parsedCoords[0], parsedCoords[1], parsedCoords[2]);
@@ -76,8 +78,6 @@ MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream)
             // each vertex info is vertex info in the polygon
             // e.g. f 1/2/3 will come out in QVector3D(1,2,3)
             for (auto vertexInfo : newPolygon) {
-                // each "vertex" contains info about
-                // vertex that belongs to the polygon
                 if (vertexInfo[0] > 0)
                     modelData->verticesIndices.append(vertexInfo[0] - 1);
 

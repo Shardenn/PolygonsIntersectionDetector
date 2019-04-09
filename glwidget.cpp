@@ -111,6 +111,9 @@ void GLWidget::initCube()
     //MeshData mesh(verts, texts, normals, inds);
 
     MeshData *mesh = OBJLoader::OBJLoader::load(":/Objects/cube_tr.obj");
+
+    Q_ASSERT(mesh != nullptr);
+
     GLModel3D *model = new GLModel3D(*mesh, QImage(":/Textures/QtCreator.png"));
     m_objects.append(model);
 }
