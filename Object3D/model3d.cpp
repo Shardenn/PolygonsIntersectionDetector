@@ -7,16 +7,6 @@
 Model3D::MeshData::MeshData()
 {}
 
-Model3D::MeshData::MeshData(QVector<QVector3D>& vertices,
-         QVector<QVector2D>& textureCoords,
-         QVector<QVector3D>& normals,
-         QVector<int>& indices) :
-    positions(vertices),
-    textureCoords(textureCoords),
-    normals(normals),
-    polygonElementsIndices(indices)
-{}
-
 QVector<QVector3D> Model3D::MeshData::getCronologicalVerticesCoords() const
 {
     QVector<QVector3D> coords(verticesIndices.size());
@@ -60,7 +50,7 @@ QVector<QVector3D> Model3D::MeshData::getPolygonVertices(const int polygonID)
 QVector<QVector2D> Model3D::MeshData::getPolygonTextureCoords(const int polygonID)
 {
     int firstVertex, numVertices;
-    getPolygonVerticesInterval(polygonID, polygonTexturesIndices, firstVertex, numVertices);
+    getPolygonVerticesInterval(polygonID, polygonElementsIndices, firstVertex, numVertices);
     return textureCoords.mid(firstVertex, numVertices);
 }
 

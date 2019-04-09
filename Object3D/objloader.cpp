@@ -32,7 +32,12 @@ MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream)
     while(!textStream.atEnd()) {
         QString str = textStream.readLine();
         QStringList lineTokens = str.split(" ");
-
+/*
+        std::for_each(lineTokens.begin(), lineTokens.end(),
+                      [&](QString& token) {
+                        if
+        });
+  */
         if(lineTokens[0] == "#") {
             qDebug() << "Comment in obj file: " << str;
         } else if (lineTokens[0] == "mtllib") {
@@ -45,6 +50,7 @@ MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream)
 
             if (parsedCoords.size() != 3) {
                 qDebug() << "Line " + str + " has either more or less than 3 arguments for vertex";
+                m_isLoadSuccessful = false;
                 break;
             }
 
@@ -55,6 +61,7 @@ MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream)
 
             if (parsedCoords.size() != 2) {
                 qDebug() << "Line " + str + " has either more or less than 2 arguments for texture";
+                m_isLoadSuccessful = false;
                 break;
             }
 
@@ -65,6 +72,7 @@ MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream)
 
             if (parsedCoords.size() != 3) {
                 qDebug() << "Line " + str + " has either more or less than 3 arguments for normal";
+                m_isLoadSuccessful = false;
                 break;
             }
 
@@ -94,6 +102,12 @@ MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream)
     if (modelData->polygonElementsIndices.size() > 0)
         modelData->polygonElementsIndices.append(modelData->verticesIndices.size());
 
+    if (!m_isLoadSuccessful) {
+        qDebug() << "OBJ file was loaded with errors. See output for details";
+        delete modelData;
+        return nullptr;
+    }
+
     return modelData;
 }
 
@@ -113,17 +127,17 @@ QVector<QVector3D> OBJLoader::OBJLoader::getPolygonInformation(QStringList &poly
         // vertexInfo[i] contains info about 1 vertex
         // for example, 1/2/3, where 1 is position index,
         // 2 is texture coord index, 3 is normal index
-        bool convertionSuccess = true;
-        unsigned int positionInd = vertexInfo[0].toUInt(&convertionSuccess);
-        if (convertionSuccess) {
+        bool isConvertionSuccess = true;
+        unsigned int positionInd = vertexInfo[0].toUInt(&isConvertionSuccess);
+        if (isConvertionSuccess) {
             vertexIndicesInfo[0] = positionInd;
         }
-        unsigned int textureInd = vertexInfo[1].toUInt(&convertionSuccess);
-        if (convertionSuccess) {
+        unsigned int textureInd = vertexInfo[1].toUInt(&isConvertionSuccess);
+        if (isConvertionSuccess) {
             vertexIndicesInfo[1] = textureInd;
         }
-        unsigned int normalInd = vertexInfo[2].toUInt(&convertionSuccess);
-        if (convertionSuccess) {
+        unsigned int normalInd = vertexInfo[2].toUInt(&isConvertionSuccess);
+        if (isConvertionSuccess) {
             vertexIndicesInfo[2] = normalInd;
         }
         polygonInformaion.append(vertexIndicesInfo);
@@ -146,6 +160,7 @@ QVector<float> OBJLoader::OBJLoader::parseLine(const QString& line)
     for (auto token : readTokens) {
         bool isConvertionSuccess{ false };
         float coord = token.toFloat(&isConvertionSuccess);
+        m_isLoadSuccessful &= isConvertionSuccess;
         if (isConvertionSuccess) {
             parsedCoords.append(coord);
         }

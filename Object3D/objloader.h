@@ -22,9 +22,9 @@ public:
      * \param filePath path to *.obj file
      * \return vector of data for each vertex from obj file
     */
-    static MeshData *load(const QString &filePath);
+    MeshData *load(const QString &filePath);
     // argument not const because readLine() is not const
-    static MeshData *load(QTextStream &textStream);
+    MeshData *load(QTextStream &textStream);
     /*!
      * \brief When given model data, returns its triangulated copy.
      * \param originalData - original model data
@@ -33,13 +33,11 @@ public:
     static MeshData triangulate(const MeshData &originalData);
 
 private:
-    static bool getFaceData(QVector<unsigned int> vertices,
-                     QVector<unsigned int> textures,
-                     QVector<unsigned int> normals);
+    QVector<QVector3D> getPolygonInformation(QStringList& polygonInfoLine);
 
-    static QVector<QVector3D> getPolygonInformation(QStringList& polygonInfoLine);
+    QVector<float> parseLine(const QString& line);
 
-    static QVector<float> parseLine(const QString& line);
+    bool m_isLoadSuccessful{ true };
 };
 
 }

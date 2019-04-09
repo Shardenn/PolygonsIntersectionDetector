@@ -14,27 +14,6 @@ class QOpenGLShaderProgram;
 
 namespace  Model3D {
 
-// TODO delete vertexData
-/*
-class VertexData
-{
-public:
-    QVector3D m_position;
-    QVector2D m_textureCoordinate;
-    QVector3D m_normal;
-
-    VertexData(){}
-
-    VertexData(QVector3D position, QVector2D textureCoord, QVector3D normal) :
-        m_position(position),
-        m_textureCoordinate(textureCoord),
-        m_normal(normal)
-    {
-    }
-};*/
-
-/// unsigned long or int? How much vertices do
-/// we usually have?
 class MeshData
 {
 public:
@@ -81,40 +60,7 @@ public:
      */
     QVector<int> polygonElementsIndices;
 
-    /*!
-     * \brief stores starting texture coordinates
-     * indices for each polygon
-     * e.g. to get i'th polygon texture coordinates:
-     * the polygon has exactly m_polygonTextures[i+1]
-     * texture coordinates;
-     * the first texture coordinate from m_textureCoords
-     * vector, that belongs to the polygon, is
-     * m_polygonTextures[i]
-     */
-    QVector<int> polygonTexturesIndices;
-
-    /*!
-     * \brief stores starting normals position
-     * indices for each polygon
-     * e.g. to get i'th polygon normals:
-     * the polygon has exactly m_polygonVertices[i+1]
-     * normals;
-     * the first normal from m_positions
-     * (or m_normals)
-     * vector, that belongs to the polygon, is
-     * m_polygonVertices[i]
-     */
-    QVector<int> polygonNormalsIndices;
-
-    //QVector<QVector3D> positionsTriangulated;
-    //QVector<int> polygonVerticesTriangulated;
-
     MeshData();
-
-    MeshData(QVector<QVector3D>& vertices,
-             QVector<QVector2D>& textureCoords,
-             QVector<QVector3D>& normals,
-             QVector<int>& indices);
 
     QVector<QVector3D> getCronologicalVerticesCoords() const;
     QVector<QVector2D> getCronologicalTexturesCoords() const;
@@ -132,7 +78,6 @@ public:
         return this->positions == other.positions &&
                 this->normals == other.normals &&
                 this->textureCoords == other.textureCoords &&
-                this->polygonTexturesIndices == other.polygonTexturesIndices &&
                 this->polygonElementsIndices == other.polygonElementsIndices;
     }
 

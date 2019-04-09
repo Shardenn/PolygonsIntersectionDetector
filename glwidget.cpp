@@ -109,8 +109,8 @@ void GLWidget::initCube()
     using namespace Model3D;
 
     //MeshData mesh(verts, texts, normals, inds);
-
-    MeshData *mesh = OBJLoader::OBJLoader::load(":/Objects/cube_tr.obj");
+    OBJLoader::OBJLoader loader;
+    MeshData *mesh = loader.load(":/Objects/cube_tr.obj");
 
     Q_ASSERT(mesh != nullptr);
 
