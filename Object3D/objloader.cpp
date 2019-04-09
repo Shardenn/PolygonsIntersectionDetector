@@ -26,10 +26,6 @@ MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream)
 {
     using namespace Model3D;
 
-    // temporary arrays for vertices and normals
-    QVector<QVector3D> coords, normals;
-    QVector<QVector2D> texturesCoords;
-
     // data for the model contained in the file
     MeshData *modelData = new MeshData;
 
@@ -43,7 +39,7 @@ MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream)
             // process the provided material
             qDebug() << "Obj file has the material assigned:" << str;
         } else if (lineTokens[0] == "v") {
-            QVector<float> parsedCoords = parseCoordsLine(str);
+            QVector<float> parsedCoords = parseLine(str);
 
             if (parsedCoords.size() != 3) {
                 qDebug() << "Line " + str + " has either more or less than 3 arguments for texture";
@@ -51,9 +47,9 @@ MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream)
             }
 
             QVector3D newCoord(parsedCoords[0], parsedCoords[1], parsedCoords[2]);
-            coords.append(newCoord);
+            modelData->positions.append(newCoord);
         } else if (lineTokens[0] == "vt") {
-            QVector<float> parsedCoords = parseCoordsLine(str);
+            QVector<float> parsedCoords = parseLine(str);
 
             if (parsedCoords.size() != 2) {
                 qDebug() << "Line " + str + " has either more or less than 2 arguments for texture";
@@ -61,9 +57,9 @@ MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream)
             }
 
             QVector2D newTexture(parsedCoords[0], parsedCoords[1]);
-            texturesCoords.append(newTexture);
+            modelData->textureCoords.append(newTexture);
         } else if (lineTokens[0] == "vn") {
-            QVector<float> parsedCoords = parseCoordsLine(str);
+            QVector<float> parsedCoords = parseLine(str);
 
             if (parsedCoords.size() != 3) {
                 qDebug() << "Line " + str + " has either more or less than 3 arguments for texture";
@@ -71,33 +67,32 @@ MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream)
             }
 
             QVector3D newNormal(parsedCoords[0], parsedCoords[1], parsedCoords[2]);
-            normals.append(newNormal);
+            modelData->normals.append(newNormal);
         } else if (lineTokens[0] == "f") {
-            modelData->polygonVertices.append(modelData->positions.size());
+            modelData->polygonElementsIndices.append(modelData->verticesIndices.size());
 
             QVector<QVector3D> newPolygon = getPolygonInformation(lineTokens);
 
+            // each vertex info is vertex info in the polygon
+            // e.g. f 1/2/3 will come out in QVector3D(1,2,3)
             for (auto vertexInfo : newPolygon) {
                 // each "vertex" contains info about
                 // vertex that belongs to the polygon
                 if (vertexInfo[0] > 0)
-                    modelData->positions.append(coords[vertexInfo[0] - 1]);
+                    modelData->verticesIndices.append(vertexInfo[0] - 1);
 
                 if (vertexInfo[1] > 0) {
-                    modelData->textureCoords.append(texturesCoords[vertexInfo[1] - 1]);
-                    modelData->polygonTextures.append(modelData->textureCoords.size());
+                    modelData->texturesIndices.append(vertexInfo[1] - 1);
                 }
                 if (vertexInfo[2] > 0)
-                    modelData->normals.append(normals[vertexInfo[2] - 1]);
+                    modelData->normalsIndices.append(vertexInfo[2] - 1);
             }
 
         }
     }
 
-    if (modelData->polygonVertices.size() > 0)
-        modelData->polygonVertices.append(modelData->positions.size());
-    if (modelData->polygonTextures.size() > 0)
-        modelData->polygonTextures.append(modelData->textureCoords.size());
+    if (modelData->polygonElementsIndices.size() > 0)
+        modelData->polygonElementsIndices.append(modelData->verticesIndices.size());
 
     return modelData;
 }
@@ -136,7 +131,7 @@ QVector<QVector3D> OBJLoader::OBJLoader::getPolygonInformation(QStringList &poly
     return polygonInformaion;
 }
 
-QVector<float> parseLine(const QString& line)
+QVector<float> OBJLoader::OBJLoader::parseLine(const QString& line)
 {
     QStringList tokens = line.split(" ");
 

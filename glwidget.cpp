@@ -108,82 +108,11 @@ void GLWidget::initCube()
 {
     using namespace Model3D;
 
-    QVector<VertexData> vertexData;
+    //MeshData mesh(verts, texts, normals, inds);
 
-    float cubeLength = 1.0;
-    float l = cubeLength / 2;
-
-    vertexData.append(VertexData(QVector3D(-l, l, l),   QVector2D(0.0, 1.0),   QVector3D(0.0, 0.0, 1.0))); // normal is up
-    vertexData.append(VertexData(QVector3D(-l, -l, l),  QVector2D(0.0, 0.0),   QVector3D(0.0, 0.0, 1.0)));
-    vertexData.append(VertexData(QVector3D(l, l, l),    QVector2D(1.0, 1.0),   QVector3D(0.0, 0.0, 1.0)));
-    vertexData.append(VertexData(QVector3D(l, -l, l),   QVector2D(1.0, 0.0),   QVector3D(0.0, 0.0, 1.0)));
-
-    vertexData.append(VertexData(QVector3D(l, l, l),     QVector2D(0.0, 1.0),   QVector3D(1.0, 0.0, 0.0)));
-    vertexData.append(VertexData(QVector3D(l, -l, l),    QVector2D(0.0, 0.0),   QVector3D(1.0, 0.0, 0.0)));
-    vertexData.append(VertexData(QVector3D(l, l, -l),    QVector2D(1.0, 1.0),   QVector3D(1.0, 0.0, 0.0)));
-    vertexData.append(VertexData(QVector3D(l, -l, -l),   QVector2D(1.0, 0.0),   QVector3D(1.0, 0.0, 0.0)));
-
-    vertexData.append(VertexData(QVector3D(l, l, l),     QVector2D(0.0, 1.0),   QVector3D(0.0, 1.0, 0.0)));
-    vertexData.append(VertexData(QVector3D(l, l, -l),    QVector2D(0.0, 0.0),   QVector3D(0.0, 1.0, 0.0)));
-    vertexData.append(VertexData(QVector3D(-l, l, l),    QVector2D(1.0, 1.0),   QVector3D(0.0, 1.0, 0.0)));
-    vertexData.append(VertexData(QVector3D(-l, l, -l),   QVector2D(1.0, 0.0),   QVector3D(0.0, 1.0, 0.0)));
-
-    vertexData.append(VertexData(QVector3D(l, l, -l),   QVector2D(0.0, 1.0),   QVector3D(0.0, 0.0, -1.0)));
-    vertexData.append(VertexData(QVector3D(l, -l, -l),  QVector2D(0.0, 0.0),   QVector3D(0.0, 0.0, -1.0)));
-    vertexData.append(VertexData(QVector3D(-l, l, -l),    QVector2D(1.0, 1.0),   QVector3D(0.0, 0.0, -1.0)));
-    vertexData.append(VertexData(QVector3D(-l, -l, -l),   QVector2D(1.0, 0.0),   QVector3D(0.0, 0.0, -1.0)));
-
-    vertexData.append(VertexData(QVector3D(-l, l, l),     QVector2D(0.0, 1.0),   QVector3D(-1.0, 0.0, 0.0)));
-    vertexData.append(VertexData(QVector3D(-l, l, -l),    QVector2D(0.0, 0.0),   QVector3D(-1.0, 0.0, 0.0)));
-    vertexData.append(VertexData(QVector3D(-l, -l, l),    QVector2D(1.0, 1.0),   QVector3D(-1.0, 0.0, 0.0)));
-    vertexData.append(VertexData(QVector3D(-l, -l, -l),   QVector2D(1.0, 0.0),   QVector3D(-1.0, 0.0, 0.0)));
-
-    vertexData.append(VertexData(QVector3D(-l, -l, l),     QVector2D(0.0, 1.0),   QVector3D(0.0, -1.0, 0.0)));
-    vertexData.append(VertexData(QVector3D(-l, -l, -l),    QVector2D(0.0, 0.0),   QVector3D(0.0, -1.0, 0.0)));
-    vertexData.append(VertexData(QVector3D(l, -l, l),    QVector2D(1.0, 1.0),   QVector3D(0.0, -1.0, 0.0)));
-    vertexData.append(VertexData(QVector3D(l, -l, -l),   QVector2D(1.0, 0.0),   QVector3D(0.0, -1.0, 0.0)));
-
-    QVector<GLuint> indicesData;
-
-    for (unsigned int i = 0; i < 24; i += 4) {
-        indicesData.append(i + 0);
-        indicesData.append(i + 1);
-        indicesData.append(i + 2);
-        indicesData.append(i + 2);
-        indicesData.append(i + 1);
-        indicesData.append(i + 3);
-    }
-
-    QVector<QVector3D> verts;
-    QVector<QVector3D> normals;
-    QVector<QVector2D> texts;
-    for(auto vertex : vertexData) {
-        verts.append(vertex.m_position);
-        normals.append(vertex.m_normal);
-        texts.append(vertex.m_textureCoordinate);
-    }
-
-    MeshData m;
-    m = OBJLoader::OBJLoader::load(":/Objects/cube.obj");
-
-    QVector<int> inds;
-    for (auto i : indicesData) {
-        inds.append(i);
-    }
-
-    MeshData mesh(verts, texts, normals, inds);
-
-    auto cube1 = new GLModel3D(vertexData, indicesData,
-                               QImage(":/Textures/QtCreator.png"));
-    cube1->translate(QVector3D(2.0f, 0.0f, 0.0f));
-
-    auto cube2 = new GLModel3D(mesh, QImage(":/Textures/QtCreator.png"));
-    cube2->translate(QVector3D(-2.0f, 0.0f, 0.0f));
-
-    m_objects.append(cube1);
-    m_objects.append(cube2);
-    m_objects.append(new GLModel3D(vertexData, indicesData,
-                                   QImage(":/Textures/QtCreator.png")));
+    MeshData *mesh = OBJLoader::OBJLoader::load(":/Objects/cube_tr.obj");
+    GLModel3D *model = new GLModel3D(*mesh, QImage(":/Textures/QtCreator.png"));
+    m_objects.append(model);
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *event)

@@ -15,6 +15,7 @@ class QOpenGLShaderProgram;
 namespace  Model3D {
 
 // TODO delete vertexData
+/*
 class VertexData
 {
 public:
@@ -30,7 +31,7 @@ public:
         m_normal(normal)
     {
     }
-};
+};*/
 
 /// unsigned long or int? How much vertices do
 /// we usually have?
@@ -42,8 +43,6 @@ public:
      */
     QVector<QVector3D> positions;
 
-    QVector<QVector3D> positionsTriangulated;
-
     /*!
      * \brief Vector of vertex data of the model stored flat
      */
@@ -52,20 +51,36 @@ public:
      * \brief Vector of normals for each vertex
      */
     QVector<QVector3D> normals;
+
     /*!
-     * \brief stores starting vertices\normals position
+     * \brief Indices of the vertices in their chonological
+     * order that is found in the "f" lines
+     */
+    QVector<int> verticesIndices;
+
+    /*!
+     * \brief Indices of the texture coordinates in
+     * their chronological order in "f" lines
+     */
+    QVector<int> texturesIndices;
+    /*!
+     * \brief Indices of the normals in their chronological
+     * order in "f" lines
+     */
+    QVector<int> normalsIndices;
+    /*!
+     * \brief stores starting vertices position
      * indices for each polygon
-     * e.g. to get i'th polygon vertices\normals:
+     * e.g. to get i'th polygon vertices:
      * the polygon has exactly m_polygonVertices[i+1]
-     * vertices\normals;
-     * the first vertex\normal from m_positions
+     * vertices;
+     * the first vertex from m_positions
      * (or m_normals)
      * vector, that belongs to the polygon, is
      * m_polygonVertices[i]
      */
-    QVector<int> polygonVertices;
+    QVector<int> polygonElementsIndices;
 
-    QVector<int> polygonVerticesTriangulated;
     /*!
      * \brief stores starting texture coordinates
      * indices for each polygon
@@ -76,7 +91,24 @@ public:
      * vector, that belongs to the polygon, is
      * m_polygonTextures[i]
      */
-    QVector<int> polygonTextures;
+    QVector<int> polygonTexturesIndices;
+
+    /*!
+     * \brief stores starting normals position
+     * indices for each polygon
+     * e.g. to get i'th polygon normals:
+     * the polygon has exactly m_polygonVertices[i+1]
+     * normals;
+     * the first normal from m_positions
+     * (or m_normals)
+     * vector, that belongs to the polygon, is
+     * m_polygonVertices[i]
+     */
+    QVector<int> polygonNormalsIndices;
+
+    //QVector<QVector3D> positionsTriangulated;
+    //QVector<int> polygonVerticesTriangulated;
+
     MeshData();
 
     MeshData(QVector<QVector3D>& vertices,
@@ -84,6 +116,9 @@ public:
              QVector<QVector3D>& normals,
              QVector<int>& indices);
 
+    QVector<QVector3D> getCronologicalVerticesCoords() const;
+    QVector<QVector2D> getCronologicalTexturesCoords() const;
+    QVector<QVector3D> getCronologicalNormalsCoords() const;
     // duplicate. Can we get rig of them?
     QVector<QVector3D> getPolygonVertices(const int polygonID);
 
@@ -97,8 +132,8 @@ public:
         return this->positions == other.positions &&
                 this->normals == other.normals &&
                 this->textureCoords == other.textureCoords &&
-                this->polygonTextures == other.polygonTextures &&
-                this->polygonVertices == other.polygonVertices;
+                this->polygonTexturesIndices == other.polygonTexturesIndices &&
+                this->polygonElementsIndices == other.polygonElementsIndices;
     }
 
     inline bool operator!=(const MeshData& other) const
@@ -128,18 +163,10 @@ class GLModel3D
 {
 public:
     GLModel3D();
-    GLModel3D(const QVector<VertexData>& vertexData,
-             const QVector<GLuint>& indeces,
-             const QImage& texture);
-
     GLModel3D(const MeshData& meshData,
               const QImage& texture);
 
     ~GLModel3D();
-
-    void reinit(const QVector<VertexData> &vertexData,
-         const QVector<GLuint> &indeces,
-         const QImage &texture);
 
     void reinit(const MeshData& meshData,
                 const QImage& texture);
@@ -149,11 +176,12 @@ public:
 
     void translate(const QVector3D &translation);
 private:
-    QOpenGLBuffer   m_vertexBuffer;
-    QOpenGLBuffer   m_indexBuffer;
-    QMatrix4x4      m_modelMatrix;
-    QOpenGLTexture *m_texture;
-    QOpenGLFunctions* f;
+    QOpenGLBuffer     m_vertexBuffer;
+    QOpenGLBuffer     m_indexBuffer;
+    QMatrix4x4        m_modelMatrix;
+    QOpenGLTexture   *m_texture = nullptr;
+    QOpenGLFunctions *m_openglFunctions = nullptr;
+    MeshData          m_meshData;
 };
 
 } // namespace Model3D

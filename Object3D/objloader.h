@@ -34,7 +34,7 @@ namespace OBJLoader
 
     QVector<QVector3D> getPolygonInformation(QStringList& polygonInfoLine);
 
-    QVector<float> parseCoordsLine(const QString& line);
+    QVector<float> parseLine(const QString& line);
 };
 
 }
