@@ -30,12 +30,10 @@ include(GLModel3D/GLModel3D.pri)
 
 SOURCES += \
         main.cpp \
-    #model3d.cpp \
     glwidget.cpp \
 
 HEADERS += \
         glwidget.h \
-    #model3d.h \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -43,8 +41,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    textures.qrc \
-    shaders.qrc \
-    objects.qrc
+    QtResources/textures.qrc \
+    QtResources/shaders.qrc \
+    QtResources/objects.qrc
 
 DISTFILES +=
