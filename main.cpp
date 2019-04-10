@@ -1,11 +1,11 @@
 #include "glwidget.h"
 #include <QApplication>
 
-#include <Object3D/object3dtests.h>
+#include "OBJLoader/objloadertests.h"
 
 void runTests()
 {
-    OBJLoader::Object3DTests objTests;
+    OBJLoader::OBJLoaderTests objTests;
     QTest::qExec(&objTests);
 }
 

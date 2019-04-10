@@ -1,7 +1,8 @@
-#include "object3dtests.h"
+#include "objloadertests.h"
 #include "objloader.h"
+#include "Object3D/model3d.h"
 
-void OBJLoader::Object3DTests::objLoaderShuffledVertices()
+void OBJLoader::OBJLoaderTests::objLoaderShuffledVertices()
 {
     OBJLoader loader;
     Model3D::MeshData *loadedMesh = loader.load(":/Objects/UnitTests/test_shuffled.obj");
@@ -26,7 +27,7 @@ void OBJLoader::Object3DTests::objLoaderShuffledVertices()
     QCOMPARE(*expectedMesh, *loadedMesh);
 }
 
-void OBJLoader::Object3DTests::objLoaderEmptyFile()
+void OBJLoader::OBJLoaderTests::objLoaderEmptyFile()
 {
     OBJLoader loader;
     auto loadedMesh = loader.load(":/Objects/UnitTests/test_empty.obj");
@@ -35,7 +36,7 @@ void OBJLoader::Object3DTests::objLoaderEmptyFile()
     QCOMPARE(*expectedMesh, *loadedMesh);
 }
 
-void OBJLoader::Object3DTests::objLoaderIncorrectFile()
+void OBJLoader::OBJLoaderTests::objLoaderIncorrectFile()
 {
     OBJLoader loader;
     Model3D::MeshData *loadedMesh = loader.load(":/Objects/UnitTests/test_incorrect_file.obj");
@@ -43,7 +44,7 @@ void OBJLoader::Object3DTests::objLoaderIncorrectFile()
     QCOMPARE(nullptr, loadedMesh);
 }
 
-void OBJLoader::Object3DTests::objLoaderTextStream()
+void OBJLoader::OBJLoaderTests::objLoaderTextStream()
 {
     OBJLoader loader;
 
@@ -64,4 +65,16 @@ void OBJLoader::Object3DTests::objLoaderTextStream()
     expectedMesh->polygonElementsIndices = QVector<int>{0, 2};
 
     QCOMPARE(*loadedMesh, *expectedMesh);
+}
+
+void OBJLoader::OBJLoaderTests::objLoaderWithoutData()
+{
+    OBJLoader loader;
+
+    QTextStream stream("vn 1.0 0.0 -0.0\n" \
+                       "f 2/3/2 3/2/1 1/1/1");
+
+    auto loadedMesh = loader.load(stream);
+
+    QCOMPARE(nullptr, loadedMesh);
 }

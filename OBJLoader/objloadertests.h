@@ -1,23 +1,20 @@
-#ifndef OBJECT3DTESTS_H
-#define OBJECT3DTESTS_H
+#ifndef OBJLOADERTESTS_H
+#define OBJLOADERTESTS_H
 
 #include <QTest>
 
 namespace OBJLoader {
 
-class Object3DTests : public QObject
+class OBJLoaderTests : public QObject
 {
     Q_OBJECT
 
 private slots:
     void objLoaderShuffledVertices();
-
-    // TODO
-    //void objLoaderWithTextures();
-
     void objLoaderEmptyFile();
     void objLoaderIncorrectFile();
     void objLoaderTextStream();
+    void objLoaderWithoutData();
 };
 
 }

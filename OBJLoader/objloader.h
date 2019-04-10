@@ -4,7 +4,7 @@
 #include <GL/gl.h>
 #include <QString>
 #include <QVector>
-#include "model3d.h"
+#include "Object3D/model3d.h"
 
 using namespace Model3D;
 

@@ -2,11 +2,12 @@
 #include <QDir>
 #include <QMouseEvent>
 #include <QTimer>
-#include <Object3D/objloader.h>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
 
 #include <QDebug>
+
+#include "OBJLoader/objloader.h"
 
 GLWidget::GLWidget(QWidget *parent)
     : QOpenGLWidget(parent)
@@ -114,7 +115,7 @@ void GLWidget::initCube()
 
     Q_ASSERT(mesh != nullptr);
 
-    GLModel3D *model = new GLModel3D(*mesh, QImage(":/Textures/QtCreator.png"));
+    GLModel3D::GLModel3D *model = new GLModel3D::GLModel3D(*mesh, QImage(":/Textures/QtCreator.png"));
     m_objects.append(model);
 }
 

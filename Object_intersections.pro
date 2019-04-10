@@ -23,10 +23,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++14
 
-#include(GeomStack/GeomStack.pri)
-#include(GeomStack/GeomStackTests.pri)
 include(Object3D/Object3D.pri)
-include(Object3D/Object3DTests.pri)
+include(OBJLoader/OBJLoader.pri)
+include(OBJLoader/OBJLoaderTests.pri)
+include(GLModel3D/GLModel3D.pri)
 
 SOURCES += \
         main.cpp \

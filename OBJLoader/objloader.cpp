@@ -83,14 +83,15 @@ MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream)
             // each vertex info is vertex info in the polygon
             // e.g. f 1/2/3 will come out in QVector3D(1,2,3)
             for (auto vertexInfo : newPolygon) {
-                if (vertexInfo[0] > 0)
+                if (vertexInfo[0] > 0) {
                     modelData->verticesIndices.append(vertexInfo[0] - 1);
-
+                }
                 if (vertexInfo[1] > 0) {
                     modelData->texturesIndices.append(vertexInfo[1] - 1);
                 }
-                if (vertexInfo[2] > 0)
+                if (vertexInfo[2] > 0) {
                     modelData->normalsIndices.append(vertexInfo[2] - 1);
+                }
             }
 
         }
@@ -98,6 +99,10 @@ MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream)
 
     if (modelData->polygonElementsIndices.size() > 0)
         modelData->polygonElementsIndices.append(modelData->verticesIndices.size());
+
+    // check if the OBJ file had enough data and faces indices
+    // are not out of range
+
 
     if (!m_isLoadSuccessful) {
         qDebug() << "OBJ file was loaded with errors. See output for details";

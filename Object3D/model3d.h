@@ -1,5 +1,3 @@
-#pragma once
-
 #ifndef MODEL3D_H
 #define MODEL3D_H
 
@@ -8,9 +6,6 @@
 #include <QVector2D>
 #include <QVector3D>
 
-class QOpenGLTexture;
-class QOpenGLFunctions;
-class QOpenGLShaderProgram;
 
 namespace  Model3D {
 
@@ -23,11 +18,11 @@ public:
     QVector<QVector3D> positions;
 
     /*!
-     * \brief Vector of vertex data of the model stored flat
+     * \brief Vector of all textureCoords
      */
     QVector<QVector2D> textureCoords;
     /*!
-     * \brief Vector of normals for each vertex
+     * \brief Vector of normals
      */
     QVector<QVector3D> normals;
 
@@ -48,15 +43,15 @@ public:
      */
     QVector<int> normalsIndices;
     /*!
-     * \brief stores starting vertices position
+     * \brief stores starting verts/text/normals position
      * indices for each polygon
-     * e.g. to get i'th polygon vertices:
-     * the polygon has exactly m_polygonVertices[i+1]
-     * vertices;
-     * the first vertex from m_positions
-     * (or m_normals)
+     * e.g. to get i'th polygon verts/text/normals:
+     * the polygon has exactly polygonElementsIndices[i+1]
+     * verts/text/normals;
+     * the first verts/text/normals from positions
+     * (or normals/textureCoords)
      * vector, that belongs to the polygon, is
-     * m_polygonVertices[i]
+     * polygonElementsIndices[i]
      */
     QVector<int> polygonElementsIndices;
 
@@ -71,6 +66,17 @@ public:
     QVector<QVector2D> getPolygonTextureCoords(const int polygonID);
 
     QVector<QVector3D> getPolygonNormals(const int polygonID);
+
+    /*!
+     * \brief isValid
+     * checks where the MeshData object is valid.
+     * For example, if a face points that it uses
+     * vertices with indices that do not exist,
+     * then it false
+     * \return false is MeshData has some invalid data
+     * true otherwise
+     */
+    bool isValid();
 
     inline bool operator==(const MeshData& other) const
     {
@@ -101,33 +107,9 @@ private:
     void getPolygonVerticesInterval(const int polygonID,
                                     QVector<int>& intervalSource,
                                     int& firstVertexNumber,
-                                    int& numVertices);
+                                    int& numVertices) const;
 };
 
-class GLModel3D
-{
-public:
-    GLModel3D();
-    GLModel3D(const MeshData& meshData,
-              const QImage& texture);
-
-    ~GLModel3D();
-
-    void reinit(const MeshData& meshData,
-                const QImage& texture);
-
-    void draw(QOpenGLShaderProgram *shaderProgram,
-              QOpenGLFunctions *functions);
-
-    void translate(const QVector3D &translation);
-private:
-    QOpenGLBuffer     m_vertexBuffer;
-    QOpenGLBuffer     m_indexBuffer;
-    QMatrix4x4        m_modelMatrix;
-    QOpenGLTexture   *m_texture = nullptr;
-    QOpenGLFunctions *m_openglFunctions = nullptr;
-    MeshData          m_meshData;
-};
 
 } // namespace Model3D
 
