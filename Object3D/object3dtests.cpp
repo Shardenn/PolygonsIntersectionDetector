@@ -47,10 +47,10 @@ void OBJLoader::Object3DTests::objLoaderTextStream()
 {
     OBJLoader loader;
 
-    QTextStream stream(" v 1 2 3\n    \
-                       v 2.0 -1 4\n   \
-                      vn 1 0.0 0.0\n  \
-                       f 1//1 2//1\n");
+    QTextStream stream("v 1 2 3\n"    \
+                       "v 2.0 -1 4\n" \
+                      "vn 1 0.0 0.0\n"  \
+                       "f 1//1 2//1\n");
     auto loadedMesh = loader.load(stream);
 
     Model3D::MeshData *expectedMesh = new Model3D::MeshData;

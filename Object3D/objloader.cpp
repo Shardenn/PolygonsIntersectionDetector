@@ -31,13 +31,10 @@ MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream)
 
     while(!textStream.atEnd()) {
         QString str = textStream.readLine();
+        str = str.simplified(); // delete leading and trailing whitespaces
+                                // and remove several whitespaces
         QStringList lineTokens = str.split(" ");
-/*
-        std::for_each(lineTokens.begin(), lineTokens.end(),
-                      [&](QString& token) {
-                        if
-        });
-  */
+
         if(lineTokens[0] == "#") {
             qDebug() << "Comment in obj file: " << str;
         } else if (lineTokens[0] == "mtllib") {
@@ -49,7 +46,7 @@ MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream)
             QVector<float> parsedCoords = parseLine(str);
 
             if (parsedCoords.size() != 3) {
-                qDebug() << "Line " + str + " has either more or less than 3 arguments for vertex";
+                qDebug() << "Line \'" + str + "\' has either more or less than 3 arguments for vertex";
                 m_isLoadSuccessful = false;
                 break;
             }
