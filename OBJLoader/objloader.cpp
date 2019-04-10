@@ -130,18 +130,16 @@ QVector<QVector3D> OBJLoader::OBJLoader::getPolygonInformation(QStringList &poly
         // for example, 1/2/3, where 1 is position index,
         // 2 is texture coord index, 3 is normal index
         bool isConvertionSuccess = true;
-        unsigned int positionInd = vertexInfo[0].toUInt(&isConvertionSuccess);
-        if (isConvertionSuccess) {
-            vertexIndicesInfo[0] = positionInd;
+
+        int j = 0;
+        while (j < vertexInfo.size() && j < 3) {
+            unsigned int index = vertexInfo[j].toUInt(&isConvertionSuccess);
+            if (isConvertionSuccess) {
+                vertexIndicesInfo[j] = index;
+            }
+            j++;
         }
-        unsigned int textureInd = vertexInfo[1].toUInt(&isConvertionSuccess);
-        if (isConvertionSuccess) {
-            vertexIndicesInfo[1] = textureInd;
-        }
-        unsigned int normalInd = vertexInfo[2].toUInt(&isConvertionSuccess);
-        if (isConvertionSuccess) {
-            vertexIndicesInfo[2] = normalInd;
-        }
+
         polygonInformaion.append(vertexIndicesInfo);
     }
     return polygonInformaion;

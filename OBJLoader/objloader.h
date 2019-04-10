@@ -10,9 +10,9 @@ using namespace Model3D;
 
 namespace OBJLoader {
 
-// it is all static, but still a class
-// because we are hiding some methods
-// from the user
+// TODO
+// triangulation
+// adding default normals if they are not provided
 class OBJLoader
 {
 public:

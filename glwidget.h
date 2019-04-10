@@ -31,7 +31,7 @@ protected:
     void wheelEvent(QWheelEvent* event) override;
 
     void initShaders();
-    void initCube();
+    void initShapes();
 private:
     QMatrix4x4 m_projectoinMatrix;
     QOpenGLShaderProgram m_shaderProgram;

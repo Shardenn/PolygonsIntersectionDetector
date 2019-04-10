@@ -45,7 +45,7 @@ void GLWidget::initializeGL()
     glEnable(GL_CULL_FACE);
 
     initShaders();
-    initCube();
+    initShapes();
 
     if (glGetError() != 0) {
         qDebug() << "InitializeGL got an error";
@@ -105,18 +105,27 @@ void GLWidget::initShaders()
     }
 }
 
-void GLWidget::initCube()
+void GLWidget::initShapes()
 {
     using namespace Model3D;
 
     //MeshData mesh(verts, texts, normals, inds);
     OBJLoader::OBJLoader loader;
-    MeshData *mesh = loader.load(":/Objects/cube_tr.obj");
+    MeshData *cubeMesh = loader.load(":/Objects/cube_tr.obj");
 
-    Q_ASSERT(mesh != nullptr);
+    Q_ASSERT(cubeMesh != nullptr);
 
-    GLModel3D::GLModel3D *model = new GLModel3D::GLModel3D(*mesh, QImage(":/Textures/QtCreator.png"));
-    m_objects.append(model);
+    GLModel3D::GLModel3D *cubeModel = new GLModel3D::GLModel3D(*cubeMesh,
+                                                           QImage(":/Textures/QtCreator.png"));
+    m_objects.append(cubeModel);
+/*
+    MeshData *pyramidMesh = loader.load(":/Objects/triangle.obj");
+    Q_ASSERT(pyramidMesh != nullptr);
+    GLModel3D::GLModel3D *pyramidModel = new GLModel3D::GLModel3D(*pyramidMesh,
+                                                           QImage(":/Texture/QtCreator.png"));
+    pyramidModel->translate(QVector3D(-2, 0, 0));
+    m_objects.append(pyramidModel);
+    */
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *event)

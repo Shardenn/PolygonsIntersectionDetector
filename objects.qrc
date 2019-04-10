@@ -8,5 +8,6 @@
         <file>Objects/UnitTests/test_usual.obj</file>
         <file>Objects/UnitTests/test_incorrect_file.obj</file>
         <file>Objects/cube_tr.obj</file>
+        <file>Objects/triangle.obj</file>
     </qresource>
 </RCC>
