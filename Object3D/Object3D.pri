@@ -9,3 +9,9 @@ SOURCES += \
     $$PWD/model3d.cpp
 
 }
+
+HEADERS += \
+    $$PWD/triangulator.h
+
+SOURCES += \
+    $$PWD/triangulator.cpp

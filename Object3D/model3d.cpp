@@ -4,6 +4,20 @@
 Model3D::MeshData::MeshData()
 {}
 
+Model3D::MeshData::MeshData(const MeshData &other) :
+    positions(other.positions),
+    textureCoords(other.textureCoords),
+    normals(other.normals),
+    verticesIndices(other.verticesIndices),
+    verticesIndicesTriangulated(other.verticesIndicesTriangulated),
+    texturesIndices(other.texturesIndices),
+    texturesIndicesTriangulated(other.texturesIndicesTriangulated),
+    normalsIndices(other.normalsIndices),
+    normalsIndicesTriangulated(other.normalsIndicesTriangulated),
+    polygonElementsIndices(other.polygonElementsIndices),
+    polygonElementsIndicesTriangulated(other.polygonElementsIndicesTriangulated)
+{}
+
 QVector<QVector3D> Model3D::MeshData::getCronologicalVerticesCoords() const
 {
     QVector<QVector3D> coords(verticesIndices.size());

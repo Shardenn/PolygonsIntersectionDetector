@@ -26,6 +26,7 @@ GLWidget::GLWidget(QWidget *parent)
 GLWidget::~GLWidget()
 {
     for (auto object : m_objects) {
+        makeCurrent();
         delete object;
     }
 }

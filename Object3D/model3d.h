@@ -6,12 +6,14 @@
 #include <QVector2D>
 #include <QVector3D>
 
-
 namespace  Model3D {
 
 class MeshData
 {
 public:
+    MeshData();
+    MeshData(const MeshData &other);
+
     /*!
      * \brief Vector of vertices positions
      */
@@ -32,16 +34,21 @@ public:
      */
     QVector<int> verticesIndices;
 
+    QVector<int> verticesIndicesTriangulated;
     /*!
      * \brief Indices of the texture coordinates in
      * their chronological order in "f" lines
      */
     QVector<int> texturesIndices;
+
+    QVector<int> texturesIndicesTriangulated;
     /*!
      * \brief Indices of the normals in their chronological
      * order in "f" lines
      */
     QVector<int> normalsIndices;
+
+    QVector<int> normalsIndicesTriangulated;
     /*!
      * \brief stores starting verts/text/normals position
      * indices for each polygon
@@ -55,12 +62,12 @@ public:
      */
     QVector<int> polygonElementsIndices;
 
-    MeshData();
+    QVector<int> polygonElementsIndicesTriangulated;
 
     QVector<QVector3D> getCronologicalVerticesCoords() const;
     QVector<QVector2D> getCronologicalTexturesCoords() const;
     QVector<QVector3D> getCronologicalNormalsCoords() const;
-    // duplicate. Can we get rig of them?
+
     QVector<QVector3D> getPolygonVertices(const int polygonID);
 
     QVector<QVector2D> getPolygonTextureCoords(const int polygonID);
@@ -90,6 +97,21 @@ public:
     inline bool operator!=(const MeshData& other) const
     {
         return !(*this == other);
+    }
+
+    inline MeshData &operator=(const MeshData &other)
+    {
+        positions                          = other.positions;
+        normals                            = other.normals;
+        textureCoords                      = other.textureCoords;
+        verticesIndices                    = other.verticesIndices;
+        verticesIndicesTriangulated        = other.verticesIndicesTriangulated;
+        texturesIndices                    = other.texturesIndices;
+        texturesIndicesTriangulated        = other.texturesIndicesTriangulated;
+        normalsIndices                     = other.normalsIndices;
+        normalsIndicesTriangulated         = other.normalsIndicesTriangulated;
+        polygonElementsIndices             = other.polygonElementsIndices;
+        polygonElementsIndicesTriangulated = other.polygonElementsIndicesTriangulated;
     }
 
 private:

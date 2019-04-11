@@ -31,6 +31,7 @@ GLModel3D::GLModel3D::~GLModel3D()
     if(m_texture != nullptr && m_texture->isCreated()) {
         // GLModel3D does not have vaild OGL context.
         // how to destroy a texture?
+
         m_texture->destroy();
         delete m_texture;
         //const GLuint textureID = m_texture->textureId();
