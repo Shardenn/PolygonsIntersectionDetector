@@ -61,7 +61,7 @@ void GLWidget::resizeGL(int w, int h)
     float aspect = w / float(h);
 
     m_projectoinMatrix.setToIdentity();
-    m_projectoinMatrix.perspective(60.0, aspect, 0.1f, 10.f);
+    m_projectoinMatrix.perspective(60.0, aspect, 0.1f, 100.f);
 }
 
 void GLWidget::paintGL()

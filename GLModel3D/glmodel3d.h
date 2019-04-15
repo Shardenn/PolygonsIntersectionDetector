@@ -22,7 +22,7 @@ public:
     GLModel3D(const Model3D::MeshData& meshData,
               const QImage& texture);
 
-    ~GLModel3D();
+    virtual ~GLModel3D();
 
     void reinit(const Model3D::MeshData& meshData,
                 const QImage& texture);
