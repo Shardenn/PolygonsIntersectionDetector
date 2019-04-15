@@ -29,13 +29,8 @@ GLModel3D::GLModel3D::~GLModel3D()
         m_indexBuffer.destroy();
 
     if(m_texture != nullptr && m_texture->isCreated()) {
-        // GLModel3D does not have vaild OGL context.
-        // how to destroy a texture?
-
         m_texture->destroy();
         delete m_texture;
-        //const GLuint textureID = m_texture->textureId();
-        //f->glDeleteTextures(1, &textureID);
     }
 }
 
@@ -62,17 +57,17 @@ void GLModel3D::GLModel3D::reinit(const MeshData& mesh,
     m_vertexBuffer.allocate(elementsCount * (3 + 2 + 3));
 
     int offset = 0;
-    QVector<QVector3D> allPositions = mesh.getCronologicalVerticesCoords();
+    QVector<QVector3D> allPositions = mesh.getChronologicalVerticesCoords();
     m_vertexBuffer.write(offset, allPositions.constData(),
                                  allPositions.size() * sizeof(QVector3D));
 
     offset += allPositions.size() * sizeof(QVector3D);
-    QVector<QVector2D> allTextures = mesh.getCronologicalTexturesCoords();
+    QVector<QVector2D> allTextures = mesh.getChronologicalTexturesCoords();
     m_vertexBuffer.write(offset, allTextures.constData(),
                                  allTextures.size() * sizeof(QVector2D));
 
     offset += allTextures.size()  * sizeof(QVector2D);
-    QVector<QVector3D> allNormals = mesh.getCronologicalNormalsCoords();
+    QVector<QVector3D> allNormals = mesh.getChronologicalNormalsCoords();
     m_vertexBuffer.write(offset, allNormals.constData(),
                                  allNormals.size() * sizeof(QVector3D));
 

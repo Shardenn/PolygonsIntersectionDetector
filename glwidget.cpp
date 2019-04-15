@@ -70,7 +70,7 @@ void GLWidget::paintGL()
 
     QMatrix4x4 vMatrix;
     vMatrix.setToIdentity();
-    vMatrix.translate(0.0,0.0,-5.0); // move camera a bit further from origin
+    vMatrix.translate(0.0, 0.0, m_distance); // move camera a bit further from origin
     vMatrix.rotate(m_rotation);
 
     m_shaderProgram.bind();
@@ -168,13 +168,14 @@ void GLWidget::wheelEvent(QWheelEvent *event)
 
     if(event->orientation() == Qt::Vertical)
     {
-        if(delta < 0)
-            m_distance *= 1.1f;
         if(delta > 0)
-            m_distance *= 0.9f;
+            m_distance += 1.f * m_zoomSpeed;
+        if(delta < 0)
+            m_distance -= 1.f * m_zoomSpeed;
 
-        //paintGL();
+        paintGL();
     }
+    update();
     event->accept();
 }
 

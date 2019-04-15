@@ -8,6 +8,7 @@
 #include <QOpenGLFunctions>
 //#include <Object3D/model3d.h>
 #include "GLModel3D/glmodel3d.h"
+
 class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
 
@@ -40,7 +41,10 @@ private:
     // mouse input stuff
     float m_alpha;
     float m_beta;
-    float m_distance;
+    float m_distance{ -5.0 };
+
+    float m_zoomSpeed = 1.f;
+
     QVector2D m_lastMousePosition;
     QQuaternion m_rotation;
 

@@ -18,7 +18,7 @@ Model3D::MeshData::MeshData(const MeshData &other) :
     polygonElementsIndicesTriangulated(other.polygonElementsIndicesTriangulated)
 {}
 
-QVector<QVector3D> Model3D::MeshData::getCronologicalVerticesCoords() const
+QVector<QVector3D> Model3D::MeshData::getChronologicalVerticesCoords() const
 {
     QVector<QVector3D> coords(verticesIndices.size());
 
@@ -29,7 +29,7 @@ QVector<QVector3D> Model3D::MeshData::getCronologicalVerticesCoords() const
     return coords;
 }
 
-QVector<QVector2D> Model3D::MeshData::getCronologicalTexturesCoords() const
+QVector<QVector2D> Model3D::MeshData::getChronologicalTexturesCoords() const
 {
     QVector<QVector2D> textures(texturesIndices.size());
 
@@ -40,7 +40,7 @@ QVector<QVector2D> Model3D::MeshData::getCronologicalTexturesCoords() const
     return textures;
 }
 
-QVector<QVector3D> Model3D::MeshData::getCronologicalNormalsCoords() const
+QVector<QVector3D> Model3D::MeshData::getChronologicalNormalsCoords() const
 {
     QVector<QVector3D> allNormals(normalsIndices.size());
 
