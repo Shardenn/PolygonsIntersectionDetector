@@ -8,6 +8,7 @@
 #include <QDebug>
 
 #include "OBJLoader/objloader.h"
+#include "Object3D/triangulator.h"
 
 GLWidget::GLWidget(QWidget *parent)
     : QOpenGLWidget(parent)
@@ -119,14 +120,19 @@ void GLWidget::initShapes()
     GLModel3D::GLModel3D *cubeModel = new GLModel3D::GLModel3D(*cubeMesh,
                                                            QImage(":/Textures/QtCreator.png"));
     m_objects.append(cubeModel);
-/*
-    MeshData *pyramidMesh = loader.load(":/Objects/triangle.obj");
-    Q_ASSERT(pyramidMesh != nullptr);
-    GLModel3D::GLModel3D *pyramidModel = new GLModel3D::GLModel3D(*pyramidMesh,
-                                                           QImage(":/Texture/QtCreator.png"));
-    pyramidModel->translate(QVector3D(-2, 0, 0));
-    m_objects.append(pyramidModel);
-    */
+
+    MeshData *triangulatedCubeMesh = loader.load(":/Objects/cube.obj");
+    Q_ASSERT(triangulatedCubeMesh != nullptr);
+
+    NaiveTriangulator *trian = new NaiveTriangulator;
+    trian->triangulate(*triangulatedCubeMesh);
+
+    GLModel3D::GLModel3D *triangulatedCube = new GLModel3D::GLModel3D(*triangulatedCubeMesh,
+                                                                          QImage(":/Textures/QtCreator.png"));
+    triangulatedCube->translate(QVector3D(-2, 0, 0));
+    m_objects.append(triangulatedCube);
+
+    delete trian;
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *event)

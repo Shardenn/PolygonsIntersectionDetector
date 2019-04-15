@@ -3,8 +3,10 @@
 
 #include <QOpenGLBuffer>
 #include <QMatrix4x4>
-// needed for MeshData. Maybe it should be pointer?
-#include <Object3D/model3d.h>
+
+#include "Object3D/model3d.h"
+//#include "glsimpleobject3d.h"
+#include "gltransofmable.h"
 
 class QOpenGLTexture;
 class QOpenGLFunctions;
@@ -12,7 +14,8 @@ class QOpenGLShaderProgram;
 
 namespace GLModel3D {
 
-class GLModel3D
+// draws from MeshData
+class GLModel3D : public GLTransformable// : public GLSimpleObject3D
 {
 public:
     GLModel3D();
@@ -25,15 +28,19 @@ public:
                 const QImage& texture);
 
     void draw(QOpenGLShaderProgram *shaderProgram,
-              QOpenGLFunctions *functions);
+              QOpenGLFunctions *functions) override;
 
-    void translate(const QVector3D &translation);
-private:
+    void rotate(const QQuaternion &quat) override;
+    void scale(const float &factor) override;
+    void translate(const QVector3D &translation) override;
+protected:
     QOpenGLBuffer     m_vertexBuffer;
     QOpenGLBuffer     m_indexBuffer;
     QMatrix4x4        m_modelMatrix;
-    QOpenGLTexture   *m_texture = nullptr;
     QOpenGLFunctions *m_openglFunctions = nullptr;
+
+private:
+    QOpenGLTexture   *m_texture = nullptr;
     Model3D::MeshData m_meshData;
 };
 

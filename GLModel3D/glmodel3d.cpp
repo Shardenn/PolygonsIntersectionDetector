@@ -14,7 +14,7 @@ GLModel3D::GLModel3D::GLModel3D() :
 }
 
 GLModel3D::GLModel3D::GLModel3D(const MeshData& mesh,
-                              const QImage& texture) :
+                                const QImage& texture) :
     GLModel3D()
 {
     m_meshData = mesh;
@@ -90,9 +90,8 @@ void GLModel3D::GLModel3D::reinit(const MeshData& mesh,
     m_indexBuffer.release();
 
     // get how much elements in QVector<VertexData> do we need
-    m_texture = new QOpenGLTexture(texture.mirrored()); // TODO why it should be mirrored?
+    m_texture = new QOpenGLTexture(texture.mirrored());
 
-    // TODO what are the first two things?
     // set nearest filtering mode for texture minification
     m_texture->setMinificationFilter(QOpenGLTexture::Nearest);
     // set bilinear filtering mode for texture magnification
@@ -140,7 +139,7 @@ void GLModel3D::GLModel3D::draw(QOpenGLShaderProgram *shaderProgram,
 
     m_indexBuffer.bind();
 
-    functions->glDrawElements(GL_TRIANGLES, m_indexBuffer.size()-1, GL_UNSIGNED_INT, nullptr);
+    functions->glDrawElements(drawMode, m_indexBuffer.size() - 1, GL_UNSIGNED_INT, nullptr);
 
     m_indexBuffer.release();
     m_vertexBuffer.release();
@@ -151,4 +150,14 @@ void GLModel3D::GLModel3D::draw(QOpenGLShaderProgram *shaderProgram,
 void GLModel3D::GLModel3D::translate(const QVector3D &translation)
 {
     m_modelMatrix.translate(translation);
+}
+
+void GLModel3D::GLModel3D::rotate(const QQuaternion &quat)
+{
+    m_modelMatrix.rotate(quat);
+}
+
+void GLModel3D::GLModel3D::scale(const float &factor)
+{
+    m_modelMatrix.scale(factor);
 }

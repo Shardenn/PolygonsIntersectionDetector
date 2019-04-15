@@ -6,55 +6,77 @@ Triangulator::Triangulator()
 
 }
 
+Triangulator::~Triangulator()
+{}
+
 NaiveTriangulator::NaiveTriangulator() :
     Triangulator ()
 {}
 
+NaiveTriangulator::~NaiveTriangulator()
+{}
+
 void NaiveTriangulator::triangulate(MeshData &mesh)
 {
-    auto triangulated = mesh;
+    mesh.normalsIndicesTriangulated.clear();
+    mesh.verticesIndicesTriangulated.clear();
+    mesh.texturesIndicesTriangulated.clear();
+    mesh.polygonElementsIndicesTriangulated.clear();
+    mesh.polygonElementsIndicesTriangulated.append(0);
 
-    triangulated.normalsIndicesTriangulated.clear();
-    triangulated.verticesIndicesTriangulated.clear();
-    triangulated.texturesIndicesTriangulated.clear();
-    triangulated.polygonElementsIndicesTriangulated.clear();
-
-    for (int i = 0; i < triangulated.polygonElementsIndices.size() - 1; i++) {
-        int startingInd = triangulated.polygonElementsIndices[i];
-        int numIndices = triangulated.polygonElementsIndices[i+1] - startingInd;
+    for (int i = 0; i < mesh.polygonElementsIndices.size() - 1; i++) {
+        int startingInd = mesh.polygonElementsIndices[i];
+        int numIndices = mesh.polygonElementsIndices[i+1] - startingInd;
 
         if (numIndices <= 3) {
             // copy these indices from
             // normals, textures and positions to triangulated
-            auto vectorChunk = triangulated.verticesIndices.mid(startingInd, numIndices);
-            triangulated.verticesIndicesTriangulated.append(vectorChunk);
+            auto vectorChunk = mesh.verticesIndices.mid(startingInd, numIndices);
+            mesh.verticesIndicesTriangulated.append(vectorChunk);
 
-            vectorChunk = triangulated.texturesIndices.mid(startingInd, numIndices);
-            triangulated.texturesIndicesTriangulated.append(vectorChunk);
+            vectorChunk = mesh.texturesIndices.mid(startingInd, numIndices);
+            mesh.texturesIndicesTriangulated.append(vectorChunk);
 
-            vectorChunk = triangulated.normalsIndices.mid(startingInd, numIndices);
-            triangulated.normalsIndicesTriangulated.append(vectorChunk);
+            vectorChunk = mesh.normalsIndices.mid(startingInd, numIndices);
+            mesh.normalsIndicesTriangulated.append(vectorChunk);
         } else {
             // from the long polygon make several short (triangulated) ones
-            for (int j = 0; j < numIndices - 3 + 1; j++) {
-                /*
-                 append the line
-                 e.g. vertices indices for the polygon:
-                 1 4 3 6 5 7 9
-                 should become
-                 1 2 3 1 3 6 1 6 5 1 5 7 1 7 9
-                 and polygonElements should become from
-                 5 12
-                 to
-                 5 8 11 14 17 20
-                */
+            int commonInd = mesh.verticesIndices[startingInd];
+            for (int j = 1; j < numIndices - 1; j++) {
+                int current, next;
+
+                if (mesh.verticesIndices.size() > 0) {
+                    current = mesh.verticesIndices[startingInd + j];
+                    next = mesh.verticesIndices[startingInd + j + 1];
+                    mesh.verticesIndicesTriangulated.append({commonInd, current, next});
+                }
+
+                if (mesh.normalsIndices.size() > 0) {
+                    current = mesh.normalsIndices[startingInd + j];
+                    next = mesh.normalsIndices[startingInd + j + 1];
+                    mesh.normalsIndicesTriangulated.append({commonInd, current, next});
+                }
+
+                if (mesh.texturesIndices.size() > 0) {
+                    current = mesh.texturesIndices[startingInd + j];
+                    next = mesh.texturesIndices[startingInd + j + 1];
+                    mesh.texturesIndicesTriangulated.append({commonInd, current, next});
+                }
+                mesh.polygonElementsIndicesTriangulated.append(mesh.verticesIndicesTriangulated.size());
             }
         }
     }
+    mesh.texturesIndices = mesh.texturesIndicesTriangulated;
+    mesh.verticesIndices = mesh.verticesIndicesTriangulated;
+    mesh.normalsIndices = mesh.normalsIndicesTriangulated;
+    mesh.polygonElementsIndices = mesh.polygonElementsIndicesTriangulated;
 }
 
 EarClippingTriangulator::EarClippingTriangulator() :
     Triangulator()
+{}
+
+EarClippingTriangulator::~EarClippingTriangulator()
 {}
 
 void EarClippingTriangulator::triangulate(MeshData &mesh)
