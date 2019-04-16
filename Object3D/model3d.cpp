@@ -1,5 +1,6 @@
 #include <Object3D/model3d.h>
 #include <QDebug>
+#include <Utils/utils.h>
 
 Model3D::MeshData::MeshData()
 {}
@@ -84,8 +85,58 @@ void Model3D::MeshData::getPolygonVerticesInterval(const int polygonID,
     numVertices = intervalSource[polygonID + 1] - firstVertexNumber;
 }
 
+bool Model3D::MeshData::operator==(const MeshData &other) const
+{
+// doing a trivial member-by-memeber comparison here
+    using namespace ObjIntUtils;
+
+    bool equals = true;
+
+    equals = equals && Utils::fuzzyCompare(this->positions, other.positions);
+    equals = equals && Utils::fuzzyCompare(this->normals, other.normals);
+    equals = equals && Utils::fuzzyCompare(this->textureCoords, other.textureCoords);
+    equals = equals && this->polygonElementsIndices ==
+                                           other.polygonElementsIndices;
+    equals = equals && this->polygonElementsIndicesTriangulated ==
+                                           other.polygonElementsIndicesTriangulated;
+    equals = equals && this->verticesIndices == other.verticesIndices;
+    equals = equals && this->verticesIndicesTriangulated ==
+                                           other.verticesIndicesTriangulated;
+    equals = equals && this->texturesIndices == other.texturesIndices;
+    equals = equals && this->texturesIndicesTriangulated ==
+                                           other.texturesIndicesTriangulated;
+    equals = equals && this->normalsIndices == other.normalsIndices;
+    equals = equals && this->normalsIndicesTriangulated ==
+                                           other.normalsIndicesTriangulated;
+    return equals;
+
+}
+
+bool Model3D::MeshData::operator!=(const Model3D::MeshData &other) const
+{
+    return !(*this == other);
+}
+
+Model3D::MeshData &Model3D::MeshData::operator=(const Model3D::MeshData &other)
+{
+    positions                          = other.positions;
+    normals                            = other.normals;
+    textureCoords                      = other.textureCoords;
+    verticesIndices                    = other.verticesIndices;
+    verticesIndicesTriangulated        = other.verticesIndicesTriangulated;
+    texturesIndices                    = other.texturesIndices;
+    texturesIndicesTriangulated        = other.texturesIndicesTriangulated;
+    normalsIndices                     = other.normalsIndices;
+    normalsIndicesTriangulated         = other.normalsIndicesTriangulated;
+    polygonElementsIndices             = other.polygonElementsIndices;
+    polygonElementsIndicesTriangulated = other.polygonElementsIndicesTriangulated;
+
+    return *this;
+}
+
 bool Model3D::MeshData::isValid()
 {
+    // TODO
     return true;
 }
 

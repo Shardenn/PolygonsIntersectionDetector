@@ -15,6 +15,20 @@ bool ObjIntUtils::Utils::fuzzyCompare(const QVector<QVector3D> &a,
         if (!qFuzzyCompare(a[i], b[i]))
             return false;
     }
+    return true;
+}
+
+bool ObjIntUtils::Utils::fuzzyCompare(const QVector<QVector2D> &a,
+                                      const QVector<QVector2D> &b)
+{
+    if (a.size() != b.size())
+        return false;
+
+    for (int i = 0; i < a.size(); i++) {
+        if (!qFuzzyCompare(a[i], b[i]))
+            return false;
+    }
+    return true;
 }
 
 bool ObjIntUtils::Utils::fuzzyCompare(const float &a,

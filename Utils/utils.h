@@ -14,6 +14,9 @@ public:
     static bool fuzzyCompare(const QVector<QVector3D> &a,
                              const QVector<QVector3D> &b);
 
+    static bool fuzzyCompare(const QVector<QVector2D> &a,
+                             const QVector<QVector2D> &b);
+
     static bool fuzzyCompare(const float &a,
                              const float &b);
 };

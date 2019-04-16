@@ -5,7 +5,6 @@
 #include <QMatrix4x4>
 #include <QVector2D>
 #include <QVector3D>
-#include <cstring> // for memcmp
 
 namespace  Model3D {
 
@@ -86,41 +85,11 @@ public:
      */
     bool isValid();
 
-    bool operator==(const MeshData& other) const
-    {
-        // doing a trivial member-by-memeber comparison here
-        return this->positions == other.positions &&
-                this->normals == other.normals &&
-                this->textureCoords == other.textureCoords &&
-                this->polygonElementsIndices == other.polygonElementsIndices &&
-                this->polygonElementsIndicesTriangulated == other.polygonElementsIndicesTriangulated &&
-                this->verticesIndices == other.verticesIndices &&
-                this->verticesIndicesTriangulated == other.verticesIndicesTriangulated &&
-                this->texturesIndices == other.texturesIndices &&
-                this->texturesIndicesTriangulated == other.texturesIndicesTriangulated &&
-                this->normalsIndices == other.normalsIndices &&
-                this->normalsIndicesTriangulated == other.normalsIndicesTriangulated;
-    }
+    bool operator==(const MeshData& other) const;
 
-    inline bool operator!=(const MeshData& other) const
-    {
-        return !(*this == other);
-    }
+    bool operator!=(const MeshData& other) const;
 
-    inline MeshData &operator=(const MeshData &other)
-    {
-        positions                          = other.positions;
-        normals                            = other.normals;
-        textureCoords                      = other.textureCoords;
-        verticesIndices                    = other.verticesIndices;
-        verticesIndicesTriangulated        = other.verticesIndicesTriangulated;
-        texturesIndices                    = other.texturesIndices;
-        texturesIndicesTriangulated        = other.texturesIndicesTriangulated;
-        normalsIndices                     = other.normalsIndices;
-        normalsIndicesTriangulated         = other.normalsIndicesTriangulated;
-        polygonElementsIndices             = other.polygonElementsIndices;
-        polygonElementsIndicesTriangulated = other.polygonElementsIndicesTriangulated;
-    }
+    inline MeshData &operator=(const MeshData &other);
 
 private:
     /*!
