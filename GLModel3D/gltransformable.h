@@ -8,7 +8,7 @@ class QVector3D;
 class QMatrix4x4;
 class QOpenGLShaderProgram;
 
-namespace GLModel3D {
+namespace GLObject {
 
 class GLDrawable
 {

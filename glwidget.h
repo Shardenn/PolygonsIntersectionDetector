@@ -36,7 +36,7 @@ protected:
 private:
     QMatrix4x4 m_projectoinMatrix;
     QOpenGLShaderProgram m_shaderProgram;
-    QVector<GLModel3D::GLModel3D*> m_objects;
+    QVector<GLObject::GLModel3D*> m_objects;
 
     // mouse input stuff
     float m_alpha;

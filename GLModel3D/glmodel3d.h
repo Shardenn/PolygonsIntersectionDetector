@@ -11,7 +11,7 @@ class QOpenGLTexture;
 class QOpenGLFunctions;
 class QOpenGLShaderProgram;
 
-namespace GLModel3D {
+namespace GLObject {
 
 // draws from MeshData
 class GLModel3D : public GLTransformable

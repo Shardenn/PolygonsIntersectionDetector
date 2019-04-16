@@ -117,7 +117,7 @@ void GLWidget::initShapes()
 
     Q_ASSERT(cubeMesh != nullptr);
 
-    GLModel3D::GLModel3D *cubeModel = new GLModel3D::GLModel3D(*cubeMesh,
+    GLObject::GLModel3D *cubeModel = new GLObject::GLModel3D(*cubeMesh,
                                                            QImage(":/Textures/QtCreator.png"));
     m_objects.append(cubeModel);
 
@@ -127,7 +127,7 @@ void GLWidget::initShapes()
     NaiveTriangulator *trian = new NaiveTriangulator;
     trian->triangulate(*triangulatedCubeMesh);
 
-    GLModel3D::GLModel3D *triangulatedCube = new GLModel3D::GLModel3D(*triangulatedCubeMesh,
+    GLObject::GLModel3D *triangulatedCube = new GLObject::GLModel3D(*triangulatedCubeMesh,
                                                                           QImage(":/Textures/QtCreator.png"));
     triangulatedCube->translate(QVector3D(-2, 0, 0));
     m_objects.append(triangulatedCube);

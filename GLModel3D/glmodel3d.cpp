@@ -6,14 +6,14 @@
 
 using namespace Model3D;
 
-GLModel3D::GLModel3D::GLModel3D() :
+GLObject::GLModel3D::GLModel3D() :
     m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
     m_indexBuffer(QOpenGLBuffer::IndexBuffer)
 {
 
 }
 
-GLModel3D::GLModel3D::GLModel3D(const MeshData& mesh,
+GLObject::GLModel3D::GLModel3D(const MeshData& mesh,
                                 const QImage& texture) :
     GLModel3D()
 {
@@ -21,7 +21,7 @@ GLModel3D::GLModel3D::GLModel3D(const MeshData& mesh,
     reinit(mesh, texture);
 }
 
-GLModel3D::GLModel3D::~GLModel3D()
+GLObject::GLModel3D::~GLModel3D()
 {
     if(m_vertexBuffer.isCreated())
         m_vertexBuffer.destroy();
@@ -34,7 +34,7 @@ GLModel3D::GLModel3D::~GLModel3D()
     }
 }
 
-void GLModel3D::GLModel3D::reinit(const MeshData& mesh,
+void GLObject::GLModel3D::reinit(const MeshData& mesh,
                                 const QImage& texture)
 {
     if(m_vertexBuffer.isCreated())
@@ -95,7 +95,7 @@ void GLModel3D::GLModel3D::reinit(const MeshData& mesh,
     m_texture->setWrapMode(QOpenGLTexture::Repeat);
 }
 
-void GLModel3D::GLModel3D::draw(QOpenGLShaderProgram *shaderProgram,
+void GLObject::GLModel3D::draw(QOpenGLShaderProgram *shaderProgram,
                               QOpenGLFunctions *functions)
 {
     if (!m_vertexBuffer.isCreated()) {
@@ -142,17 +142,17 @@ void GLModel3D::GLModel3D::draw(QOpenGLShaderProgram *shaderProgram,
     m_texture->release();
 }
 
-void GLModel3D::GLModel3D::translate(const QVector3D &translation)
+void GLObject::GLModel3D::translate(const QVector3D &translation)
 {
     m_modelMatrix.translate(translation);
 }
 
-void GLModel3D::GLModel3D::rotate(const QQuaternion &quat)
+void GLObject::GLModel3D::rotate(const QQuaternion &quat)
 {
     m_modelMatrix.rotate(quat);
 }
 
-void GLModel3D::GLModel3D::scale(const float &factor)
+void GLObject::GLModel3D::scale(const float &factor)
 {
     m_modelMatrix.scale(factor);
 }
