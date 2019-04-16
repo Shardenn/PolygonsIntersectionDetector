@@ -1,6 +1,8 @@
 #include "globject3d.h"
 #include <QOpenGLShaderProgram>
 #include <QOpenGLFunctions>
+#include <memory>
+#include "Object3D/triangulator.h"
 
 GLObject::GLObject3D::GLObject3D() :
     m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
@@ -25,7 +27,12 @@ GLObject::GLObject3D::GLObject3D(const Model3D::MeshData &mesh) :
 }
 
 GLObject::GLObject3D::~GLObject3D()
-{}
+{
+    if (m_vertexBuffer.isCreated())
+        m_vertexBuffer.destroy();
+    if (m_indexBuffer.isCreated())
+        m_indexBuffer.destroy();
+}
 
 void GLObject::GLObject3D::reinit(const QVector<QVector3D> &vertices,
                                   const QVector<QVector2D> &textures,
@@ -41,12 +48,13 @@ void GLObject::GLObject3D::reinit(const QVector<QVector3D> &vertices,
     m_textureCoordsCount = textures.size();
     m_normalsCount       = normals.size();
 
+    int elementsCount = m_verticesCount +
+            m_textureCoordsCount +
+            m_normalsCount;
     // create and allocate vertex and index buffer
     m_vertexBuffer.create();
     m_vertexBuffer.bind();
-    m_vertexBuffer.allocate(vertices.size() +
-                            textures.size() +
-                            normals.size());
+    m_vertexBuffer.allocate(elementsCount * (3 + 2 + 3));
 
     int offset = 0;
     m_vertexBuffer.write(offset, vertices.constData(), vertices.size() * sizeof(QVector3D));
@@ -54,7 +62,7 @@ void GLObject::GLObject3D::reinit(const QVector<QVector3D> &vertices,
     offset += vertices.size() * sizeof(QVector3D);
     m_vertexBuffer.write(offset, textures.constData(), textures.size() * sizeof(QVector2D));
 
-    offset += vertices.size() * sizeof(QVector2D);
+    offset += textures.size() * sizeof(QVector2D);
     m_vertexBuffer.write(offset, normals.constData(), normals.size() * sizeof(QVector3D));
 
     m_vertexBuffer.release();
@@ -68,7 +76,20 @@ void GLObject::GLObject3D::reinit(const QVector<QVector3D> &vertices,
 
 void GLObject::GLObject3D::reinit(const Model3D::MeshData &mesh)
 {
-    Q_ASSERT(false);
+    NaiveTriangulator tr;
+    auto tempMesh = mesh;
+    tr.triangulate(tempMesh);
+
+    auto vertices = tempMesh.getTriangulatedVertices();
+    auto textureCoords = tempMesh.getTriangulatedTextureCoords();
+    auto normals = tempMesh.getTriangulatedNormals();
+
+    QVector<GLuint> indices;
+    for (unsigned int i = 0; i < vertices.size(); i++) {
+        indices.append(i);
+    }
+
+    reinit(vertices, textureCoords, normals, indices);
 }
 
 void GLObject::GLObject3D::draw(QOpenGLShaderProgram *shaderProgram,

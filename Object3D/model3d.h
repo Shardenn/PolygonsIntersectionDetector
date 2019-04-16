@@ -68,10 +68,12 @@ public:
     QVector<QVector2D> getChronologicalTexturesCoords() const;
     QVector<QVector3D> getChronologicalNormalsCoords() const;
 
+    QVector<QVector3D> getTriangulatedVertices() const;
+    QVector<QVector2D> getTriangulatedTextureCoords() const;
+    QVector<QVector3D> getTriangulatedNormals() const;
+
     QVector<QVector3D> getPolygonVertices(const int polygonID);
-
     QVector<QVector2D> getPolygonTextureCoords(const int polygonID);
-
     QVector<QVector3D> getPolygonNormals(const int polygonID);
 
     /*!

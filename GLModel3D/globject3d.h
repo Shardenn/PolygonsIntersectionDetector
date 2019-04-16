@@ -3,7 +3,8 @@
 
 #include "gltransformable.h"
 #include <Object3D/model3d.h>
-#include <QMatrix4x4>;
+#include <QMatrix4x4>
+
 namespace GLObject {
 
 class GLObject3D : public GLTransformable

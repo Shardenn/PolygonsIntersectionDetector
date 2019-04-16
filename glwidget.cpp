@@ -9,6 +9,7 @@
 
 #include "OBJLoader/objloader.h"
 #include "Object3D/triangulator.h"
+#include "GLModel3D/globject3d.h"
 
 GLWidget::GLWidget(QWidget *parent)
     : QOpenGLWidget(parent)
@@ -117,22 +118,18 @@ void GLWidget::initShapes()
 
     Q_ASSERT(cubeMesh != nullptr);
 
-    GLObject::GLModel3D *cubeModel = new GLObject::GLModel3D(*cubeMesh,
-                                                           QImage(":/Textures/QtCreator.png"));
+    GLObject::GLObject3D *cubeModel = new GLObject::GLObject3D(*cubeMesh);
     m_objects.append(cubeModel);
 
-    MeshData *triangulatedCubeMesh = loader.load(":/Objects/cube.obj");
-    Q_ASSERT(triangulatedCubeMesh != nullptr);
+    MeshData *myCubeMesh = loader.load(":/Objects/cube.obj");
+    Q_ASSERT(myCubeMesh != nullptr);
 
-    NaiveTriangulator *trian = new NaiveTriangulator;
-    trian->triangulate(*triangulatedCubeMesh);
+    NaiveTriangulator tr;
+    tr.triangulate(*myCubeMesh);
 
-    GLObject::GLModel3D *triangulatedCube = new GLObject::GLModel3D(*triangulatedCubeMesh,
-                                                                          QImage(":/Textures/QtCreator.png"));
-    triangulatedCube->translate(QVector3D(-2, 0, 0));
-    m_objects.append(triangulatedCube);
-
-    delete trian;
+    GLObject::GLObject3D *object = new GLObject::GLObject3D(*myCubeMesh);
+    object->translate(QVector3D(2, 0, 0));
+    m_objects.append(object);
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *event)

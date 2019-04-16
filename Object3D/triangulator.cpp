@@ -66,10 +66,10 @@ void NaiveTriangulator::triangulate(MeshData &mesh)
             }
         }
     }
-    mesh.texturesIndices = mesh.texturesIndicesTriangulated;
-    mesh.verticesIndices = mesh.verticesIndicesTriangulated;
-    mesh.normalsIndices = mesh.normalsIndicesTriangulated;
-    mesh.polygonElementsIndices = mesh.polygonElementsIndicesTriangulated;
+    //mesh.texturesIndices = mesh.texturesIndicesTriangulated;
+    //mesh.verticesIndices = mesh.verticesIndicesTriangulated;
+    //mesh.normalsIndices = mesh.normalsIndicesTriangulated;
+    //mesh.polygonElementsIndices = mesh.polygonElementsIndicesTriangulated;
 }
 
 EarClippingTriangulator::EarClippingTriangulator() :

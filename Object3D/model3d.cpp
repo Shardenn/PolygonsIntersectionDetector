@@ -19,6 +19,7 @@ Model3D::MeshData::MeshData(const MeshData &other) :
     polygonElementsIndicesTriangulated(other.polygonElementsIndicesTriangulated)
 {}
 
+
 QVector<QVector3D> Model3D::MeshData::getChronologicalVerticesCoords() const
 {
     QVector<QVector3D> coords(verticesIndices.size());
@@ -50,6 +51,39 @@ QVector<QVector3D> Model3D::MeshData::getChronologicalNormalsCoords() const
     }
 
     return allNormals;
+}
+
+QVector<QVector3D> Model3D::MeshData::getTriangulatedVertices() const
+{
+    QVector<QVector3D> coords(verticesIndicesTriangulated.size());
+
+    for (int i = 0; i < verticesIndicesTriangulated.size(); i++) {
+        coords[i] = positions[verticesIndicesTriangulated[i]];
+    }
+
+    return coords;
+}
+
+QVector<QVector2D> Model3D::MeshData::getTriangulatedTextureCoords() const
+{
+    QVector<QVector2D> tex(texturesIndicesTriangulated.size());
+
+    for (int i = 0; i < texturesIndicesTriangulated.size(); i++) {
+        tex[i] = textureCoords[texturesIndicesTriangulated[i]];
+    }
+
+    return tex;
+}
+
+QVector<QVector3D> Model3D::MeshData::getTriangulatedNormals() const
+{
+    QVector<QVector3D> norms(normalsIndicesTriangulated.size());
+
+    for (int i = 0; i < normalsIndicesTriangulated.size(); i++) {
+        norms[i] = normals[normalsIndicesTriangulated[i]];
+    }
+
+    return norms;
 }
 
 QVector<QVector3D> Model3D::MeshData::getPolygonVertices(const int polygonID)
