@@ -5,8 +5,7 @@
 #include <QMatrix4x4>
 
 #include "Object3D/model3d.h"
-//#include "glsimpleobject3d.h"
-#include "gltransofmable.h"
+#include "gltransformable.h"
 
 class QOpenGLTexture;
 class QOpenGLFunctions;
@@ -15,7 +14,7 @@ class QOpenGLShaderProgram;
 namespace GLModel3D {
 
 // draws from MeshData
-class GLModel3D : public GLTransformable// : public GLSimpleObject3D
+class GLModel3D : public GLTransformable
 {
 public:
     GLModel3D();

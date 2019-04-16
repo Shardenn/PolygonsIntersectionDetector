@@ -3,6 +3,7 @@
 
 #include <QVector>
 #include <QVector3D>
+#include <QVector2D>
 
 namespace ObjIntUtils {
 

@@ -89,7 +89,7 @@ public:
 
     bool operator!=(const MeshData& other) const;
 
-    inline MeshData &operator=(const MeshData &other);
+    MeshData &operator=(const MeshData &other);
 
 private:
     /*!
