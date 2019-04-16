@@ -6,8 +6,7 @@
 #include <QOpenGLBuffer>
 #include <QOpenGLTexture>
 #include <QOpenGLFunctions>
-//#include <Object3D/model3d.h>
-#include "GLModel3D/glmodel3d.h"
+#include "GLModel3D/globject3d.h"
 
 class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
