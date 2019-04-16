@@ -9,8 +9,4 @@ SOURCES += \
     $$PWD/glmodel3d.cpp
 
 }
-
-HEADERS += \
-    $$PWD/gltransofmable.h
-
-SOURCES +=
+                   

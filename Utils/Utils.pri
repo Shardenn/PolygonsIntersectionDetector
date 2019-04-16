@@ -1,0 +1,12 @@
+!OBJECTS_INTERSECTIONS_UTILS {
+CONFIG += OBJECTS_INTERSECTIONS_UTILS
+INCLUDEPATH += $$PWD/../
+
+HEADERS += \
+    $$PWD/utils.h
+
+SOURCES += \
+    $$PWD/utils.cpp
+}           
+
+
