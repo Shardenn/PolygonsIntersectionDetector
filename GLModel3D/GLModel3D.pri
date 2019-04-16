@@ -10,3 +10,9 @@ SOURCES += \
     $$PWD/globject3d.cpp
 
 }
+
+HEADERS += \
+    $$PWD/glgrid.h
+
+SOURCES += \
+    $$PWD/glgrid.cpp

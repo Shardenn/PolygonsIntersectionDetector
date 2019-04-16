@@ -10,6 +10,7 @@
 #include "OBJLoader/objloader.h"
 #include "Object3D/triangulator.h"
 #include "GLModel3D/globject3d.h"
+#include "GLModel3D/glgrid.h"
 
 GLWidget::GLWidget(QWidget *parent)
     : QOpenGLWidget(parent)
@@ -84,6 +85,24 @@ void GLWidget::paintGL()
     for (auto object : m_objects) {
         object->draw(&m_shaderProgram, context()->functions());
     }
+/*
+    glBegin(GL_LINES);
+    glColor3f(1, 1, 1);
+    float m_gridSize = 20.f;
+    float halfGridSize = m_gridSize / 2.f;
+    glVertex3f(0, 0, 0);
+    glVertex3f(10, 0, 0);
+    for(int i = -halfGridSize; i <= halfGridSize; i++) {
+        float fi = static_cast<float>(i);
+        float fgs = static_cast<float>(halfGridSize);
+
+        glVertex3f(fi, 0, -fgs);
+        glVertex3f(fi, 0, fgs);
+
+        glVertex3f(-fgs, 0, fi);
+        glVertex3f(fgs,0,fi);
+    }
+    glEnd();*/
 }
 
 void GLWidget::initShaders()
@@ -112,6 +131,9 @@ void GLWidget::initShapes()
 {
     using namespace Model3D;
 
+    GLObject::GLGrid *grid = new GLObject::GLGrid();
+    m_objects.append(grid);
+
     //MeshData mesh(verts, texts, normals, inds);
     OBJLoader::OBJLoader loader;
     MeshData *cubeMesh = loader.load(":/Objects/cube_tr.obj");
@@ -129,6 +151,7 @@ void GLWidget::initShapes()
 
     GLObject::GLObject3D *object = new GLObject::GLObject3D(*myCubeMesh);
     object->translate(QVector3D(2, 0, 0));
+    //object->drawMode = GL_LINES;
     m_objects.append(object);
 }
 

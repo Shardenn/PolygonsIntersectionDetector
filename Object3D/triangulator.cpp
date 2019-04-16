@@ -25,8 +25,8 @@ void NaiveTriangulator::triangulate(MeshData &mesh)
     mesh.polygonElementsIndicesTriangulated.append(0);
 
     for (int i = 0; i < mesh.polygonElementsIndices.size() - 1; i++) {
-        int startingInd = mesh.polygonElementsIndices[i];
-        int numIndices = mesh.polygonElementsIndices[i+1] - startingInd;
+        const int startingInd = mesh.polygonElementsIndices[i];
+        const int numIndices = mesh.polygonElementsIndices[i+1] - startingInd;
 
         if (numIndices <= 3) {
             // copy these indices from
@@ -41,9 +41,9 @@ void NaiveTriangulator::triangulate(MeshData &mesh)
             mesh.normalsIndicesTriangulated.append(vectorChunk);
         } else {
             // from the long polygon make several short (triangulated) ones
-            int commonInd = mesh.verticesIndices[startingInd];
+            const int commonInd = mesh.verticesIndices[startingInd];
             for (int j = 1; j < numIndices - 1; j++) {
-                int current, next;
+                int current = commonInd, next = commonInd;
 
                 if (mesh.verticesIndices.size() > 0) {
                     current = mesh.verticesIndices[startingInd + j];
@@ -66,10 +66,6 @@ void NaiveTriangulator::triangulate(MeshData &mesh)
             }
         }
     }
-    //mesh.texturesIndices = mesh.texturesIndicesTriangulated;
-    //mesh.verticesIndices = mesh.verticesIndicesTriangulated;
-    //mesh.normalsIndices = mesh.normalsIndicesTriangulated;
-    //mesh.polygonElementsIndices = mesh.polygonElementsIndicesTriangulated;
 }
 
 EarClippingTriangulator::EarClippingTriangulator() :
