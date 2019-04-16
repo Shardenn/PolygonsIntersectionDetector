@@ -2,6 +2,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDebug>
+#include <memory>
 
 MeshData *OBJLoader::OBJLoader::load(const QString &filePath)
 {
@@ -27,7 +28,7 @@ MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream)
     using namespace Model3D;
 
     // data for the model contained in the file
-    MeshData *modelData = new MeshData;
+    auto modelData = new MeshData;
 
     while(!textStream.atEnd()) {
         QString str = textStream.readLine();

@@ -41,9 +41,9 @@ private:
     // mouse input stuff
     float m_alpha;
     float m_beta;
-    float m_distance{ -5.0 };
+    float m_distance;
 
-    float m_zoomSpeed = 1.f;
+    float m_zoomSpeed;
 
     QVector2D m_lastMousePosition;
     QQuaternion m_rotation;

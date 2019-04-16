@@ -15,8 +15,8 @@ GLWidget::GLWidget(QWidget *parent)
 {
     m_alpha = 25;
     m_beta = -25;
-    m_distance = 2.5;
-
+    m_distance = -5.0;
+    m_zoomSpeed = 1.0;
 //    m_light_angle = 0;
 
     QTimer* timer = new QTimer(this);

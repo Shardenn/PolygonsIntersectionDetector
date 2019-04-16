@@ -86,24 +86,20 @@ public:
      */
     bool isValid();
 
-    inline bool operator==(const MeshData& other) const
+    bool operator==(const MeshData& other) const
     {
         // doing a trivial member-by-memeber comparison here
-        /*
         return this->positions == other.positions &&
                 this->normals == other.normals &&
                 this->textureCoords == other.textureCoords &&
                 this->polygonElementsIndices == other.polygonElementsIndices &&
+                this->polygonElementsIndicesTriangulated == other.polygonElementsIndicesTriangulated &&
                 this->verticesIndices == other.verticesIndices &&
                 this->verticesIndicesTriangulated == other.verticesIndicesTriangulated &&
                 this->texturesIndices == other.texturesIndices &&
                 this->texturesIndicesTriangulated == other.texturesIndicesTriangulated &&
                 this->normalsIndices == other.normalsIndices &&
                 this->normalsIndicesTriangulated == other.normalsIndicesTriangulated;
-                */
-        return (std::memcmp(reinterpret_cast<char const*>(this),
-                            reinterpret_cast<char const*>(&other),
-                            sizeof(MeshData)) == 0);
     }
 
     inline bool operator!=(const MeshData& other) const
