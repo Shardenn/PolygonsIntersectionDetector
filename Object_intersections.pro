@@ -24,6 +24,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++14
 
 include(Object3D/Object3D.pri)
+include(Object3D/Object3DTests.pri)
 
 include(OBJLoader/OBJLoader.pri)
 include(OBJLoader/OBJLoaderTests.pri)

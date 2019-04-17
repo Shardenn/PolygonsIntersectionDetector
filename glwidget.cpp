@@ -143,16 +143,13 @@ void GLWidget::initShapes()
     GLObject::GLObject3D *cubeModel = new GLObject::GLObject3D(*cubeMesh);
     m_objects.append(cubeModel);
 
-    MeshData *myCubeMesh = loader.load(":/Objects/cube.obj");
-    Q_ASSERT(myCubeMesh != nullptr);
+    MeshData *headMesh = loader.load(":/Objects/male_head.obj");
+    Q_ASSERT(headMesh != nullptr);
 
-    NaiveTriangulator tr;
-    tr.triangulate(*myCubeMesh);
-
-    GLObject::GLObject3D *object = new GLObject::GLObject3D(*myCubeMesh);
-    object->translate(QVector3D(2, 0, 0));
+    GLObject::GLObject3D *headObj = new GLObject::GLObject3D(*headMesh);
+    headObj->translate(QVector3D(2, 0, 0));
     //object->drawMode = GL_LINES;
-    m_objects.append(object);
+    m_objects.append(headObj);
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *event)

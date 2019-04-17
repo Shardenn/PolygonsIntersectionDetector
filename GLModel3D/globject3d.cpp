@@ -76,13 +76,11 @@ void GLObject::GLObject3D::reinit(const QVector<QVector3D> &vertices,
 
 void GLObject::GLObject3D::reinit(const Model3D::MeshData &mesh)
 {
-    NaiveTriangulator tr;
-    auto tempMesh = mesh;
-    tr.triangulate(tempMesh);
+    Triangulation::NaiveTriangulator tr;
 
-    auto vertices = tempMesh.getTriangulatedVertices();
-    auto textureCoords = tempMesh.getTriangulatedTextureCoords();
-    auto normals = tempMesh.getTriangulatedNormals();
+    auto vertices      = mesh.getTriangulatedVertices();
+    auto textureCoords = mesh.getTriangulatedTextureCoords();
+    auto normals       = mesh.getTriangulatedNormals();
 
     QVector<GLuint> indices;
     for (unsigned int i = 0; i < vertices.size(); i++) {

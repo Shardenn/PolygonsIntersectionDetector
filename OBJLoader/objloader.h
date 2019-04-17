@@ -22,9 +22,9 @@ public:
      * \param filePath path to *.obj file
      * \return vector of data for each vertex from obj file
     */
-    MeshData *load(const QString &filePath);
+    MeshData *load(const QString &filePath, bool triangulte = true);
     // argument not const because readLine() is not const
-    MeshData *load(QTextStream &textStream);
+    MeshData *load(QTextStream &textStream, bool triangulate = true);
     /*!
      * \brief When given model data, returns its triangulated copy.
      * \param originalData - original model data

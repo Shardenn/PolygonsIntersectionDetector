@@ -7,6 +7,8 @@
 
 using namespace Model3D;
 
+namespace Triangulation {
+
 class Triangulator
 {    
 
@@ -14,7 +16,8 @@ public:
     Triangulator();
     virtual ~Triangulator();
 
-    virtual void triangulate(MeshData &mesh) = 0;
+    virtual QVector<int> triangulate(QVector<int> indices,
+                                     QVector<int> offsets) = 0;
 };
 
 class NaiveTriangulator : public Triangulator
@@ -23,7 +26,8 @@ public:
     NaiveTriangulator();
     virtual ~NaiveTriangulator() override;
 
-    virtual void triangulate(MeshData &mesh) override;
+    virtual QVector<int> triangulate(QVector<int> indices,
+                                     QVector<int> offsets) override;
 };
 
 class EarClippingTriangulator : public Triangulator
@@ -32,7 +36,8 @@ public:
     EarClippingTriangulator();
     virtual ~EarClippingTriangulator() override;
 
-    virtual void triangulate(MeshData &mesh) override;
+    virtual QVector<int> triangulate(QVector<int> indices,
+                                     QVector<int> offsets) override;
 
 private:
     /*!
@@ -82,5 +87,7 @@ private:
                                const QVector3D b,
                                const QVector3D c);
 };
+
+}
 
 #endif // TRIANGULATOR_H

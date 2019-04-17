@@ -3,11 +3,13 @@ CONFIG += OBJECT3D_TESTS
 INCLUDEPATH += $$PWD/../
 
 HEADERS += \
-    $$PWD/object3dtests.h
+    $$PWD/triangulatortests.h
 
 SOURCES += \
-    $$PWD/object3dtests.cpp
+    $$PWD/triangulatortests.cpp
 }
+
+
 
 
 

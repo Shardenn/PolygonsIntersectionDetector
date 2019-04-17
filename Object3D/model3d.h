@@ -62,7 +62,7 @@ public:
      */
     QVector<int> polygonElementsIndices;
 
-    QVector<int> polygonElementsIndicesTriangulated;
+    void triangulate();
 
     QVector<QVector3D> getChronologicalVerticesCoords() const;
     QVector<QVector2D> getChronologicalTexturesCoords() const;

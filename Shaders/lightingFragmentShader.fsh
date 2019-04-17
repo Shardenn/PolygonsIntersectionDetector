@@ -44,5 +44,6 @@ void main(void)
 
         resultColor += specularColor;
 	
-        gl_FragColor = resultColor;
+        //gl_FragColor = resultColor;
+        gl_FragColor = vec4(0.5, 0.5, 0.5, 1.0);
 }

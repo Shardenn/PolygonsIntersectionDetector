@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <memory>
 
-MeshData *OBJLoader::OBJLoader::load(const QString &filePath)
+MeshData *OBJLoader::OBJLoader::load(const QString &filePath, bool doTriangulation)
 {
     QFile objFile(filePath);
     if(!objFile.exists()) {
@@ -16,14 +16,14 @@ MeshData *OBJLoader::OBJLoader::load(const QString &filePath)
 
     QTextStream textStream(&objFile);
 
-    auto ret =  load(textStream);
+    auto ret =  load(textStream, doTriangulation);
 
     objFile.close();
 
     return ret;
 }
 
-MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream)
+MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream, bool doTriangulation)
 {
     using namespace Model3D;
 
@@ -110,6 +110,9 @@ MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream)
         delete modelData;
         return nullptr;
     }
+
+    if (doTriangulation)
+        modelData->triangulate();
 
     return modelData;
 }

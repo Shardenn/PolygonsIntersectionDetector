@@ -1,6 +1,7 @@
 #include <Object3D/model3d.h>
 #include <QDebug>
 #include <Utils/utils.h>
+#include "triangulator.h"
 
 Model3D::MeshData::MeshData()
 {}
@@ -15,10 +16,19 @@ Model3D::MeshData::MeshData(const MeshData &other) :
     texturesIndicesTriangulated(other.texturesIndicesTriangulated),
     normalsIndices(other.normalsIndices),
     normalsIndicesTriangulated(other.normalsIndicesTriangulated),
-    polygonElementsIndices(other.polygonElementsIndices),
-    polygonElementsIndicesTriangulated(other.polygonElementsIndicesTriangulated)
+    polygonElementsIndices(other.polygonElementsIndices)
 {}
 
+void Model3D::MeshData::triangulate()
+{
+    Triangulation::NaiveTriangulator tr;
+    verticesIndicesTriangulated = tr.triangulate(verticesIndices,
+                                                 polygonElementsIndices);
+    texturesIndicesTriangulated = tr.triangulate(texturesIndices,
+                                                 polygonElementsIndices);
+    normalsIndicesTriangulated = tr.triangulate(normalsIndices,
+                                                polygonElementsIndices);
+}
 
 QVector<QVector3D> Model3D::MeshData::getChronologicalVerticesCoords() const
 {
@@ -131,8 +141,6 @@ bool Model3D::MeshData::operator==(const MeshData &other) const
     equals = equals && Utils::fuzzyCompare(this->textureCoords, other.textureCoords);
     equals = equals && this->polygonElementsIndices ==
                                            other.polygonElementsIndices;
-    equals = equals && this->polygonElementsIndicesTriangulated ==
-                                           other.polygonElementsIndicesTriangulated;
     equals = equals && this->verticesIndices == other.verticesIndices;
     equals = equals && this->verticesIndicesTriangulated ==
                                            other.verticesIndicesTriangulated;
@@ -163,7 +171,6 @@ Model3D::MeshData &Model3D::MeshData::operator=(const Model3D::MeshData &other)
     normalsIndices                     = other.normalsIndices;
     normalsIndicesTriangulated         = other.normalsIndicesTriangulated;
     polygonElementsIndices             = other.polygonElementsIndices;
-    polygonElementsIndicesTriangulated = other.polygonElementsIndicesTriangulated;
 
     return *this;
 }
