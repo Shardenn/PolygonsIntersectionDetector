@@ -7,8 +7,7 @@ GLObject::GLGrid::GLGrid(float gridSize,
     m_color = color;
 }
 
-void GLObject::GLGrid::draw(QOpenGLShaderProgram *shaderProgram,
-                            QOpenGLFunctions *functions)
+void GLObject::GLGrid::draw(QOpenGLShaderProgram *shaderProgram)
 {
     glBegin(GL_LINES);
     glColor3f(m_color.red(), m_color.green(), m_color.blue());

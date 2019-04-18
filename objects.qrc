@@ -7,7 +7,6 @@
         <file>Objects/UnitTests/test_trivial.obj</file>
         <file>Objects/UnitTests/test_usual.obj</file>
         <file>Objects/UnitTests/test_incorrect_file.obj</file>
-        <file>Objects/cube_tr.obj</file>
         <file>Objects/triangle.obj</file>
         <file>Objects/male_head.obj</file>
     </qresource>

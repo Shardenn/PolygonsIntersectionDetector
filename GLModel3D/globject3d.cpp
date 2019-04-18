@@ -90,8 +90,7 @@ void GLObject::GLObject3D::reinit(const Model3D::MeshData &mesh)
     reinit(vertices, textureCoords, normals, indices);
 }
 
-void GLObject::GLObject3D::draw(QOpenGLShaderProgram *shaderProgram,
-                                QOpenGLFunctions *functions)
+void GLObject::GLObject3D::draw(QOpenGLShaderProgram *shaderProgram)
 {
     if (!m_vertexBuffer.isCreated()) {
         qDebug() << "Vertex buffer is not created";
@@ -126,10 +125,12 @@ void GLObject::GLObject3D::draw(QOpenGLShaderProgram *shaderProgram,
 
     m_indexBuffer.bind();
 
-    functions->glDrawElements(drawMode, m_indexBuffer.size() - 1,
-                              GL_UNSIGNED_INT, nullptr);
-
+    //functions->glDrawElements(drawMode, m_indexBuffer.size() - 1,
+                              //GL_UNSIGNED_INT, nullptr);
+    QOpenGLContext::currentContext()->functions()->glDrawElements(drawMode, m_indexBuffer.size() - 1,
+                                                                  GL_UNSIGNED_INT, nullptr);
     m_indexBuffer.release();
+
     m_vertexBuffer.release();
 }
 

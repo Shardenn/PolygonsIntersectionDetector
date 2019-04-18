@@ -33,8 +33,7 @@ public:
      */
     virtual void reinit(const Model3D::MeshData &mesh);
 
-    virtual void draw(QOpenGLShaderProgram *shaderProgram,
-                      QOpenGLFunctions *functions);
+    virtual void draw(QOpenGLShaderProgram *shaderProgram) override;
 
     void translate(const QVector3D &t) override;
     void rotate(const QQuaternion &q) override;

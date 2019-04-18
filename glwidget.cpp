@@ -83,7 +83,7 @@ void GLWidget::paintGL()
     m_shaderProgram.setUniformValue("u_lightPower", 5.0f);
 
     for (auto object : m_objects) {
-        object->draw(&m_shaderProgram, context()->functions());
+        object->draw(&m_shaderProgram);
     }
 /*
     glBegin(GL_LINES);
@@ -136,7 +136,7 @@ void GLWidget::initShapes()
 
     //MeshData mesh(verts, texts, normals, inds);
     OBJLoader::OBJLoader loader;
-    MeshData *cubeMesh = loader.load(":/Objects/cube_tr.obj");
+    MeshData *cubeMesh = loader.load(":/Objects/cube.obj");
 
     Q_ASSERT(cubeMesh != nullptr);
 
@@ -148,7 +148,7 @@ void GLWidget::initShapes()
 
     GLObject::GLObject3D *headObj = new GLObject::GLObject3D(*headMesh);
     headObj->translate(QVector3D(2, 0, 0));
-    //object->drawMode = GL_LINES;
+    //headObj->drawMode = GL_LINES;
     m_objects.append(headObj);
 }
 

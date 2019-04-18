@@ -31,7 +31,7 @@ void main(void)
         float specularFactor = 50.0;
         float ambientFactor = 1;
 
-        vec4 diffColor = diffMatColor * u_lightPower * max(0.0, dot(v_normal, -lightVect)) /
+        vec4 diffColor = diffMatColor* u_lightPower * max(0.0, dot(v_normal, -lightVect)) /
                 (1.0 + 0.25 * pow(len, 2));
         resultColor += diffColor;
 

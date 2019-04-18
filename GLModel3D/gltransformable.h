@@ -15,8 +15,7 @@ class GLDrawable
 public:
     virtual ~GLDrawable() {}
 
-    virtual void draw(QOpenGLShaderProgram *program,
-                      QOpenGLFunctions *functions) = 0;
+    virtual void draw(QOpenGLShaderProgram *program) = 0;
 
     GLenum drawMode{ GL_TRIANGLES };
 };

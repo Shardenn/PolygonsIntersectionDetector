@@ -12,8 +12,7 @@ public:
     GLGrid(float gridSize = 1.f,
            QColor color = QColor{ 128, 128, 128});
 
-    void draw(QOpenGLShaderProgram *shaderProgram,
-              QOpenGLFunctions *functions) override;
+    void draw(QOpenGLShaderProgram *shaderProgram) override;
 
 protected:
     float m_gridSize{ 20.f };

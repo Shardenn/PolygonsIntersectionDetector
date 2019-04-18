@@ -1,9 +1,0 @@
-DONE - model_data.h -> modeldata.h
-DONE - asserts or logging instead of close()
-- runTests - every run of project
-- brackets for ifs
-OK - references inside for (for (auto &x : container))
-- fix bad pointers
-- add triangulated data into MeshData
-IN PROGRESS - split vertices, normals and texture vertices from vertex data to separate buffer. Store theim in MeshData
-- split (parse and all other) logic into smaller functions. Should be easy to test
