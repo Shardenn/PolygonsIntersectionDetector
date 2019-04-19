@@ -67,7 +67,7 @@ void GLWidget::paintGL()
 
     QMatrix4x4 vMatrix;
     vMatrix.setToIdentity();
-    vMatrix.translate(0.0, 0.0, m_distance); // move camera a bit further from origin
+    vMatrix.translate(0.0, 0.0, m_distance);
     vMatrix.rotate(m_rotation);
 
     m_shaderProgram.bind();
@@ -167,36 +167,23 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
-
-
     if (event->buttons() != Qt::LeftButton &&
             event->buttons() != Qt::RightButton)
         return;
 
+    if (QApplication::keyboardModifiers() == Qt::Modifier::ALT) {
+        QVector2D diff = QVector2D(event->localPos()) - m_lastMousePosition;
 
-    switch(event->buttons()) {
-    case Qt::LeftButton: // if left button is pressed
-        switch (QApplication::keyboardModifiers()) {
-        case Qt::Modifier::ALT: // if ALT and left button, then camera flies
-            QVector2D diff = QVector2D(event->localPos()) - m_lastMousePosition;
-
+        if (event->buttons() == Qt::LeftButton) {
             float angle = diff.length() / 2.0f;
 
             QVector3D axis(diff.y(), diff.x(), 0.0);
-
             m_rotation = QQuaternion::fromAxisAndAngle(axis, angle) * m_rotation;
-        break;
-        }
-    break;
-
-    case Qt::RightButton:
-        switch (QApplication::keyboardModifiers()) {
-        case Qt::Modifier::ALT:
-            QVector2D diff = QVector2D(event->localPos()) - m_lastMousePosition;
+        } else if (event->buttons() == Qt::RightButton) {
             m_distance += diff.x() * m_zoomSpeed;
-        break;
+        } else if (event->buttons() == Qt::MiddleButton) {
+            m_cameraTranslation = diff;
         }
-    break;
     }
 
     update();

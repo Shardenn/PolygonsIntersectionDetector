@@ -40,9 +40,11 @@ private:
     // mouse input stuff
     float m_alpha{ 25 };
     float m_beta{ -25 };
-    float m_distance{ -5 };
 
+    float m_distance{ -5 };
     float m_zoomSpeed { 0.03f };
+
+    QVector2D m_cameraTranslation{};
 
     float m_lightPower{ 5.0f };
 
