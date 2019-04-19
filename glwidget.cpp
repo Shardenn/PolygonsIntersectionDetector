@@ -2,10 +2,12 @@
 #include <QDir>
 #include <QMouseEvent>
 #include <QTimer>
+#include <QApplication>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
-
+#include <QtGlobal>
 #include <QDebug>
+#include <algorithm>
 
 #include "OBJLoader/objloader.h"
 #include "Object3D/triangulator.h"
@@ -14,14 +16,7 @@
 
 GLWidget::GLWidget(QWidget *parent)
     : QOpenGLWidget(parent)
-{
-    m_alpha = 25;
-    m_beta = -25;
-    m_distance = -5.0;
-    m_zoomSpeed = 1.0;
-//    m_light_angle = 0;
-
-    QTimer* timer = new QTimer(this);
+{   QTimer* timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(timeout()));
     timer->start(20);
 }
@@ -163,7 +158,8 @@ void GLWidget::initShapes()
 
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
-    if (event->buttons() == Qt::LeftButton) {
+    if (event->buttons() == Qt::LeftButton ||
+            event->button() == Qt::RightButton) {
         m_lastMousePosition = QVector2D(event->localPos());
     }
     event->accept();
@@ -171,20 +167,40 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    if (event->buttons() != Qt::LeftButton)
+
+
+    if (event->buttons() != Qt::LeftButton &&
+            event->buttons() != Qt::RightButton)
         return;
 
-    QVector2D diff = QVector2D(event->localPos()) - m_lastMousePosition;
-    m_lastMousePosition = QVector2D(event->localPos());
 
-    float angle = diff.length() / 2.0f;
+    switch(event->buttons()) {
+    case Qt::LeftButton: // if left button is pressed
+        switch (QApplication::keyboardModifiers()) {
+        case Qt::Modifier::ALT: // if ALT and left button, then camera flies
+            QVector2D diff = QVector2D(event->localPos()) - m_lastMousePosition;
 
-    QVector3D axis(diff.y(), diff.x(), 0.0);
+            float angle = diff.length() / 2.0f;
 
-    m_rotation = QQuaternion::fromAxisAndAngle(axis, angle) * m_rotation;
+            QVector3D axis(diff.y(), diff.x(), 0.0);
+
+            m_rotation = QQuaternion::fromAxisAndAngle(axis, angle) * m_rotation;
+        break;
+        }
+    break;
+
+    case Qt::RightButton:
+        switch (QApplication::keyboardModifiers()) {
+        case Qt::Modifier::ALT:
+            QVector2D diff = QVector2D(event->localPos()) - m_lastMousePosition;
+            m_distance += diff.x() * m_zoomSpeed;
+        break;
+        }
+    break;
+    }
 
     update();
-
+    m_lastMousePosition = QVector2D(event->localPos());
     event->accept();
 }
 

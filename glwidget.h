@@ -38,11 +38,11 @@ private:
     QVector<GLObject::GLDrawable*> m_objects;
 
     // mouse input stuff
-    float m_alpha;
-    float m_beta;
-    float m_distance;
+    float m_alpha{ 25 };
+    float m_beta{ -25 };
+    float m_distance{ -5 };
 
-    float m_zoomSpeed;
+    float m_zoomSpeed { 0.03f };
 
     float m_lightPower{ 5.0f };
 

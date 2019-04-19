@@ -64,6 +64,8 @@ public:
 
     void triangulate();
 
+    bool isTriangulated{ false };
+
     QVector<QVector3D> getChronologicalVerticesCoords() const;
     QVector<QVector2D> getChronologicalTexturesCoords() const;
     QVector<QVector3D> getChronologicalNormalsCoords() const;
@@ -109,6 +111,8 @@ private:
                                     QVector<int>& intervalSource,
                                     int& firstVertexNumber,
                                     int& numVertices) const;
+
+
 };
 
 

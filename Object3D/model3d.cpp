@@ -28,6 +28,8 @@ void Model3D::MeshData::triangulate()
                                                  polygonElementsIndices);
     normalsIndicesTriangulated = tr.triangulate(normalsIndices,
                                                 polygonElementsIndices);
+
+    isTriangulated = true;
 }
 
 QVector<QVector3D> Model3D::MeshData::getChronologicalVerticesCoords() const
