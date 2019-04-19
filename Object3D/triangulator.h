@@ -13,9 +13,11 @@ class Triangulator
 {    
 
 public:
+    // TODO too much here
     Triangulator();
     virtual ~Triangulator();
 
+    // TODO const &
     virtual QVector<int> triangulate(QVector<int> indices,
                                      QVector<int> offsets) = 0;
 };

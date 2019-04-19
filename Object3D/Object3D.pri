@@ -9,3 +9,9 @@ SOURCES += \
     $$PWD/model3d.cpp \
     $$PWD/triangulator.cpp
 }
+
+HEADERS += \
+    $$PWD/normalssmoother.h
+
+SOURCES += \
+    $$PWD/normalssmoother.cpp

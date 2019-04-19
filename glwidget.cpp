@@ -40,8 +40,9 @@ void GLWidget::initializeGL()
 
     glClearColor(0.0f, 0.3f, 0.0f, 1.0f);
 
-    glEnable(GL_DEPTH_TEST);
+    // TODO
     glEnable(GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
 
     initShaders();
     initShapes();
