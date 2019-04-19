@@ -77,10 +77,17 @@ void GLWidget::paintGL()
 
     m_shaderProgram.bind();
 
-    m_shaderProgram.setUniformValue("u_projectionMatrix", m_projectoinMatrix);
+    m_shaderProgram.setUniformValue("u_projectionMatrix",
+                                    m_projectoinMatrix);
     m_shaderProgram.setUniformValue("u_viewMatrix", vMatrix);
-    m_shaderProgram.setUniformValue("u_lightPosition", QVector4D(0.0, 0.0, 0.0, 1.0));
-    m_shaderProgram.setUniformValue("u_lightPower", 5.0f);
+
+    m_shaderProgram.setUniformValue("u_lightPosition",
+                                    QVector3D(0.0, 5.0, 10.0));
+    m_shaderProgram.setUniformValue("u_lightPower", 1.5f);
+    m_shaderProgram.setUniformValue("u_lightColor",
+                                    QVector3D(1.0, 1.0, 1.0));
+    m_shaderProgram.setUniformValue("u_objectColor",
+                                    QVector3D(0.2, 0.35, 0.7));
 
     for (auto object : m_objects) {
         object->draw(&m_shaderProgram);
@@ -141,14 +148,16 @@ void GLWidget::initShapes()
     Q_ASSERT(cubeMesh != nullptr);
 
     GLObject::GLObject3D *cubeModel = new GLObject::GLObject3D(*cubeMesh);
+    cubeModel->translate(QVector3D(-1.5, 0, 0));
+    //cubeModel->drawMode = GL_LINES;
     m_objects.append(cubeModel);
 
     MeshData *headMesh = loader.load(":/Objects/male_head.obj");
     Q_ASSERT(headMesh != nullptr);
 
     GLObject::GLObject3D *headObj = new GLObject::GLObject3D(*headMesh);
-    headObj->translate(QVector3D(2, 0, 0));
-    //headObj->drawMode = GL_LINES;
+    headObj->translate(QVector3D(1, 0, 0));
+    headObj->scale(0.4);
     m_objects.append(headObj);
 }
 

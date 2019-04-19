@@ -44,6 +44,8 @@ private:
 
     float m_zoomSpeed;
 
+    float m_lightPower{ 5.0f };
+
     QVector2D m_lastMousePosition;
     QQuaternion m_rotation;
 

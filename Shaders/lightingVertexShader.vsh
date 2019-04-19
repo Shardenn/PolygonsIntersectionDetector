@@ -8,11 +8,11 @@ uniform mat4 u_modelMatrix;
 // uniform mat3 normalMatrix;
 // uniform vec3 lightPosition;
 
-in vec4 vertexPosition;
+in vec3 vertexPosition;
 in vec3 normal;
 in vec2 textureCoordinate;
 
-out vec4 v_position;
+out vec3 v_position;
 out vec3 v_normal;
 out vec2 v_textureCoord;
 
@@ -24,9 +24,9 @@ void main(void)
     mat4 mvMatrix = u_viewMatrix * u_modelMatrix;
 
     v_textureCoord = textureCoordinate;
-    v_normal = normalize(vec3(mvMatrix * vec4(normal, 0.0)));
-    v_position = mvMatrix * vertexPosition;
+    v_normal = normal;
+    v_position = vec3(u_modelMatrix * vec4(vertexPosition, 1.0));
 
-    gl_Position = u_projectionMatrix * mvMatrix * vertexPosition;
-    //gl_Position = u_projectionMatrix * mvMatrix * vertexPosition;
+    gl_Position = u_projectionMatrix * mvMatrix *
+            vec4(v_position, 1.0);
 }

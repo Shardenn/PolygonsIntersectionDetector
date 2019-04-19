@@ -48,22 +48,24 @@ void GLObject::GLObject3D::reinit(const QVector<QVector3D> &vertices,
     m_textureCoordsCount = textures.size();
     m_normalsCount       = normals.size();
 
-    int elementsCount = m_verticesCount +
-            m_textureCoordsCount +
-            m_normalsCount;
     // create and allocate vertex and index buffer
     m_vertexBuffer.create();
     m_vertexBuffer.bind();
-    m_vertexBuffer.allocate(elementsCount * (3 + 2 + 3));
+    m_vertexBuffer.allocate(m_verticesCount * sizeof(QVector3D) +
+                            m_textureCoordsCount * sizeof(QVector2D) +
+                            m_normalsCount * sizeof(QVector3D));
 
     int offset = 0;
-    m_vertexBuffer.write(offset, vertices.constData(), vertices.size() * sizeof(QVector3D));
+    m_vertexBuffer.write(offset, vertices.constData(),
+                         m_verticesCount * sizeof(QVector3D));
 
-    offset += vertices.size() * sizeof(QVector3D);
-    m_vertexBuffer.write(offset, textures.constData(), textures.size() * sizeof(QVector2D));
+    offset += m_verticesCount * sizeof(QVector3D);
+    m_vertexBuffer.write(offset, textures.constData(),
+                         m_textureCoordsCount * sizeof(QVector2D));
 
-    offset += textures.size() * sizeof(QVector2D);
-    m_vertexBuffer.write(offset, normals.constData(), normals.size() * sizeof(QVector3D));
+    offset += m_textureCoordsCount * sizeof(QVector2D);
+    m_vertexBuffer.write(offset, normals.constData(),
+                         m_normalsCount * sizeof(QVector3D));
 
     m_vertexBuffer.release();
 
@@ -122,6 +124,8 @@ void GLObject::GLObject3D::draw(QOpenGLShaderProgram *shaderProgram)
     int normLoc = shaderProgram->attributeLocation("normal");
     shaderProgram->enableAttributeArray(normLoc);
     shaderProgram->setAttributeBuffer(normLoc, GL_FLOAT, offset, 3);
+
+
 
     m_indexBuffer.bind();
 
