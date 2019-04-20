@@ -68,7 +68,8 @@ void GLWidget::paintGL()
 
     QMatrix4x4 vMatrix;
     vMatrix.setToIdentity();
-    vMatrix.translate(0.0, 0.0, m_distance);
+    vMatrix.translate(m_cameraTranslation.x(), m_cameraTranslation.y(),
+                      m_distance);
     vMatrix.rotate(m_rotation);
 
     m_shaderProgram.bind();
@@ -160,7 +161,8 @@ void GLWidget::initShapes()
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
     if (event->buttons() == Qt::LeftButton ||
-            event->button() == Qt::RightButton) {
+            event->button() == Qt::RightButton ||
+            event->buttons() == Qt::MiddleButton) {
         m_lastMousePosition = QVector2D(event->localPos());
     }
     event->accept();
@@ -169,7 +171,8 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
 void GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
     if (event->buttons() != Qt::LeftButton &&
-            event->buttons() != Qt::RightButton)
+            event->buttons() != Qt::RightButton &&
+            event->buttons() != Qt::MiddleButton)
         return;
 
     if (QApplication::keyboardModifiers() == Qt::Modifier::ALT) {
@@ -183,7 +186,11 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
         } else if (event->buttons() == Qt::RightButton) {
             m_distance += diff.x() * m_zoomSpeed;
         } else if (event->buttons() == Qt::MiddleButton) {
-            m_cameraTranslation = diff;
+            const float prev_x = m_cameraTranslation.x();
+            const float prev_y = m_cameraTranslation.y();
+
+            m_cameraTranslation.setX(prev_x + (diff.x() * 0.01f));
+            m_cameraTranslation.setY(prev_y + (-diff.y() * 0.01f));
         }
     }
 

@@ -9,6 +9,7 @@ GLObject::GLGrid::GLGrid(float gridSize,
 
 void GLObject::GLGrid::draw(QOpenGLShaderProgram *shaderProgram)
 {
+    /*
     glBegin(GL_LINES);
     glColor3f(m_color.red(), m_color.green(), m_color.blue());
     int halfGridSize = m_gridSize / 0.5f;
@@ -22,5 +23,5 @@ void GLObject::GLGrid::draw(QOpenGLShaderProgram *shaderProgram)
         glVertex3f(-fgs, 0, fi);
         glVertex3f(fgs,0,fi);
     }
-    glEnd();
+    glEnd();*/
 }
