@@ -45,6 +45,8 @@ private:
     float m_zoomSpeed { 0.03f };
 
     QVector2D m_cameraTranslation{};
+    QQuaternion m_cameraVerticalRotation{};
+    QQuaternion m_cameraHorizontalRotation{};
 
     float m_lightPower{ 5.0f };
 

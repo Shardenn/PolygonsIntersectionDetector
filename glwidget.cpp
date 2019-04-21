@@ -68,9 +68,12 @@ void GLWidget::paintGL()
 
     QMatrix4x4 vMatrix;
     vMatrix.setToIdentity();
+
     vMatrix.translate(m_cameraTranslation.x(), m_cameraTranslation.y(),
                       m_distance);
     vMatrix.rotate(m_rotation);
+//    vMatrix.rotate(m_cameraVerticalRotation);
+//    vMatrix.rotate(m_cameraHorizontalRotation);
 
     m_shaderProgram.bind();
 
@@ -157,6 +160,7 @@ void GLWidget::initShapes()
     GLObject::GLObject3D *headObj = new GLObject::GLObject3D(*headMesh);
     headObj->translate(QVector3D(1, 0, 0));
     headObj->scale(0.4);
+
     m_objects.append(headObj);
 
 // ---------- SUSANNA
@@ -202,9 +206,19 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
 
         if (event->buttons() == Qt::LeftButton) {
             float angle = diff.length() / 2.0f;
+            float angleHor = abs(diff.y());
+            float angleVert = diff.x();
+
+            QVector3D axisHor(diff.y(), 0.0, 0.0);
+            QVector3D axisVert(0.0, 1.0, 0.0);
+
+            m_cameraVerticalRotation = QQuaternion::fromAxisAndAngle(
+                        axisVert, angleVert) * m_cameraVerticalRotation;
+            m_cameraHorizontalRotation = QQuaternion::fromAxisAndAngle(
+                        axisHor, angleHor) * m_cameraHorizontalRotation;
 
             QVector3D axis(diff.y(), diff.x(), 0.0);
-            m_rotation = QQuaternion::fromAxisAndAngle(axis, angle) * m_rotation;
+            m_rotation = m_cameraVerticalRotation * m_cameraHorizontalRotation;
         } else if (event->buttons() == Qt::RightButton) {
             m_distance += diff.x() * m_zoomSpeed;
         } else if (event->buttons() == Qt::MiddleButton) {
