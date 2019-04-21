@@ -4,17 +4,17 @@
 #include <QVector>
 #include <QVector3D>
 
-class NormalsSmoother
+namespace NormalsSmoother
 {
-public:
-    NormalsSmoother();
-
     /*!
      * \brief calculates smoothed normals for vertices
+     * assuming that the vertices are from
+     * triangulated mesh
      * \param positions - vertices, triangulated
      * \return smoothed normals
      */
-    QVector<QVector3D> smooth(const QVector<QVector3D>& positions);
+    QVector<QVector3D> smooth(const QVector<QVector3D>& positions,
+                              const QVector<int>& triangulatedIndices);
 };
 
 #endif // NORMALSSMOOTHER_H

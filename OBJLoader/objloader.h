@@ -25,12 +25,6 @@ public:
     MeshData *load(const QString &filePath, bool triangulte = true);
     // argument not const because readLine() is not const
     MeshData *load(QTextStream &textStream, bool triangulate = true);
-    /*!
-     * \brief When given model data, returns its triangulated copy.
-     * \param originalData - original model data
-     * \return triangulated data
-     */
-    static MeshData triangulate(const MeshData &originalData);
 
 private:
     QVector<QVector3D> getPolygonInformation(QStringList& polygonInfoLine);

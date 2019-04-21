@@ -140,6 +140,7 @@ void GLWidget::initShapes()
 
     //MeshData mesh(verts, texts, normals, inds);
     OBJLoader::OBJLoader loader;
+// ------------CUBE
     MeshData *cubeMesh = loader.load(":/Objects/cube.obj");
 
     Q_ASSERT(cubeMesh != nullptr);
@@ -149,6 +150,7 @@ void GLWidget::initShapes()
     //cubeModel->drawMode = GL_LINES;
     m_objects.append(cubeModel);
 
+// ----------- HEAD
     MeshData *headMesh = loader.load(":/Objects/male_head.obj");
     Q_ASSERT(headMesh != nullptr);
 
@@ -156,6 +158,26 @@ void GLWidget::initShapes()
     headObj->translate(QVector3D(1, 0, 0));
     headObj->scale(0.4);
     m_objects.append(headObj);
+
+// ---------- SUSANNA
+    MeshData *susMesh = loader.load(":/Objects/susanna.obj");
+    Q_ASSERT(susMesh != nullptr);
+
+    GLObject::GLObject3D *susanna =
+            new GLObject::GLObject3D(*susMesh);
+    susanna->translate(QVector3D(-1.0, 2.5, 0.0));
+    m_objects.append(susanna);
+
+// ------------SUSANNE SMOOTHED
+    MeshData *susMeshSmoothed = loader.load(":/Objects/susanna.obj");
+    Q_ASSERT(susMeshSmoothed != nullptr);
+    susMeshSmoothed->smoothNormals();
+
+    GLObject::GLObject3D *susannaSmoothed =
+            new GLObject::GLObject3D(*susMeshSmoothed);
+    susannaSmoothed->translate(QVector3D(1.0, 2.5, 0.0));
+    m_objects.append(susannaSmoothed);
+
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *event)

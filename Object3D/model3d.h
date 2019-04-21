@@ -63,8 +63,10 @@ public:
     QVector<int> polygonElementsIndices;
 
     void triangulate();
-
     bool isTriangulated{ false };
+
+    void smoothNormals();
+    bool isSmoothed{ false };
 
     QVector<QVector3D> getChronologicalVerticesCoords() const;
     QVector<QVector2D> getChronologicalTexturesCoords() const;

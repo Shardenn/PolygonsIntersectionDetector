@@ -117,10 +117,6 @@ MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream, bool doTriangulati
     return modelData;
 }
 
-MeshData OBJLoader::OBJLoader::triangulate(const MeshData &originalData)
-{
-
-}
 
 // TODO process the errors like convertion errors
 QVector<QVector3D> OBJLoader::OBJLoader::getPolygonInformation(QStringList &polygonInfoLine)

@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <Utils/utils.h>
 #include "triangulator.h"
+#include "normalssmoother.h"
 
 Model3D::MeshData::MeshData()
 {}
@@ -30,6 +31,15 @@ void Model3D::MeshData::triangulate()
                                                 polygonElementsIndices);
 
     isTriangulated = true;
+}
+
+void Model3D::MeshData::smoothNormals()
+{
+    normals = NormalsSmoother::smooth(positions,
+                                      verticesIndicesTriangulated);
+    normalsIndicesTriangulated = verticesIndicesTriangulated;
+
+    isSmoothed = true;
 }
 
 QVector<QVector3D> Model3D::MeshData::getChronologicalVerticesCoords() const
