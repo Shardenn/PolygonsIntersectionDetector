@@ -4,7 +4,8 @@
 #include <QDebug>
 #include <memory>
 
-MeshData *OBJLoader::OBJLoader::load(const QString &filePath, bool doTriangulation)
+MeshData *OBJLoader::OBJLoader::load(const QString &filePath,
+                                     bool smoothNormals, bool doTriangulation)
 {
     QFile objFile(filePath);
     if(!objFile.exists()) {
@@ -16,21 +17,27 @@ MeshData *OBJLoader::OBJLoader::load(const QString &filePath, bool doTriangulati
 
     QTextStream textStream(&objFile);
 
-    auto ret =  load(textStream, doTriangulation);
+    auto ret = load(textStream, smoothNormals, doTriangulation);
 
     objFile.close();
 
     return ret;
 }
 
-MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream, bool doTriangulation)
+MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream,
+                                     bool smoothNormals, bool doTriangulation)
 {
     using namespace Model3D;
 
     // data for the model contained in the file
     auto modelData = new MeshData;
 
-    while(!textStream.atEnd()) {
+    if (textStream.atEnd()) {
+        delete modelData;
+        return nullptr;
+    }
+
+    while (!textStream.atEnd()) {
         QString str = textStream.readLine();
         str = str.simplified(); // delete leading and trailing whitespaces
                                 // and remove several whitespaces
@@ -114,6 +121,9 @@ MeshData *OBJLoader::OBJLoader::load(QTextStream &textStream, bool doTriangulati
     if (doTriangulation)
         modelData->triangulate();
 
+    if (modelData->isTriangulated && smoothNormals)
+        modelData->smoothNormals();
+
     return modelData;
 }
 
@@ -123,7 +133,7 @@ QVector<QVector3D> OBJLoader::OBJLoader::getPolygonInformation(QStringList &poly
 {
     QVector<QVector3D> polygonInformaion;
     // polygonInfoLine[0] == "f"
-    for(int i = 1; i < polygonInfoLine.size(); i++) {
+    for(int i = 1; i < polygonInfoLine.size(); ++i) {
         QVector3D vertexIndicesInfo;
         auto vertexInfo = polygonInfoLine[i].split("/");
         // vertexInfo[i] contains info about 1 vertex

@@ -141,10 +141,9 @@ void GLWidget::initShapes()
     GLObject::GLGrid *grid = new GLObject::GLGrid();
     m_objects.append(grid);
 
-    //MeshData mesh(verts, texts, normals, inds);
     OBJLoader::OBJLoader loader;
 // ------------CUBE
-    MeshData *cubeMesh = loader.load(":/Objects/cube.obj");
+    MeshData *cubeMesh = loader.load(":/Objects/cube.obj", false);
 
     Q_ASSERT(cubeMesh != nullptr);
 
@@ -164,7 +163,7 @@ void GLWidget::initShapes()
     m_objects.append(headObj);
 
 // ---------- SUSANNA
-    MeshData *susMesh = loader.load(":/Objects/susanna.obj");
+    MeshData *susMesh = loader.load(":/Objects/susanna.obj", false);
     Q_ASSERT(susMesh != nullptr);
 
     GLObject::GLObject3D *susanna =

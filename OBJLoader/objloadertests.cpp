@@ -34,7 +34,8 @@ void OBJLoader::OBJLoaderTests::objLoaderEmptyFile()
     std::unique_ptr<MeshData> loadedMesh(loader.load(":/Objects/UnitTests/test_empty.obj"));
     std::unique_ptr<MeshData> expectedMesh(new MeshData);
 
-    QCOMPARE(*expectedMesh, *loadedMesh);
+    // should be nullptr
+    QCOMPARE(expectedMesh, loadedMesh);
 }
 
 void OBJLoader::OBJLoaderTests::objLoaderIncorrectFile()

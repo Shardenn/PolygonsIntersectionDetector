@@ -3,6 +3,10 @@
 QVector<QVector3D> NormalsSmoother::smooth(const QVector<QVector3D>& positions,
                                            const QVector<int>& indices)
 {
+    if (positions.size() < 1) {
+        return QVector<QVector3D>();
+    }
+
     QVector<QVector3D> normals(positions.size());
 
     for (int i = 0; i < indices.size() - 2; i += 3) {
@@ -22,10 +26,6 @@ QVector<QVector3D> NormalsSmoother::smooth(const QVector<QVector3D>& positions,
         normals[positionInd_0] += polygonNormal;
         normals[positionInd_1] += polygonNormal;
         normals[positionInd_2] += polygonNormal;
-
-        //normals[positionInd_0].normalize();
-        //normals[positionInd_1].normalize();
-        //normals[positionInd_2].normalize();
     }
 
     for (QVector3D &normal : normals) {

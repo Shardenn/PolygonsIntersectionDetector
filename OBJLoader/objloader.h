@@ -22,9 +22,11 @@ public:
      * \param filePath path to *.obj file
      * \return vector of data for each vertex from obj file
     */
-    MeshData *load(const QString &filePath, bool triangulte = true);
+    MeshData *load(const QString &filePath,
+                   bool smoothNormals = true, bool triangulte = true);
     // argument not const because readLine() is not const
-    MeshData *load(QTextStream &textStream, bool triangulate = true);
+    MeshData *load(QTextStream &textStream,
+                   bool smoothNormals = true, bool triangulate = true);
 
 private:
     QVector<QVector3D> getPolygonInformation(QStringList& polygonInfoLine);
