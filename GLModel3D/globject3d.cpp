@@ -125,12 +125,8 @@ void GLObject::GLObject3D::draw(QOpenGLShaderProgram *shaderProgram)
     shaderProgram->enableAttributeArray(normLoc);
     shaderProgram->setAttributeBuffer(normLoc, GL_FLOAT, offset, 3);
 
-
-
     m_indexBuffer.bind();
 
-    //functions->glDrawElements(drawMode, m_indexBuffer.size() - 1,
-                              //GL_UNSIGNED_INT, nullptr);
     QOpenGLContext::currentContext()->functions()->glDrawElements(drawMode, m_indexBuffer.size() - 1,
                                                                   GL_UNSIGNED_INT, nullptr);
     m_indexBuffer.release();

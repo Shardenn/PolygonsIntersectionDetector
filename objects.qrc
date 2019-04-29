@@ -10,5 +10,6 @@
         <file>Objects/triangle.obj</file>
         <file>Objects/male_head.obj</file>
         <file>Objects/susanna.obj</file>
+        <file>Objects/leg_simplified.obj</file>
     </qresource>
 </RCC>

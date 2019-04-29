@@ -23,6 +23,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++14
 
+INCLUDEPATH += $$PWD/Deps
+
 include(Object3D/Object3D.pri)
 include(Object3D/Object3DTests.pri)
 
@@ -31,16 +33,17 @@ include(OBJLoader/OBJLoaderTests.pri)
 
 include(GLModel3D/GLModel3D.pri)
 
+include(ICP/ICP.pri)
+
 include(Utils/Utils.pri)
 
 SOURCES += \
         main.cpp \
-    #model3d.cpp \
     glwidget.cpp \
 
 HEADERS += \
         glwidget.h \
-    #model3d.h \
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

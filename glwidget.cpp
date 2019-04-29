@@ -13,6 +13,7 @@
 #include "Object3D/triangulator.h"
 #include "GLModel3D/globject3d.h"
 #include "GLModel3D/glgrid.h"
+#include "ICP/icp.h"
 
 GLWidget::GLWidget(QWidget *parent)
     : QOpenGLWidget(parent)
@@ -109,7 +110,8 @@ void GLWidget::paintGL()
         glVertex3f(-fgs, 0, fi);
         glVertex3f(fgs,0,fi);
     }
-    glEnd();*/
+    glEnd();
+    */
 }
 
 void GLWidget::initShaders()
@@ -139,18 +141,19 @@ void GLWidget::initShapes()
     using namespace Model3D;
 
     GLObject::GLGrid *grid = new GLObject::GLGrid();
-    m_objects.append(grid);
+    //m_objects.append(grid);
 
     OBJLoader::OBJLoader loader;
-// ------------CUBE
-    MeshData *cubeMesh = loader.load(":/Objects/cube.obj", false);
 
-    Q_ASSERT(cubeMesh != nullptr);
 
-    GLObject::GLObject3D *cubeModel = new GLObject::GLObject3D(*cubeMesh);
-    cubeModel->translate(QVector3D(-1.5, 0, 0));
-    //cubeModel->drawMode = GL_LINES;
-    m_objects.append(cubeModel);
+// ------------LEG
+    MeshData *legMesh = loader.load(":/Objects/leg_simplified.obj");
+
+    Q_ASSERT(legMesh != nullptr);
+
+    GLObject::GLObject3D *legModel = new GLObject::GLObject3D(*legMesh);
+    legModel->translate(QVector3D(-1.5, -7, 0));
+    m_objects.append(legModel);
 
 // ----------- HEAD
     MeshData *headMesh = loader.load(":/Objects/male_head.obj");
@@ -162,24 +165,7 @@ void GLWidget::initShapes()
 
     m_objects.append(headObj);
 
-// ---------- SUSANNA
-    MeshData *susMesh = loader.load(":/Objects/susanna.obj", false);
-    Q_ASSERT(susMesh != nullptr);
 
-    GLObject::GLObject3D *susanna =
-            new GLObject::GLObject3D(*susMesh);
-    susanna->translate(QVector3D(-1.0, 2.5, 0.0));
-    m_objects.append(susanna);
-
-// ------------SUSANNE SMOOTHED
-    MeshData *susMeshSmoothed = loader.load(":/Objects/susanna.obj");
-    Q_ASSERT(susMeshSmoothed != nullptr);
-    susMeshSmoothed->smoothNormals();
-
-    GLObject::GLObject3D *susannaSmoothed =
-            new GLObject::GLObject3D(*susMeshSmoothed);
-    susannaSmoothed->translate(QVector3D(1.0, 2.5, 0.0));
-    m_objects.append(susannaSmoothed);
 
 }
 
@@ -249,6 +235,42 @@ void GLWidget::wheelEvent(QWheelEvent *event)
     }
     update();
     event->accept();
+}
+
+void GLWidget::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Q) {
+        OBJLoader::OBJLoader loader;
+
+        // ------------SUSANNE SMOOTHED
+        MeshData *susMeshSmoothed = loader.load(":/Objects/cube.obj");
+        Q_ASSERT(susMeshSmoothed != nullptr);
+
+        GLObject::GLObject3D *susannaSmoothed =
+                new GLObject::GLObject3D(*susMeshSmoothed);
+        susannaSmoothed->translate(QVector3D(1.0, 2.5, 0.0));
+        m_objects.append(susannaSmoothed);
+
+    // -----------SUSANNE 2
+        MeshData *susanna2 = loader.load(":/Objects/cube.obj");
+        Q_ASSERT(susanna2 != nullptr);
+
+        GLObject::GLObject3D *sussanna2obj =
+                new GLObject::GLObject3D(*susanna2);
+        sussanna2obj->translate(QVector3D(-4.0, 0.5, -1.0));
+        //sussanna2obj->rotate(QQuaternion::fromAxisAndAngle(
+          //                       QVector3D(-1.0, -1.0, -1.0), 50));
+        m_objects.append(sussanna2obj);
+
+        ICP icp;
+        icp.performRigidAlignment(susMeshSmoothed->positions, susanna2->positions,
+                                  susannaSmoothed->getModelMatrix(), sussanna2obj->getModelMatrix() );
+    }
+}
+
+void GLWidget::keyReleaseEvent(QKeyEvent *event)
+{
+
 }
 
 void GLWidget::timeout()

@@ -38,6 +38,8 @@ public:
     void translate(const QVector3D &t) override;
     void rotate(const QQuaternion &q) override;
     void scale(const float &factor) override;
+
+    QMatrix4x4 getModelMatrix() { return m_modelMatrix; }
 protected:
     QOpenGLBuffer m_vertexBuffer;
     QOpenGLBuffer m_indexBuffer;
